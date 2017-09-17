@@ -71,6 +71,8 @@ set(SOURCE_FILES
         src/hprof_tracker.h
         src/hprof_util.c
         src/hprof_util.h
+        src/hprof_prelude.h
+        src/hprof_prelude.c
         ${JAVA_HOME}/classfile_constants.h
         ${JAVA_HOME}/jni.h
         ${JAVA_HOME}/jvmti.h
