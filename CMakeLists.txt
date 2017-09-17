@@ -1,14 +1,20 @@
 cmake_minimum_required(VERSION 3.8)
-project(hprof)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Os -g1 -DSKIP_NPT=1 -DLINUX=1 -DDEBUG=1 -fPIC -D_GNU_SOURCE=1")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-strict-aliasing -fPIC -fno-omit-frame-pointer -W -Wall  -Wno-unused -Wno-parentheses -D_GNU_SOURCE -DLINUX -D_REENTRANT -DHPROF_LOGGING -DDEBUG")
 
-set(JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64/include)
-set(JDK8 /home/dylan/Trees/jdk8/jdk/src/solaris/javavm/export)
+set(JAVA_HOME lib/include)
+set(JAVA_VM lib/javavm/export)
+set(NPT lib/npt)
+set(BCI lib/java_crw_demo)
+
+project(hprof C)
 
 include_directories(${JAVA_HOME})
 include_directories(${JAVA_HOME}/linux)
-include_directories(${JDK8})
+include_directories(${JAVA_VM})
+include_directories(${NPT})
+include_directories(${BCI})
+
 
 set(SOURCE_FILES
         src/debug_malloc.c
@@ -65,17 +71,22 @@ set(SOURCE_FILES
         src/hprof_tracker.h
         src/hprof_util.c
         src/hprof_util.h
-        src/java_crw_demo.c
-        src/java_crw_demo.h
         ${JAVA_HOME}/classfile_constants.h
-        ${JAVA_HOME}/jawt.h
-        ${JAVA_HOME}/jdwpTransport.h
         ${JAVA_HOME}/jni.h
         ${JAVA_HOME}/jvmti.h
-        ${JAVA_HOME}/jvmticmlr.h
-        ${JAVA_HOME}/linux/jawt_md.h
         ${JAVA_HOME}/linux/jni_md.h
-        ${JDK8}/jvm_md.h )
+        ${NPT}/npt.c
+        ${NPT}/npt.h
+        ${NPT}/utf.c
+        ${NPT}/utf.h
+        ${NPT}/npt_md.h
+        ${NPT}/utf_md.h
+        ${NPT}/utf_md.c
+        ${BCI}/java_crw_demo.h
+        ${BCI}/java_crw_demo.c
+        ${JAVA_VM}/jni_md.h
+        ${JAVA_VM}/jvm_md.h
+        )
 
 add_library(hprof SHARED ${SOURCE_FILES})
 target_link_libraries(hprof -lrt)

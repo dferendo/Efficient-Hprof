@@ -38,8 +38,6 @@
  */
 
 
-// Machine dependent code.
-
 #ifndef HPROF_MD_H
 #define HPROF_MD_H
 
