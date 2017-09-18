@@ -14,20 +14,19 @@ The following shows the results in microseconds.
 
 | | No HProf | HProf | Modified HProf |
 |:---: |  :---:   |  :---:   | :---:   | 
-| avrora |3903 | | |
-| batik |4070 | | |
-| eclipse | N/A | | |
-| fop |3037 | | |
-| h2 | 8939 | | |
-| jython | 9552 | | |
-| luindex | 1744 | | |
-| lusearch | 3274 | | |
-| pmd | 3223 | | |
-| sunflow | 6369 | | |
-| tomcat | N/A | | |
-| tradebeans | 8110 | | |
-| tradesoap | 22222 | | |
-| xalan | 4909 | | |
+| avrora |3903 | 18788 | |
+| batik |4070 | 15669 | |
+| eclipse | N/A | N/A | |
+| fop |3037 | 23650 | |
+| jython | 9552 | 539661 | |
+| luindex | 1744 | 5036 | |
+| lusearch | 3274 | 64828 | |
+| pmd | 3223 |  55116| |
+| sunflow | 6369 | 478120 | |
+| tomcat | N/A | N/A | |
+| tradebeans | 8110 | N/A | |
+| tradesoap | 22222 | 2004548 | |
+| xalan | 4909 | 66053 | |
 
 
 
