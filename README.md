@@ -29,8 +29,8 @@ The following shows the results in microseconds.
 | tradesoap  | 22222      | 2004548 | 2118732                      | 274979                    |
 | xalan      | 4909       | 66053   | 80147                        | 29046                     |
 
-% Call, Exception catch and return events were removed.
-$ Object init event was removed.
+%: Call, Exception catch and return events were removed.
+$: Object init event was removed.
 
 ## Compilation
 
