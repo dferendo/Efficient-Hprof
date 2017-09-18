@@ -13,7 +13,7 @@ bash ./run-bench-marks.sh > text.txt 2>&1
 The following shows the results in microseconds.
 
 | Project    | No HProf | HProf   | Suggested Optimal HProf * |
-| :---:      |  :---:   | :---:   | :---: 		      | 
+| :----:     | :----:   | :----:  | :----: 		      | 
 | avrora     | 3903     | 18788   | 19379		      |
 | batik      | 4070     | 15669   | 20789 		      |
 | eclipse    | N/A      | N/A     | N/A                       |
