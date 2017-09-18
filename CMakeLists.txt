@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.8)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-strict-aliasing -fPIC -fno-omit-frame-pointer -W -Wall  -Wno-unused -Wno-parentheses -D_GNU_SOURCE -DLINUX -D_REENTRANT -DHPROF_LOGGING -DDEBUG")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-strict-aliasing -fPIC -fno-omit-frame-pointer -W -Wall  -Wno-unused -Wno-parentheses -D_GNU_SOURCE -DLINUX -D_REENTRANT -DHPROF_LOGGING")
 
 set(JAVA_HOME lib/include)
 set(JAVA_VM lib/javavm/export)
