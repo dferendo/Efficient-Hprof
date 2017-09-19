@@ -36,4 +36,10 @@ $: Object init event was removed.
 
 To compile hprof, use cmake. The shared library will be created in cmake-build-debug with the name "libhprof.so".
 
+## Run
 
+To run hprof, link the library as an agent and run the classes that will be profiled. Example
+
+```
+java -agentpath:"../cmake-build-debug/libhprof.so" -jar dacapo-9.12-bach.jar tradesoap
+```
