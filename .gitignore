@@ -1,4 +1,6 @@
 /.idea
 /cmake-build-debug
-/benchmarks
 text.txt
+/benchmarks/scratch/
+/benchmarks/dacapo-9.12-bach.jar
+/benchmarks/java.hprof.txt
