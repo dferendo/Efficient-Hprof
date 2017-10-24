@@ -1,0 +1,252 @@
+Run HPROF WITH Commands:
+
+Agent_OnLoad -> parse opens - init tables - setCallback To JVM - io setup - set sample rate
+
+Tables. A data structure used to store data in hprof. Every table contains a lock. Each element has a key that can consist of N bytes, hashcode, TableIndex with points to the next element and void * to hold the information of the element. Storage of elements cannot be moved. Hash Tables are used. ->
+
+1. String Table:
+
+Table of byte arrays. This table is different from the other table since the strings themselves are unique by their own contents and thus are the keys themselves. This means that the table also has dynamically sized keys.
+
+2. Class Table:
+
+Table containing the information of Java classes. The key for this table is the signature of the class and the index of the class loader where every class loaded has a unique class serial number. 
+
+Elements Found:
+
+jclass         classref;             Global ref to jclass object which is given by JVMTI 
+MethodInfo    *method;               Array of method data containing the class method information (method name, signature and method Id) obtained by BCI.
+int            method_count;         Count of methods 
+ObjectIndex    object_index;         Optional object index for jclass since jclass is an object 
+SerialNumber   serial_num;           Unique to the actual class load 
+ClassStatus    status;               Current class status (bit mask) 
+ClassIndex     super;                Super class in this table 
+StringIndex    name;                 Name of class 
+jint           inst_size;            #bytes needed for instance fields 
+jint           field_count;          Number of all fields 
+FieldInfo     *field;                Pointer to all FieldInfo's which holds information about a field and potentially a value too.
+
+References: Class loader Table, String Table 
+
+3. Thread Local Storage Table:
+
+The key for this table is it's serial number which is unique for each thread. 
+
+Elements found:
+
+jint            sample_status;       Thread status for cpu sampling 
+jboolean        agent_thread;        Is thread our own agent thread (hprof thread)? 
+jthread         globalref;           Global reference for thread object which is given by JVMTI
+Stack          *stack;               Stack of StackElements entry/exit which contain Frames, method Id, method start time and time taken. 
+MonitorIndex    monitor_index;       last contended mon 
+jint            tracker_status;      If we are inside Tracker class 
+FrameIndex     *frames_buffer;       Buffer used to create TraceIndex 
+jvmtiFrameInfo *jframes_buffer;      Buffer used to create TraceIndex 
+int             buffer_depth;        Frames allowed in buffer 
+TraceIndex      last_trace;          Last trace for this thread 
+ObjectIndex     thread_object_index; If heap=dump 
+jlong           monitor_start_time;  Start time for monitor 
+jint            in_heap_dump;        If we are an object in the dump 
+
+References: FrameIndex, TraceIndex, ObjectIndex, MonitorIndex Tables
+
+4. Trace Table:
+
+A trace is an optional thread serial number (unique) plus N frames. Thread serial number is only added if the user asks threads in traces which will cause many more traces to be created. Without it all threads share the traces. The key for this table is a variable length key depending on the number of frames. 
+
+Elements found:
+
+SerialNumber serial_num;         Trace serial number
+jint         num_hits;           Number of hits this trace has 
+jlong        total_cost;         Total cost associated with trace 
+jlong        self_cost;          Total cost without children cost 
+jint         status;             Status of dump of trace 
+
+References: Frame Table
+
+5. Object Table:
+
+Contains all object found in the program resulting in the biggest table when using heap=dump since there is one table entry per object. The key for this table is unique by it's allocation site, size, knd and serial number. Table differs when heap=site and heap=dump, in our case we only care abiyt heap=dump. TODO: processing heap dump.
+
+Elements found:
+
+RefIndex     references;         Linked list of refs in this object
+SerialNumber thread_serial_num;  Thread serial number for allocation
+
+References: References, Site Tables
+
+6. Site Table:
+
+This table contains the allocation sites. Every object allocation will have a place where it was allocated and this table will contain such data. The key for this table is the class and trace number.
+
+int         changed;                Objects at this site changed? 
+unsigned    n_alloced_instances;    Total allocated instances 
+unsigned    n_alloced_bytes;        Total bytes allocated from here 
+unsigned    n_live_instances;       Live instances for this site. 
+unsigned    n_live_bytes;           Live byte count for this site. 
+
+References: Class, Trace tables.
+
+
+7. Frame Table:
+
+Frames map 1 to 1 to methodID and location. 
+
+Elements found:
+
+unsigned short      lineno;
+unsigned char       lineno_state;  LinenoState
+unsigned char       status;
+SerialNumber 	    serial_num;
+
+References: None
+
+
+8. Monitor Table:
+
+Monitor contention (conflicts) tracking and monitor wait handling. The key for this table is the trace and signature of the monitor. The Thread local storage table will be used to store the monitor contention or being waited on. Monitor wait activity is emitted as it happens while monitor contention is tabulated and summarized at dump time.
+
+Elements:
+
+jint         num_hits;
+jlong        contended_time;
+
+References: Trace Table.
+
+
+9. Class Loader Table:
+
+The class loader concept, one of the cornerstones of the Java virtual machine, describes the behavior of converting a named class into the bits responsible for implementing that class. Because class loaders exist, the Java run time does not need to know anything about files and file systems when running Java programs. These class loader objects show up early in the VM process. The class loader is unique by it's jobject uniqueness. IT is assumed that the number of class loaders will be limited and a linear search will be performed.
+
+Elements:
+jobject         globalref;    Weak Global reference for object 
+ObjectIndex     object_index;
+
+References: Object table.
+
+
+CallBacks Functions, control the flow of the program. These are callbacks by the JVMTI which do actions after being called.
+
+Resources used: https://docs.oracle.com/javase/8/docs/platform/jvmti/jvmti.html
+https://docs.oracle.com/javase/8/docs/technotes/guides/jni/spec/functions.html#RegisterNatives
+
+1. VM_init
+
+Reason for being called:
+
+The VM initialization event signals the completion of VM initialization. Once this event is generated, the agent is free to call any JNI or JVM TI function. The thread start event for the main application thread is guaranteed not to occur until after the handler for the VM initialization event returns.
+
+Hprof Action:
+
+Write header for hprof file.
+Adds a class loader to the table and adds the classess "Ljava/lang/Object;" and "Ljava/lang/Thread;" to this loader. The thread returned by the JVMTI as the main thread is also added to the table of TLS. The tracker class is also setup and added to the table classes as a class special. 
+
+Also setups the tracker to get data of the methods. Hprof uses BCI for this to register natively. This will trigger the events event_newarray, event_object_init, event_call and event_return. To allow other events to be enabled for the other event that are indicated by JVMTI, not BCI, setEventNotificationMode function is called for:
+
+JVMTI_EVENT_THREAD_START
+JVMTI_EVENT_THREAD_END
+JVMTI_EVENT_CLASS_LOAD
+JVMTI_EVENT_CLASS_PREPARE
+JVMTI_EVENT_DATA_DUMP_REQUEST
+JVMTI_EVENT_EXCEPTION_CATCH
+...
+
+
+# TODO:
+
+Look at what gc_finish agent thread does.
+Look what listener_init agent thread does.
+Look what cpu_sample_init agent thread does.
+
+2. VMDeath
+
+The VM death event notifies the agent of the termination of the VM. No events will occur after the VMDeath event. This occurs before agent_onunload. 
+
+Hprof Action:
+
+Indicate all active threads to shut down after completing their task. Also dump the final set of data. The footer for the hprof file is written. Finally all the fds are closed.
+
+3. ThreadStart
+
+Thread start events are generated by a new thread before its initial method executes.
+
+
+Hprof Action:
+
+The event_thread_start is called.
+
+4. ThreadEnd
+
+Thread end events are generated by a terminating thread after its initial method has finished execution.
+
+
+Hprof Action:
+
+The event_thread_end is called.
+
+5. ClassFileLoadHook
+
+This event is sent when the VM obtains class file data, but before it constructs the in-memory representation for that class. This event is also sent when the class is being modified by the RetransformClasses function or the RedefineClasses function, called in any JVM TI environment. The agent can instrument the existing class file data sent by the VM to include profiling/debugging hooks. See the description of bytecode instrumentation for usage information.
+
+
+Hprof Action:
+
+Do some bytecode manipulation.
+
+# TODO: more research on this.
+
+6. ClassLoad
+
+A class load event is generated when a class is first loaded. The order of class load events generated by a particular thread are guaranteed to match the order of class loading within that thread. Array class creation does not generate a class load event. The creation of a primitive class (for example, java.lang.Integer.TYPE) does not generate a class load event.
+
+Hprof Action:
+
+The event_class_load is called.
+
+
+7. ClassPrepare
+
+A class prepare event is generated when class preparation is complete. At this point, class fields, methods, and implemented interfaces are available, and no code from the class has been executed. Since array classes never have fields or methods, class prepare events are not generated for them. Class prepare events are not generated for primitive classes (for example, java.lang.Integer.TYPE).
+
+Hprof Action:
+
+The event_class_prepare is called.
+
+
+8. DataDumpRequest
+
+Sent by the VM to request the agent to dump its data. This is just a hint and the agent need not react to this event. This is useful for processing command-line signals from users. For example, in the Java 2 SDK a CTRL-Break on Win32 and a CTRL-\ on Solaris causes the VM to send this event to the agent.
+
+
+Hprof Action: 
+
+Dump all data.
+
+9. ExceptionCatch
+
+Exception catch events are generated whenever a thrown exception is caught. Where "exception" means any java.lang.Throwable. If the exception is caught in a Java programming language method, the event is generated when the catch clause is reached. If the exception is caught in a native method, the event is generated as soon as control is returned to a Java programming language method. Exception catch events are generated for any exception for which a throw was detected in a Java programming language method. Note that finally clauses are implemented as catch and re-throw. Therefore they will generate exception catch events.
+
+Hprof Action:
+
+The event event_exception_catch is called.
+
+################################################
+
+Actions still need viewing:
+callbacks.MonitorWait                = &cbMonitorWait;
+    /* JVMTI_EVENT_MONITOR_WAITED */
+    callbacks.MonitorWaited              = &cbMonitorWaited;
+    /* JVMTI_EVENT_MONITOR_CONTENDED_ENTER */
+    callbacks.MonitorContendedEnter      = &cbMonitorContendedEnter;
+    /* JVMTI_EVENT_MONITOR_CONTENDED_ENTERED */
+    callbacks.MonitorContendedEntered    = &cbMonitorContendedEntered;
+    /* JVMTI_EVENT_GARBAGE_COLLECTION_START */
+    callbacks.GarbageCollectionStart     = &cbGarbageCollectionStart;
+    /* JVMTI_EVENT_GARBAGE_COLLECTION_FINISH */
+    callbacks.GarbageCollectionFinish    = &cbGarbageCollectionFinish;
+    /* JVMTI_EVENT_OBJECT_FREE */
+    callbacks.ObjectFree                 = &cbObjectFree;
+
+
+
+
