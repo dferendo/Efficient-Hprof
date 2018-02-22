@@ -1,62 +1,121 @@
 #!/bin/bash
 
 # Avrora
-java -jar dacapo-9.12-bach.jar avrora
-java -agentpath:"./libs/libhprof.so" -jar dacapo-9.12-bach.jar avrora
-java -agentpath:"./libs/libhprof_modified.so" -jar dacapo-9.12-bach.jar avrora
+echo "No Hprof"
+java -jar dacapo-9.12-bach.jar avrora -s large
+echo "Normal Hprof"
+java -agentpath:"./libs/libhprof.so" -jar dacapo-9.12-bach.jar avrora -s large
+echo "Hprof with BCI trigger events but events do nothing"
+java -agentpath:"./libs/libhprof_bci_trigger_events_events_do_nothing.so" -jar dacapo-9.12-bach.jar avrora -s large
+echo "Hprof with BCI is not triggered"
+java -agentpath:"./libs/libhprof_no_bci_trigger.so" -jar dacapo-9.12-bach.jar avrora -s large
 
 # Batik
-java -jar dacapo-9.12-bach.jar batik
-java -agentpath:"./libs/libhprof.so" -jar dacapo-9.12-bach.jar batik
-java -agentpath:"./libs/libhprof_modified.so" -jar dacapo-9.12-bach.jar batik
+echo "No Hprof"
+java -jar dacapo-9.12-bach.jar batik -s large
+echo "Normal Hprof"
+java -agentpath:"./libs/libhprof.so" -jar dacapo-9.12-bach.jar batik -s large
+echo "Hprof with BCI trigger events but events do nothing"
+java -agentpath:"./libs/libhprof_bci_trigger_events_events_do_nothing.so" -jar dacapo-9.12-bach.jar batik -s large
+echo "Hprof with BCI is not triggered"
+java -agentpath:"./libs/libhprof_no_bci_trigger.so" -jar dacapo-9.12-bach.jar batik -s large
 
 # Fop
-java -jar dacapo-9.12-bach.jar fop
-java -agentpath:"./libs/libhprof.so" -jar dacapo-9.12-bach.jar fop
-java -agentpath:"./libs/libhprof_modified.so" -jar dacapo-9.12-bach.jar fop
+echo "No Hprof"
+java -jar dacapo-9.12-bach.jar fop -s large
+echo "Normal Hprof"
+java -agentpath:"./libs/libhprof.so" -jar dacapo-9.12-bach.jar fop -s large
+echo "Hprof with BCI trigger events but events do nothing"
+java -agentpath:"./libs/libhprof_bci_trigger_events_events_do_nothing.so" -jar dacapo-9.12-bach.jar fop -s large
+echo "Hprof with BCI is not triggered"
+java -agentpath:"./libs/libhprof_no_bci_trigger.so" -jar dacapo-9.12-bach.jar fop -s large
 
 # h2
-java -jar dacapo-9.12-bach.jar h2
-java -agentpath:"./libs/libhprof.so" -jar dacapo-9.12-bach.jar h2
-java -agentpath:"./libs/libhprof_modified.so" -jar dacapo-9.12-bach.jar h2
+echo "No Hprof"
+java -jar dacapo-9.12-bach.jar h2 -s large
+echo "Normal Hprof"
+java -agentpath:"./libs/libhprof.so" -jar dacapo-9.12-bach.jar h2 -s large
+echo "Hprof with BCI trigger events but events do nothing"
+java -agentpath:"./libs/libhprof_bci_trigger_events_events_do_nothing.so" -jar dacapo-9.12-bach.jar h2 -s large
+echo "Hprof with BCI is not triggered"
+java -agentpath:"./libs/libhprof_no_bci_trigger.so" -jar dacapo-9.12-bach.jar h2 -s large
 
 # jython
-java -jar dacapo-9.12-bach.jar jython
-java -agentpath:"./libs/libhprof.so" -jar dacapo-9.12-bach.jar jython
-java -agentpath:"./libs/libhprof_modified.so" -jar dacapo-9.12-bach.jar jython
+echo "No Hprof"
+java -jar dacapo-9.12-bach.jar jython -s large
+echo "Normal Hprof"
+java -agentpath:"./libs/libhprof.so" -jar dacapo-9.12-bach.jar jython -s large
+echo "Hprof with BCI trigger events but events do nothing"
+java -agentpath:"./libs/libhprof_bci_trigger_events_events_do_nothing.so" -jar dacapo-9.12-bach.jar jython -s large
+echo "Hprof with BCI is not triggered"
+java -agentpath:"./libs/libhprof_no_bci_trigger.so" -jar dacapo-9.12-bach.jar jython -s large
 
 # luindex
-java -jar dacapo-9.12-bach.jar luindex
-java -agentpath:"./libs/libhprof.so" -jar dacapo-9.12-bach.jar luindex
-java -agentpath:"./libs/libhprof_modified.so" -jar dacapo-9.12-bach.jar luindex
+echo "No Hprof"
+java -jar dacapo-9.12-bach.jar luindex -s large
+echo "Normal Hprof"
+java -agentpath:"./libs/libhprof.so" -jar dacapo-9.12-bach.jar luindex -s large
+echo "Hprof with BCI trigger events but events do nothing"
+java -agentpath:"./libs/libhprof_bci_trigger_events_events_do_nothing.so" -jar dacapo-9.12-bach.jar luindex -s large
+echo "Hprof with BCI is not triggered"
+java -agentpath:"./libs/libhprof_no_bci_trigger.so" -jar dacapo-9.12-bach.jar luindex -s large
 
 # lusearch
-java -jar dacapo-9.12-bach.jar lusearch
-java -agentpath:"./libs/libhprof.so" -jar dacapo-9.12-bach.jar lusearch
-java -agentpath:"./libs/libhprof_modified.so" -jar dacapo-9.12-bach.jar lusearch
+echo "No Hprof"
+java -jar dacapo-9.12-bach.jar lusearch -s large
+echo "Normal Hprof"
+java -agentpath:"./libs/libhprof.so" -jar dacapo-9.12-bach.jar lusearch -s large
+echo "Hprof with BCI trigger events but events do nothing"
+java -agentpath:"./libs/libhprof_bci_trigger_events_events_do_nothing.so" -jar dacapo-9.12-bach.jar lusearch -s large
+echo "Hprof with BCI is not triggered"
+java -agentpath:"./libs/libhprof_no_bci_trigger.so" -jar dacapo-9.12-bach.jar lusearch -s large
 
 # pmd
-java -jar dacapo-9.12-bach.jar pmd
-java -agentpath:"./libs/libhprof.so" -jar dacapo-9.12-bach.jar pmd
-java -agentpath:"./libs/libhprof_modified.so" -jar dacapo-9.12-bach.jar pmd
+echo "No Hprof"
+java -jar dacapo-9.12-bach.jar pmd -s large
+echo "Normal Hprof"
+java -agentpath:"./libs/libhprof.so" -jar dacapo-9.12-bach.jar pmd -s large
+echo "Hprof with BCI trigger events but events do nothing"
+java -agentpath:"./libs/libhprof_bci_trigger_events_events_do_nothing.so" -jar dacapo-9.12-bach.jar pmd -s large
+echo "Hprof with BCI is not triggered"
+java -agentpath:"./libs/libhprof_no_bci_trigger.so" -jar dacapo-9.12-bach.jar pmd -s large
 
 # sunflow
-java -jar dacapo-9.12-bach.jar sunflow
-java -agentpath:"./libs/libhprof.so" -jar dacapo-9.12-bach.jar sunflow
-java -agentpath:"./libs/libhprof_modified.so" -jar dacapo-9.12-bach.jar sunflow
+echo "No Hprof"
+java -jar dacapo-9.12-bach.jar sunflow -s large
+echo "Normal Hprof"
+java -agentpath:"./libs/libhprof.so" -jar dacapo-9.12-bach.jar sunflow -s large
+echo "Hprof with BCI trigger events but events do nothing"
+java -agentpath:"./libs/libhprof_bci_trigger_events_events_do_nothing.so" -jar dacapo-9.12-bach.jar sunflow -s large
+echo "Hprof with BCI is not triggered"
+java -agentpath:"./libs/libhprof_no_bci_trigger.so" -jar dacapo-9.12-bach.jar sunflow -s large
 
 # tradebeans
-java -jar dacapo-9.12-bach.jar tradebeans
-java -agentpath:"./libs/libhprof.so" -jar dacapo-9.12-bach.jar tradebeans
-java -agentpath:"./libs/libhprof_modified.so" -jar dacapo-9.12-bach.jar tradebeans
-
+echo "No Hprof"
+java -jar dacapo-9.12-bach.jar tradebeans -s large
+echo "Normal Hprof"
+java -agentpath:"./libs/libhprof.so" -jar dacapo-9.12-bach.jar tradebeans -s large
+echo "Hprof with BCI trigger events but events do nothing"
+java -agentpath:"./libs/libhprof_bci_trigger_events_events_do_nothing.so" -jar dacapo-9.12-bach.jar tradebeans -s large
+echo "Hprof with BCI is not triggered"
+java -agentpath:"./libs/libhprof_no_bci_trigger.so" -jar dacapo-9.12-bach.jar tradebeans -s large
 
 # Tradesoap
-java -jar dacapo-9.12-bach.jar tradesoap
-java -agentpath:"./libs/libhprof.so" -jar dacapo-9.12-bach.jar tradesoap
-java -agentpath:"./libs/libhprof_modified.so" -jar dacapo-9.12-bach.jar tradesoap
+echo "No Hprof"
+java -jar dacapo-9.12-bach.jar tradesoap -s large
+echo "Normal Hprof"
+java -agentpath:"./libs/libhprof.so" -jar dacapo-9.12-bach.jar tradesoap -s large
+echo "Hprof with BCI trigger events but events do nothing"
+java -agentpath:"./libs/libhprof_bci_trigger_events_events_do_nothing.so" -jar dacapo-9.12-bach.jar tradesoap -s large
+echo "Hprof with BCI is not triggered"
+java -agentpath:"./libs/libhprof_no_bci_trigger.so" -jar dacapo-9.12-bach.jar tradesoap -s large
 
 # Xalan
-java -jar dacapo-9.12-bach.jar xalan
-java -agentpath:"./libs/libhprof.so" -jar dacapo-9.12-bach.jar xalan
-java -agentpath:"./libs/libhprof_modified.so" -jar dacapo-9.12-bach.jar xalan
+echo "No Hprof"
+java -jar dacapo-9.12-bach.jar xalan -s large
+echo "Normal Hprof"
+java -agentpath:"./libs/libhprof.so" -jar dacapo-9.12-bach.jar xalan -s large
+echo "Hprof with BCI trigger events but events do nothing"
+java -agentpath:"./libs/libhprof_bci_trigger_events_events_do_nothing.so" -jar dacapo-9.12-bach.jar xalan -s large
+echo "Hprof with BCI is not triggered"
+java -agentpath:"./libs/libhprof_no_bci_trigger.so" -jar dacapo-9.12-bach.jar xalan -s large

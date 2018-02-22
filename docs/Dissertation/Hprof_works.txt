@@ -141,7 +141,7 @@ Hprof Action:
 Write header for hprof file.
 Adds a class loader to the table and adds the classess "Ljava/lang/Object;" and "Ljava/lang/Thread;" to this loader. The thread returned by the JVMTI as the main thread is also added to the table of TLS. The tracker class is also setup and added to the table classes as a class special. 
 
-Also setups the tracker to get data of the methods. Hprof uses BCI for this to register natively. This will trigger the events event_newarray, event_object_init, event_call and event_return. To allow other events to be enabled for the other event that are indicated by JVMTI, not BCI, setEventNotificationMode function is called for:
+Also setups the tracker to get data of the methods. Hprof uses BCI for this to register natively. This will trigger the events event_newarray, event_object_init, event_call and event_return. To allow other events to be enabled for the other event that are indicated by JVMTI, not BCI, setEventNotificationMode function is called for (ie the below function):
 
 JVMTI_EVENT_THREAD_START
 JVMTI_EVENT_THREAD_END
@@ -234,18 +234,18 @@ The event event_exception_catch is called.
 
 Actions still need viewing:
 callbacks.MonitorWait                = &cbMonitorWait;
-    /* JVMTI_EVENT_MONITOR_WAITED */
-    callbacks.MonitorWaited              = &cbMonitorWaited;
-    /* JVMTI_EVENT_MONITOR_CONTENDED_ENTER */
-    callbacks.MonitorContendedEnter      = &cbMonitorContendedEnter;
-    /* JVMTI_EVENT_MONITOR_CONTENDED_ENTERED */
-    callbacks.MonitorContendedEntered    = &cbMonitorContendedEntered;
-    /* JVMTI_EVENT_GARBAGE_COLLECTION_START */
-    callbacks.GarbageCollectionStart     = &cbGarbageCollectionStart;
-    /* JVMTI_EVENT_GARBAGE_COLLECTION_FINISH */
-    callbacks.GarbageCollectionFinish    = &cbGarbageCollectionFinish;
-    /* JVMTI_EVENT_OBJECT_FREE */
-    callbacks.ObjectFree                 = &cbObjectFree;
+/* JVMTI_EVENT_MONITOR_WAITED */
+callbacks.MonitorWaited              = &cbMonitorWaited;
+/* JVMTI_EVENT_MONITOR_CONTENDED_ENTER */
+callbacks.MonitorContendedEnter      = &cbMonitorContendedEnter;
+/* JVMTI_EVENT_MONITOR_CONTENDED_ENTERED */
+callbacks.MonitorContendedEntered    = &cbMonitorContendedEntered;
+/* JVMTI_EVENT_GARBAGE_COLLECTION_START */
+callbacks.GarbageCollectionStart     = &cbGarbageCollectionStart;
+/* JVMTI_EVENT_GARBAGE_COLLECTION_FINISH */
+callbacks.GarbageCollectionFinish    = &cbGarbageCollectionFinish;
+/* JVMTI_EVENT_OBJECT_FREE */
+callbacks.ObjectFree                 = &cbObjectFree;
 
 
 
