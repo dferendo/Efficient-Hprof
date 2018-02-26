@@ -6,7 +6,6 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_CHECK_C
   "/home/dylan/Trees/hprof/trie_temp/src/main.c" "/home/dylan/Trees/hprof/trie_temp/cmake-build-debug/CMakeFiles/trie_temp.dir/src/main.c.o"
   "/home/dylan/Trees/hprof/trie_temp/src/new_trie.c" "/home/dylan/Trees/hprof/trie_temp/cmake-build-debug/CMakeFiles/trie_temp.dir/src/new_trie.c.o"
-  "/home/dylan/Trees/hprof/trie_temp/src/trie.c" "/home/dylan/Trees/hprof/trie_temp/cmake-build-debug/CMakeFiles/trie_temp.dir/src/trie.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 

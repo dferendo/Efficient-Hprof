@@ -177,33 +177,6 @@ src/new_trie.c.s:
 	$(MAKE) -f CMakeFiles/trie_temp.dir/build.make CMakeFiles/trie_temp.dir/src/new_trie.c.s
 .PHONY : src/new_trie.c.s
 
-src/trie.o: src/trie.c.o
-
-.PHONY : src/trie.o
-
-# target to build an object file
-src/trie.c.o:
-	$(MAKE) -f CMakeFiles/trie_temp.dir/build.make CMakeFiles/trie_temp.dir/src/trie.c.o
-.PHONY : src/trie.c.o
-
-src/trie.i: src/trie.c.i
-
-.PHONY : src/trie.i
-
-# target to preprocess a source file
-src/trie.c.i:
-	$(MAKE) -f CMakeFiles/trie_temp.dir/build.make CMakeFiles/trie_temp.dir/src/trie.c.i
-.PHONY : src/trie.c.i
-
-src/trie.s: src/trie.c.s
-
-.PHONY : src/trie.s
-
-# target to generate assembly for a file
-src/trie.c.s:
-	$(MAKE) -f CMakeFiles/trie_temp.dir/build.make CMakeFiles/trie_temp.dir/src/trie.c.s
-.PHONY : src/trie.c.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -219,9 +192,6 @@ help:
 	@echo "... src/new_trie.o"
 	@echo "... src/new_trie.i"
 	@echo "... src/new_trie.s"
-	@echo "... src/trie.o"
-	@echo "... src/trie.i"
-	@echo "... src/trie.s"
 .PHONY : help
 
 

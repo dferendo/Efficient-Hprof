@@ -9,16 +9,18 @@
 /home/dylan/Trees/hprof/trie_temp/src/main.c
 stdio.h
 -
+new_trie.h
+/home/dylan/Trees/hprof/trie_temp/src/new_trie.h
 
-/home/dylan/Trees/hprof/trie_temp/src/trie.c
+/home/dylan/Trees/hprof/trie_temp/src/new_trie.c
+new_trie.h
+/home/dylan/Trees/hprof/trie_temp/src/new_trie.h
+memory.h
+-
 stdlib.h
 -
-string.h
+stdio.h
 -
-trie.h
-/home/dylan/Trees/hprof/trie_temp/src/trie.h
-alloc-testing.h
-/home/dylan/Trees/hprof/trie_temp/src/alloc-testing.h
 
-/home/dylan/Trees/hprof/trie_temp/src/trie.h
+/home/dylan/Trees/hprof/trie_temp/src/new_trie.h
 

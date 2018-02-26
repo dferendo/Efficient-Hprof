@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/trie_temp.dir/src/main.c.o"
-  "CMakeFiles/trie_temp.dir/src/trie.c.o"
   "CMakeFiles/trie_temp.dir/src/new_trie.c.o"
   "trie_temp.pdb"
   "trie_temp"

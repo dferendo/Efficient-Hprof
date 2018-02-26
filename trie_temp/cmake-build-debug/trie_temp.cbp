@@ -93,12 +93,6 @@
 		<Unit filename="/home/dylan/Trees/hprof/trie_temp/src/new_trie.h">
 			<Option target="trie_temp"/>
 		</Unit>
-		<Unit filename="/home/dylan/Trees/hprof/trie_temp/src/trie.c">
-			<Option target="trie_temp"/>
-		</Unit>
-		<Unit filename="/home/dylan/Trees/hprof/trie_temp/src/trie.h">
-			<Option target="trie_temp"/>
-		</Unit>
 		<Unit filename="/home/dylan/Trees/hprof/trie_temp/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
