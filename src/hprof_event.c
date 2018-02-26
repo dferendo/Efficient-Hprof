@@ -190,31 +190,36 @@ event_call(JNIEnv *env, jthread thread, ClassIndex cnum, MethodIndex mnum)
 
     /* Be very careful what is called here, watch out for recursion. */
 
-    TlsIndex tls_index;
-    jint     *pstatus;
+    //    printf("%s", string_get(class_get_signature(cnum)));
 
-    HPROF_ASSERT(env!=NULL);
-    HPROF_ASSERT(thread!=NULL);
-    if (cnum == 0 || cnum == gdata->tracker_cnum) {
-        jclass newExcCls = (*env)->FindClass(env, "java/lang/IllegalArgumentException");
-        (*env)->ThrowNew(env, newExcCls, "Illegal cnum.");
+    if (gdata->cpu_timing) {
+        TlsIndex tls_index;
+        jint     *pstatus;
 
-        return;
-    }
+        HPROF_ASSERT(env!=NULL);
+        HPROF_ASSERT(thread!=NULL);
+        if (cnum == 0 || cnum == gdata->tracker_cnum) {
+            jclass newExcCls = (*env)->FindClass(env, "java/lang/IllegalArgumentException");
+            (*env)->ThrowNew(env, newExcCls, "Illegal cnum.");
 
-    /* Prevent recursion into any BCI function for this thread (pstatus). */
-    if ( tls_get_tracker_status(env, thread, JNI_FALSE,
-             &pstatus, &tls_index, NULL, NULL) == 0 ) {
-        jmethodID     method;
-
-        (*pstatus) = 1;
-        method      = class_get_methodID(env, cnum, mnum);
-        if (method != NULL) {
-            tls_push_method(tls_index, method);
+            return;
         }
 
-        (*pstatus) = 0;
+        /* Prevent recursion into any BCI function for this thread (pstatus). */
+        if ( tls_get_tracker_status(env, thread, JNI_FALSE,
+                                    &pstatus, &tls_index, NULL, NULL) == 0 ) {
+            jmethodID     method;
+
+            (*pstatus) = 1;
+            method      = class_get_methodID(env, cnum, mnum);
+            if (method != NULL) {
+                tls_push_method(tls_index, method);
+            }
+
+            (*pstatus) = 0;
+        }
     }
+
 }
 
 /* Handle tracking of an exception catch */
@@ -250,31 +255,34 @@ event_return(JNIEnv *env, jthread thread, ClassIndex cnum, MethodIndex mnum)
 
     /* Be very careful what is called here, watch out for recursion. */
 
-    TlsIndex tls_index;
-    jint     *pstatus;
+    if (gdata->cpu_timing) {
 
-    HPROF_ASSERT(env!=NULL);
-    HPROF_ASSERT(thread!=NULL);
+        TlsIndex tls_index;
+        jint *pstatus;
 
-    if (cnum == 0 || cnum == gdata->tracker_cnum) {
-        jclass newExcCls = (*env)->FindClass(env, "java/lang/IllegalArgumentException");
-        (*env)->ThrowNew(env, newExcCls, "Illegal cnum.");
+        HPROF_ASSERT(env != NULL);
+        HPROF_ASSERT(thread != NULL);
 
-        return;
-    }
+        if (cnum == 0 || cnum == gdata->tracker_cnum) {
+            jclass newExcCls = (*env)->FindClass(env, "java/lang/IllegalArgumentException");
+            (*env)->ThrowNew(env, newExcCls, "Illegal cnum.");
 
-    /* Prevent recursion into any BCI function for this thread (pstatus). */
-    if ( tls_get_tracker_status(env, thread, JNI_FALSE,
-             &pstatus, &tls_index, NULL, NULL) == 0 ) {
-        jmethodID     method;
-
-        (*pstatus) = 1;
-        method      = class_get_methodID(env, cnum, mnum);
-        if (method != NULL) {
-            tls_pop_method(tls_index, thread, method);
+            return;
         }
 
-        (*pstatus) = 0;
+        /* Prevent recursion into any BCI function for this thread (pstatus). */
+        if (tls_get_tracker_status(env, thread, JNI_FALSE,
+                                   &pstatus, &tls_index, NULL, NULL) == 0) {
+            jmethodID method;
+
+            (*pstatus) = 1;
+            method = class_get_methodID(env, cnum, mnum);
+            if (method != NULL) {
+                tls_pop_method(tls_index, thread, method);
+            }
+
+            (*pstatus) = 0;
+        }
     }
 }
 

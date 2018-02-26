@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/dylan/Trees/hprof/trie_temp/src/main.c
+stdio.h
+-
+
+/home/dylan/Trees/hprof/trie_temp/src/trie.c
+stdlib.h
+-
+string.h
+-
+trie.h
+/home/dylan/Trees/hprof/trie_temp/src/trie.h
+alloc-testing.h
+/home/dylan/Trees/hprof/trie_temp/src/alloc-testing.h
+
+/home/dylan/Trees/hprof/trie_temp/src/trie.h
+

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="trie_temp"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/dylan/Trees/hprof/trie_temp/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/dylan/Trees/hprof/trie_temp/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/dylan/Trees/hprof/trie_temp/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/dylan/Trees/hprof/trie_temp/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/dylan/Trees/hprof/trie_temp/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/home/dylan/Trees/hprof/trie_temp/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/dylan/Trees/hprof/trie_temp/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/dylan/Trees/hprof/trie_temp/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/dylan/Trees/hprof/trie_temp/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/dylan/Trees/hprof/trie_temp/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/home/dylan/Trees/hprof/trie_temp/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/dylan/Trees/hprof/trie_temp/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/dylan/Trees/hprof/trie_temp/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/dylan/Trees/hprof/trie_temp/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/dylan/Trees/hprof/trie_temp/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="trie_temp">
+				<Option output="/home/dylan/Trees/hprof/trie_temp/cmake-build-debug/trie_temp" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/dylan/Trees/hprof/trie_temp/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/dylan/Trees/hprof/trie_temp/cmake-build-debug/Makefile&quot;  VERBOSE=1 trie_temp"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/dylan/Trees/hprof/trie_temp/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/dylan/Trees/hprof/trie_temp/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/dylan/Trees/hprof/trie_temp/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="trie_temp/fast">
+				<Option output="/home/dylan/Trees/hprof/trie_temp/cmake-build-debug/trie_temp" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/dylan/Trees/hprof/trie_temp/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/dylan/Trees/hprof/trie_temp/cmake-build-debug/Makefile&quot;  VERBOSE=1 trie_temp/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/dylan/Trees/hprof/trie_temp/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/dylan/Trees/hprof/trie_temp/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/dylan/Trees/hprof/trie_temp/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/dylan/Trees/hprof/trie_temp/src/main.c">
+			<Option target="trie_temp"/>
+		</Unit>
+		<Unit filename="/home/dylan/Trees/hprof/trie_temp/src/new_trie.c">
+			<Option target="trie_temp"/>
+		</Unit>
+		<Unit filename="/home/dylan/Trees/hprof/trie_temp/src/new_trie.h">
+			<Option target="trie_temp"/>
+		</Unit>
+		<Unit filename="/home/dylan/Trees/hprof/trie_temp/src/trie.c">
+			<Option target="trie_temp"/>
+		</Unit>
+		<Unit filename="/home/dylan/Trees/hprof/trie_temp/src/trie.h">
+			<Option target="trie_temp"/>
+		</Unit>
+		<Unit filename="/home/dylan/Trees/hprof/trie_temp/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
