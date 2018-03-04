@@ -2,10 +2,18 @@
 // Created by dylan on 24/02/2018.
 //
 
-#include "new_trie.h"
+#include "hprof_tree.h"
 #include <memory.h>
 #include <stdlib.h>
 #include <stdio.h>
+
+typedef struct Node {
+    int data;               // Change to struct required. Tree will not be generalised.
+    struct Node * parent;
+    struct Node ** children;
+    int size;
+} Node;
+
 
 Node * initTree() {
     Node * newTree = (Node *) malloc(sizeof(Node));

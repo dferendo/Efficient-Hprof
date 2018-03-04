@@ -100,6 +100,7 @@ typedef struct TlsInfo {
     ObjectIndex     thread_object_index;/* If heap=dump */
     jlong           monitor_start_time; /* Start time for monitor */
     jint            in_heap_dump;       /* If we are an object in the dump */
+    
 } TlsInfo;
 
 typedef struct SearchData {

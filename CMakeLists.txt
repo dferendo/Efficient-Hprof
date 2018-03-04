@@ -17,8 +17,8 @@ include_directories(${BCI})
 
 
 set(SOURCE_FILES
-        src/hprof_vector.c
-        src/hprof_vector.h
+        src/hprof_tree.c
+        src/hprof_tree.h
         src/debug_malloc.c
         src/debug_malloc.h
         src/hprof.h
@@ -75,8 +75,6 @@ set(SOURCE_FILES
         src/hprof_util.h
         src/hprof_prelude.h
         src/hprof_prelude.c
-        src/trie.c
-        src/trie.h
         ${JAVA_HOME}/classfile_constants.h
         ${JAVA_HOME}/jni.h
         ${JAVA_HOME}/jvmti.h

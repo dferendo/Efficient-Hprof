@@ -198,6 +198,7 @@ typedef struct ConstantPoolValue {
 #include "hprof_listener.h"
 #include "hprof_cpu.h"
 #include "hprof_tag.h"
+#include "hprof_tree.h"
 
 /* Global data structure */
 
@@ -398,6 +399,9 @@ typedef struct {
 
     /* Indication that the agent has been loaded */
     jboolean isLoaded;
+
+    /* Tree for traces */
+    struct Node * root_traces;
 
 } GlobalData;
 

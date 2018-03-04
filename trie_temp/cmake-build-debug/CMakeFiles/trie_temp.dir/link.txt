@@ -1,1 +1,0 @@
-/usr/bin/cc -g   CMakeFiles/trie_temp.dir/src/main.c.o CMakeFiles/trie_temp.dir/src/new_trie.c.o  -o trie_temp 

@@ -250,6 +250,7 @@ event_exception_catch(JNIEnv *env, jthread thread, jmethodID method,
 void
 event_return(JNIEnv *env, jthread thread, ClassIndex cnum, MethodIndex mnum)
 {
+    // TO get node use get_info.
     /* Called via BCI Tracker class */
 
     /* Be very careful what is called here, watch out for recursion. */
