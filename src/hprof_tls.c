@@ -100,7 +100,7 @@ typedef struct TlsInfo {
     ObjectIndex     thread_object_index;/* If heap=dump */
     jlong           monitor_start_time; /* Start time for monitor */
     jint            in_heap_dump;       /* If we are an object in the dump */
-    
+    struct Node *   thread_root_node;   /* Keep the current trace node of the thread */
 } TlsInfo;
 
 typedef struct SearchData {
@@ -1188,4 +1188,13 @@ tls_find(SerialNumber thread_serial_num)
     index = table_find_entry(gdata->tls_table,
           (void*)&thread_serial_num, (int)sizeof(SerialNumber));
     return index;
+}
+
+struct Node * tls_get_node(TlsIndex index, jthread thread) {
+    TlsInfo  *    info;
+
+    info               = get_info(index);
+    HPROF_ASSERT(info!=NULL);
+    
+    return info->thread_root_node;
 }
