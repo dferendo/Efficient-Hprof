@@ -7,6 +7,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+typedef struct NodeData {
+
+} NodeData;
+
 typedef struct Node {
     int data;               // Change to struct required. Tree will not be generalised.
     struct Node * parent;

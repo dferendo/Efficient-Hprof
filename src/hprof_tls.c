@@ -1195,6 +1195,6 @@ struct Node * tls_get_node(TlsIndex index, jthread thread) {
 
     info               = get_info(index);
     HPROF_ASSERT(info!=NULL);
-    
+
     return info->thread_root_node;
 }

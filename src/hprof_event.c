@@ -93,14 +93,14 @@ get_super(JNIEnv *env, jclass klass)
 
     super_cnum  = 0;
     WITH_LOCAL_REFS(env, 1) {
-        jclass  super_klass;
+                jclass  super_klass;
 
-        super_klass = getSuperclass(env, klass);
-        if ( super_klass != NULL ) {
-            super_cnum = find_cnum(env, super_klass,
-                                getClassLoader(super_klass));
-        }
-    } END_WITH_LOCAL_REFS;
+                super_klass = getSuperclass(env, klass);
+                if ( super_klass != NULL ) {
+                    super_cnum = find_cnum(env, super_klass,
+                                           getClassLoader(super_klass));
+                }
+            } END_WITH_LOCAL_REFS;
     return super_cnum;
 }
 
@@ -136,96 +136,27 @@ any_allocation(JNIEnv *env, SerialNumber thread_serial_num,
 void
 event_object_init(JNIEnv *env, jthread thread, jobject object)
 {
-    /* Called via BCI Tracker class */
 
-    /* Be very careful what is called here, watch out for recursion. */
-    return;
-    jint        *pstatus;
-    TraceIndex   trace_index;
-    SerialNumber thread_serial_num;
-
-    HPROF_ASSERT(env!=NULL);
-    HPROF_ASSERT(thread!=NULL);
-    HPROF_ASSERT(object!=NULL);
-
-    /* Prevent recursion into any BCI function for this thread (pstatus). */
-    if ( tls_get_tracker_status(env, thread, JNI_TRUE,
-             &pstatus, NULL, &thread_serial_num, &trace_index) == 0 ) {
-        (*pstatus) = 1;
-        any_allocation(env, thread_serial_num, trace_index, object);
-        (*pstatus) = 0;
-    }
 }
 
 /* Handle any newarray opcode allocation. */
 void
 event_newarray(JNIEnv *env, jthread thread, jobject object)
 {
-    /* Called via BCI Tracker class */
 
-    /* Be very careful what is called here, watch out for recursion. */
-    return;
-    jint        *pstatus;
-    TraceIndex   trace_index;
-    SerialNumber thread_serial_num;
-
-    HPROF_ASSERT(env!=NULL);
-    HPROF_ASSERT(thread!=NULL);
-    HPROF_ASSERT(object!=NULL);
-
-    /* Prevent recursion into any BCI function for this thread (pstatus). */
-    if ( tls_get_tracker_status(env, thread, JNI_FALSE,
-             &pstatus, NULL, &thread_serial_num, &trace_index) == 0 ) {
-        (*pstatus) = 1;
-        any_allocation(env, thread_serial_num, trace_index, object);
-        (*pstatus) = 0;
-    }
 }
 
 /* Handle tracking of a method call. */
 void
 event_call(JNIEnv *env, jthread thread, ClassIndex cnum, MethodIndex mnum)
 {
-    /* Called via BCI Tracker class */
-
-    /* Be very careful what is called here, watch out for recursion. */
-//    printf("TEST");
-//    printf("%s\n", string_get(class_get_signature(cnum)));
-    return;
-    if (gdata->cpu_timing) {
-        TlsIndex tls_index;
-        jint     *pstatus;
-
-        HPROF_ASSERT(env!=NULL);
-        HPROF_ASSERT(thread!=NULL);
-        if (cnum == 0 || cnum == gdata->tracker_cnum) {
-            jclass newExcCls = (*env)->FindClass(env, "java/lang/IllegalArgumentException");
-            (*env)->ThrowNew(env, newExcCls, "Illegal cnum.");
-
-            return;
-        }
-
-        /* Prevent recursion into any BCI function for this thread (pstatus). */
-        if ( tls_get_tracker_status(env, thread, JNI_FALSE,
-                                    &pstatus, &tls_index, NULL, NULL) == 0 ) {
-            jmethodID     method;
-
-            (*pstatus) = 1;
-            method      = class_get_methodID(env, cnum, mnum);
-            if (method != NULL) {
-                tls_push_method(tls_index, method);
-            }
-
-            (*pstatus) = 0;
-        }
-    }
 
 }
 
 /* Handle tracking of an exception catch */
 void
 event_exception_catch(JNIEnv *env, jthread thread, jmethodID method,
-        jlocation location, jobject exception)
+                      jlocation location, jobject exception)
 {
     /* Called via JVMTI_EVENT_EXCEPTION_CATCH callback */
     /* Be very careful what is called here, watch out for recursion. */
@@ -239,9 +170,9 @@ event_exception_catch(JNIEnv *env, jthread thread, jmethodID method,
 
     /* Prevent recursion into any BCI function for this thread (pstatus). */
     if ( tls_get_tracker_status(env, thread, JNI_FALSE,
-             &pstatus, &tls_index, NULL, NULL) == 0 ) {
+                                &pstatus, &tls_index, NULL, NULL) == 0 ) {
         (*pstatus) = 1;
-         tls_pop_exception_catch(tls_index, thread, method);
+        tls_pop_exception_catch(tls_index, thread, method);
         (*pstatus) = 0;
     }
 }
@@ -250,40 +181,7 @@ event_exception_catch(JNIEnv *env, jthread thread, jmethodID method,
 void
 event_return(JNIEnv *env, jthread thread, ClassIndex cnum, MethodIndex mnum)
 {
-    // TO get node use get_info.
-    /* Called via BCI Tracker class */
 
-    /* Be very careful what is called here, watch out for recursion. */
-    return;
-//    if (gdata->cpu_timing) {
-//
-//        TlsIndex tls_index;
-//        jint *pstatus;
-//
-//        HPROF_ASSERT(env != NULL);
-//        HPROF_ASSERT(thread != NULL);
-//
-//        if (cnum == 0 || cnum == gdata->tracker_cnum) {
-//            jclass newExcCls = (*env)->FindClass(env, "java/lang/IllegalArgumentException");
-//            (*env)->ThrowNew(env, newExcCls, "Illegal cnum.");
-//
-//            return;
-//        }
-//
-//        /* Prevent recursion into any BCI function for this thread (pstatus). */
-//        if (tls_get_tracker_status(env, thread, JNI_FALSE,
-//                                   &pstatus, &tls_index, NULL, NULL) == 0) {
-//            jmethodID method;
-//
-//            (*pstatus) = 1;
-//            method = class_get_methodID(env, cnum, mnum);
-//            if (method != NULL) {
-//                tls_pop_method(tls_index, thread, method);
-//            }
-//
-//            (*pstatus) = 0;
-//        }
-//    }
 }
 
 /* Handle a class prepare (should have been already loaded) */
@@ -366,7 +264,7 @@ event_class_load(JNIEnv *env, jthread thread, jclass klass, jobject loader)
 
         rawMonitorEnter(gdata->data_access_lock); {
             io_write_class_load(class_serial_num, class_object_index,
-                        trace_serial_num, signature);
+                                trace_serial_num, signature);
         } rawMonitorExit(gdata->data_access_lock);
 
         super  = get_super(env, klass);
@@ -403,7 +301,7 @@ event_thread_start(JNIEnv *env, jthread thread)
         site_index = site_find_or_create(gdata->thread_cnum, trace_index);
         /*  We create a new object with this thread's serial number */
         object_index = object_new(site_index, size, OBJECT_NORMAL,
-                                              thread_serial_num);
+                                  thread_serial_num);
     } else {
         object_index = tag_extract(tag);
         /* Normally the Thread object is created and tagged before we get
@@ -415,29 +313,29 @@ event_thread_start(JNIEnv *env, jthread thread)
     tls_set_thread_object_index(tls_index, object_index);
 
     WITH_LOCAL_REFS(env, 1) {
-        jvmtiThreadInfo      threadInfo;
-        jvmtiThreadGroupInfo threadGroupInfo;
-        jvmtiThreadGroupInfo parentGroupInfo;
+                jvmtiThreadInfo      threadInfo;
+                jvmtiThreadGroupInfo threadGroupInfo;
+                jvmtiThreadGroupInfo parentGroupInfo;
 
-        getThreadInfo(thread, &threadInfo);
-        getThreadGroupInfo(threadInfo.thread_group, &threadGroupInfo);
-        if ( threadGroupInfo.parent != NULL ) {
-            getThreadGroupInfo(threadGroupInfo.parent, &parentGroupInfo);
-        } else {
-            (void)memset(&parentGroupInfo, 0, sizeof(parentGroupInfo));
-        }
+                getThreadInfo(thread, &threadInfo);
+                getThreadGroupInfo(threadInfo.thread_group, &threadGroupInfo);
+                if ( threadGroupInfo.parent != NULL ) {
+                    getThreadGroupInfo(threadGroupInfo.parent, &parentGroupInfo);
+                } else {
+                    (void)memset(&parentGroupInfo, 0, sizeof(parentGroupInfo));
+                }
 
-        rawMonitorEnter(gdata->data_access_lock); {
-            io_write_thread_start(thread_serial_num,
-                object_index, trace_get_serial_number(trace_index),
-                threadInfo.name, threadGroupInfo.name, parentGroupInfo.name);
-        } rawMonitorExit(gdata->data_access_lock);
+                rawMonitorEnter(gdata->data_access_lock); {
+                    io_write_thread_start(thread_serial_num,
+                                          object_index, trace_get_serial_number(trace_index),
+                                          threadInfo.name, threadGroupInfo.name, parentGroupInfo.name);
+                } rawMonitorExit(gdata->data_access_lock);
 
-        jvmtiDeallocate(threadInfo.name);
-        jvmtiDeallocate(threadGroupInfo.name);
-        jvmtiDeallocate(parentGroupInfo.name);
+                jvmtiDeallocate(threadInfo.name);
+                jvmtiDeallocate(threadGroupInfo.name);
+                jvmtiDeallocate(parentGroupInfo.name);
 
-    } END_WITH_LOCAL_REFS;
+            } END_WITH_LOCAL_REFS;
 }
 
 void
