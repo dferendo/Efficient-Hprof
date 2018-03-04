@@ -145,9 +145,12 @@ static void JNICALL
 Tracker_nativeCallSite
   (JNIEnv *env, jclass clazz, jobject thread, jint cnum, jint mnum)
 {
-    BEGIN_TRACKER_CALLBACK() {
-        event_call(env, thread, cnum, mnum);
-    } END_TRACKER_CALLBACK();
+    if (gdata->cpu_timing) {
+        BEGIN_TRACKER_CALLBACK(){
+                    event_call(env, thread, cnum, mnum);
+                }
+        END_TRACKER_CALLBACK();
+    }
 }
 
 /*
@@ -159,9 +162,12 @@ static void JNICALL
 Tracker_nativeReturnSite
   (JNIEnv *env, jclass clazz, jobject thread, jint cnum, jint mnum)
 {
-    BEGIN_TRACKER_CALLBACK() {
-        event_return(env, thread, cnum, mnum);
-    } END_TRACKER_CALLBACK();
+    if (gdata->cpu_timing) {
+        BEGIN_TRACKER_CALLBACK(){
+                    event_return(env, thread, cnum, mnum);
+                }
+        END_TRACKER_CALLBACK();
+    }
 }
 
 
