@@ -17,6 +17,8 @@ include_directories(${BCI})
 
 
 set(SOURCE_FILES
+        src/hprof_vector.c
+        src/hprof_vector.h
         src/debug_malloc.c
         src/debug_malloc.h
         src/hprof.h

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Options to run: 
+# heap=all, thread=y, depth=1
 # Avrora
 echo "No Hprof"
 java -jar dacapo-9.12-bach.jar avrora -s large

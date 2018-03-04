@@ -72,3 +72,8 @@ Node * moveToParent(Node * currentNode) {
 
     return currentNode->parent;
 }
+
+
+void printTree(Node * root) {
+    // TODO: Do we need this?
+}

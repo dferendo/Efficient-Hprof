@@ -1140,7 +1140,7 @@ setup_event_mode(jboolean onload_set_only, jvmtiEventMode state)
 
 /* JVMTI_EVENT_VM_INIT */
 static void JNICALL
-cbVMInit(jvmtiEnv *jvmti, JNIEnv *env, jthread thread)
+    cbVMInit(jvmtiEnv *jvmti, JNIEnv *env, jthread thread)
 {
     rawMonitorEnter(gdata->data_access_lock); {
 
@@ -1546,10 +1546,10 @@ cbClassFileLoadHook(jvmtiEnv *jvmti_env, JNIEnv* env,
                     system_class,
                     TRACKER_CLASS_NAME,
                     TRACKER_CLASS_SIG,
-                    TRACKER_CALL_NAME,
-                    TRACKER_CALL_SIG,
-                    TRACKER_RETURN_NAME,
-                    TRACKER_RETURN_SIG,
+                    NULL,
+                    NULL,
+                    NULL,
+                    NULL,
                     (gdata->obj_watch)?TRACKER_OBJECT_INIT_NAME:NULL,
                     (gdata->obj_watch)?TRACKER_OBJECT_INIT_SIG:NULL,
                     (gdata->obj_watch)?TRACKER_NEWARRAY_NAME:NULL,

@@ -115,11 +115,9 @@
  */
 static void JNICALL
 Tracker_nativeNewArray
-  (JNIEnv *env, jclass clazz, jobject thread, jobject obj)
+        (JNIEnv *env, jclass clazz, jobject thread, jobject obj)
 {
-    BEGIN_TRACKER_CALLBACK() {
-        event_newarray(env, thread, obj);
-    } END_TRACKER_CALLBACK();
+  event_newarray(env, thread, obj);
 }
 
 /*
@@ -129,11 +127,9 @@ Tracker_nativeNewArray
  */
 static void JNICALL
 Tracker_nativeObjectInit
-  (JNIEnv *env, jclass clazz, jobject thread, jobject obj)
+        (JNIEnv *env, jclass clazz, jobject thread, jobject obj)
 {
-    BEGIN_TRACKER_CALLBACK() {
-        event_object_init(env, thread, obj);
-    } END_TRACKER_CALLBACK();
+    event_object_init(env, thread, obj);
 }
 
 /*
@@ -143,11 +139,9 @@ Tracker_nativeObjectInit
  */
 static void JNICALL
 Tracker_nativeCallSite
-  (JNIEnv *env, jclass clazz, jobject thread, jint cnum, jint mnum)
+        (JNIEnv *env, jclass clazz, jobject thread, jint cnum, jint mnum)
 {
-    BEGIN_TRACKER_CALLBACK() {
-        event_call(env, thread, cnum, mnum);
-    } END_TRACKER_CALLBACK();
+    event_call(env, thread, cnum, mnum);
 }
 
 /*
@@ -157,11 +151,9 @@ Tracker_nativeCallSite
  */
 static void JNICALL
 Tracker_nativeReturnSite
-  (JNIEnv *env, jclass clazz, jobject thread, jint cnum, jint mnum)
+        (JNIEnv *env, jclass clazz, jobject thread, jint cnum, jint mnum)
 {
-    BEGIN_TRACKER_CALLBACK() {
-        event_return(env, thread, cnum, mnum);
-    } END_TRACKER_CALLBACK();
+    event_return(env, thread, cnum, mnum);
 }
 
 
@@ -187,7 +179,7 @@ set_engaged(JNIEnv *env, jint engaged)
             HPROF_ASSERT(tracker_class!=NULL);
             exceptionClear(env);
             field = getStaticFieldID(env, tracker_class,
-                                    TRACKER_ENGAGED_NAME, TRACKER_ENGAGED_SIG);
+                                     TRACKER_ENGAGED_NAME, TRACKER_ENGAGED_SIG);
             setStaticIntField(env, tracker_class, field, engaged);
             exceptionClear(env);
 
@@ -231,31 +223,31 @@ tracker_method(jmethodID method)
 }
 
 static JNINativeMethod registry[4] =
-{
-        { TRACKER_NEWARRAY_NATIVE_NAME,    TRACKER_NEWARRAY_NATIVE_SIG,
-                (void*)&Tracker_nativeNewArray },
-        { TRACKER_OBJECT_INIT_NATIVE_NAME, TRACKER_OBJECT_INIT_NATIVE_SIG,
-                (void*)&Tracker_nativeObjectInit },
-        { TRACKER_CALL_NATIVE_NAME,        TRACKER_CALL_NATIVE_SIG,
-                (void*)&Tracker_nativeCallSite },
-        { TRACKER_RETURN_NATIVE_NAME,      TRACKER_RETURN_NATIVE_SIG,
-                (void*)&Tracker_nativeReturnSite }
-};
+        {
+                { TRACKER_NEWARRAY_NATIVE_NAME,    TRACKER_NEWARRAY_NATIVE_SIG,
+                        (void*)&Tracker_nativeNewArray },
+                { TRACKER_OBJECT_INIT_NATIVE_NAME, TRACKER_OBJECT_INIT_NATIVE_SIG,
+                        (void*)&Tracker_nativeObjectInit },
+                { TRACKER_CALL_NATIVE_NAME,        TRACKER_CALL_NATIVE_SIG,
+                        (void*)&Tracker_nativeCallSite },
+                { TRACKER_RETURN_NATIVE_NAME,      TRACKER_RETURN_NATIVE_SIG,
+                        (void*)&Tracker_nativeReturnSite }
+        };
 
 static struct {
     char *name;
     char *sig;
 } tracker_methods[] =
-    {
-        { TRACKER_NEWARRAY_NAME,           TRACKER_NEWARRAY_SIG            },
-        { TRACKER_OBJECT_INIT_NAME,        TRACKER_OBJECT_INIT_SIG         },
-        { TRACKER_CALL_NAME,               TRACKER_CALL_SIG                },
-        { TRACKER_RETURN_NAME,             TRACKER_RETURN_SIG              },
-        { TRACKER_NEWARRAY_NATIVE_NAME,    TRACKER_NEWARRAY_NATIVE_SIG     },
-        { TRACKER_OBJECT_INIT_NATIVE_NAME, TRACKER_OBJECT_INIT_NATIVE_SIG  },
-        { TRACKER_CALL_NATIVE_NAME,        TRACKER_CALL_NATIVE_SIG         },
-        { TRACKER_RETURN_NATIVE_NAME,      TRACKER_RETURN_NATIVE_SIG       }
-    };
+        {
+                { TRACKER_NEWARRAY_NAME,           TRACKER_NEWARRAY_SIG            },
+                { TRACKER_OBJECT_INIT_NAME,        TRACKER_OBJECT_INIT_SIG         },
+                { TRACKER_CALL_NAME,               TRACKER_CALL_SIG                },
+                { TRACKER_RETURN_NAME,             TRACKER_RETURN_SIG              },
+                { TRACKER_NEWARRAY_NATIVE_NAME,    TRACKER_NEWARRAY_NATIVE_SIG     },
+                { TRACKER_OBJECT_INIT_NATIVE_NAME, TRACKER_OBJECT_INIT_NATIVE_SIG  },
+                { TRACKER_CALL_NATIVE_NAME,        TRACKER_CALL_NATIVE_SIG         },
+                { TRACKER_RETURN_NATIVE_NAME,      TRACKER_RETURN_NATIVE_SIG       }
+        };
 
 void
 tracker_setup_class(void)
@@ -290,31 +282,31 @@ tracker_setup_methods(JNIEnv *env)
     tracker_class = class_get_class(env, gdata->tracker_cnum);
 
     CHECK_EXCEPTIONS(env) {
-        registerNatives(env, tracker_class, registry,
+                registerNatives(env, tracker_class, registry,
                                 (int)sizeof(registry)/(int)sizeof(registry[0]));
-    } END_CHECK_EXCEPTIONS;
+            } END_CHECK_EXCEPTIONS;
 
     HPROF_ASSERT(tracker_class!=NULL);
 
     gdata->tracker_method_count =
-        (int)sizeof(tracker_methods)/(int)sizeof(tracker_methods[0]);
+            (int)sizeof(tracker_methods)/(int)sizeof(tracker_methods[0]);
 
     HPROF_ASSERT(gdata->tracker_method_count <=
-      (int)(sizeof(gdata->tracker_methods)/sizeof(gdata->tracker_methods[0])));
+                 (int)(sizeof(gdata->tracker_methods)/sizeof(gdata->tracker_methods[0])));
 
     CHECK_EXCEPTIONS(env) {
-        gdata->object_init_method = getMethodID(env, object_class,
-                                    OBJECT_INIT_NAME, OBJECT_INIT_SIG);
-        for ( i=0 ; i < gdata->tracker_method_count ; i++ ) {
-            gdata->tracker_methods[i].name =
-                        string_find_or_create(tracker_methods[i].name);
-            gdata->tracker_methods[i].sig =
-                        string_find_or_create(tracker_methods[i].sig);
-            gdata->tracker_methods[i].method =
-                      getStaticMethodID(env, tracker_class,
-                            tracker_methods[i].name, tracker_methods[i].sig);
-            HPROF_ASSERT(gdata->tracker_methods[i].method!=NULL);
-            LOG2("tracker_setup_methods(): Found", tracker_methods[i].name);
-        }
-    } END_CHECK_EXCEPTIONS;
+                gdata->object_init_method = getMethodID(env, object_class,
+                                                        OBJECT_INIT_NAME, OBJECT_INIT_SIG);
+                for ( i=0 ; i < gdata->tracker_method_count ; i++ ) {
+                    gdata->tracker_methods[i].name =
+                            string_find_or_create(tracker_methods[i].name);
+                    gdata->tracker_methods[i].sig =
+                            string_find_or_create(tracker_methods[i].sig);
+                    gdata->tracker_methods[i].method =
+                            getStaticMethodID(env, tracker_class,
+                                              tracker_methods[i].name, tracker_methods[i].sig);
+                    HPROF_ASSERT(gdata->tracker_methods[i].method!=NULL);
+                    LOG2("tracker_setup_methods(): Found", tracker_methods[i].name);
+                }
+            } END_CHECK_EXCEPTIONS;
 }

@@ -18,4 +18,6 @@ Node * findOrCreateTreeChild(Node * currentNode, int data);
 
 Node * moveToParent(Node * currentNode);
 
+void printTree(Node * root);
+
 #endif //TRIE_TEMP_NEW_TRIE_H
