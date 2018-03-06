@@ -193,6 +193,9 @@ get_gdata(void)
     data.gref_serial_number_counter   = data.gref_serial_number_start;
 
     data.unknown_thread_serial_num    = data.thread_serial_number_counter++;
+
+    data.root                         = initTree();
+    data.current_method_root          = data.root;
     return &data;
 }
 

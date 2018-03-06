@@ -861,6 +861,9 @@ site_heapdump(JNIEnv *env)
         /* Dump the last thread traces and get the lists back we need */
         tls_dump_traces(env);
 
+        /* Print Tree */
+        dump_tree();
+
         /* Write header for heap dump */
         io_heap_header(gdata->total_live_instances, gdata->total_live_bytes);
 

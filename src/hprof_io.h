@@ -166,4 +166,6 @@ void io_heap_prim_array(ObjectIndex obj_id, SerialNumber trace_serial_num,
 
 void io_heap_footer(void);
 
+void dump_tree();
+
 #endif

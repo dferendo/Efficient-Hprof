@@ -150,6 +150,17 @@ event_newarray(JNIEnv *env, jthread thread, jobject object)
 void
 event_call(JNIEnv *env, jthread thread, ClassIndex cnum, MethodIndex mnum)
 {
+//    printf("Entered method %s\n", string_get(class_get_signature(cnum)));
+
+//    TlsIndex tls_index;
+//    struct Node * root;
+//
+//    // Get thread root node.
+//    tls_index = tls_find_or_create(env, thread);
+//
+//    root = tls_get_node(tls_index, thread);
+//
+//    // Check if the thread
 
 }
 
@@ -181,7 +192,7 @@ event_exception_catch(JNIEnv *env, jthread thread, jmethodID method,
 void
 event_return(JNIEnv *env, jthread thread, ClassIndex cnum, MethodIndex mnum)
 {
-
+//    printf("Returned method %s\n", string_get(class_get_signature(cnum)));
 }
 
 /* Handle a class prepare (should have been already loaded) */
@@ -278,6 +289,13 @@ void
 event_thread_start(JNIEnv *env, jthread thread)
 {
     /* Called via JVMTI_EVENT_THREAD_START event */
+
+    // TODO: Get the parent of the thread and set the starting node of this thread to that thread.
+    // TODO: MAYBE USE ASSUMPTION THREAD GROUPS ONLY??
+
+    // TODO: ALSO WE CAN GET THE STACK TRACE AND MATCH IT IN THE TREE
+
+    // TODO: OR SEPARATE THEM INTO DIFFERENT TREES?
 
     TlsIndex    tls_index;
     ObjectIndex object_index;

@@ -7,16 +7,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-typedef struct NodeData {
 
-} NodeData;
-
-typedef struct Node {
-    int data;               // Change to struct required. Tree will not be generalised.
-    struct Node * parent;
-    struct Node ** children;
-    int size;
-} Node;
+Node * findInTree() {
+    // TODO: Implement?
+    return NULL;
+}
 
 
 Node * initTree() {
@@ -27,19 +22,21 @@ Node * initTree() {
         return NULL;
     }
     newTree->parent = NULL;
-    newTree->data = 0;
+    newTree->data = NULL;
     newTree->children = NULL;
     newTree->size = 0;
 
     return newTree;
 }
 
-Node * findOrCreateTreeChild(Node * currentNode, int data) {
+Node * findOrCreateTreeChild(Node * currentNode, int class_id, int method_id) {
     Node * newNode;
+    NodeData * data;
 
     // Check if child is already created
     for (int i = 0; i < currentNode->size; i++) {
-        if (currentNode->children[i]->data == data) {
+        if (currentNode->children[i]->data->class_id == class_id &&
+                currentNode->children[i]->data->method_id == method_id) {
             return currentNode->children[i];
         }
     }
@@ -65,6 +62,9 @@ Node * findOrCreateTreeChild(Node * currentNode, int data) {
     // Allocate memory for new Node
     newNode = (Node *) malloc(sizeof(Node));
 
+    // Allocate memory for data
+    data = (NodeData *) malloc(sizeof(NodeData));
+
     // Update child
     newNode->size = 0;
     newNode->data = data;
@@ -83,9 +83,4 @@ Node * moveToParent(Node * currentNode) {
     }
 
     return currentNode->parent;
-}
-
-
-void printTree(Node * root) {
-    // TODO: Do we need this?
 }

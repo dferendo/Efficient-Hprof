@@ -1951,3 +1951,37 @@ io_heap_footer(void)
         }
     }
 }
+
+void print_tree(Node * currentNode) {
+
+    // Root node can be NULL.
+    if (currentNode->data != NULL) {
+        printf("Node Class %d, Method %d, Children: ", currentNode->data->class_id,
+               currentNode->data->method_id);
+    }
+
+    for (int i = 0; i < currentNode->size; i++) {
+        printf("Node Class %d, Method %d,,", currentNode->children[i]->data->class_id,
+               currentNode->children[i]->data->method_id);
+    }
+
+    printf("\n");
+
+    // Recursive call children
+    for (int i = 0; i < currentNode->size; i++) {
+        print_tree(currentNode->children[i]);
+    }
+
+}
+
+void dump_tree() {
+
+    if (gdata->output_format != 'b') {
+        heap_printf("DUMPING TREE\n");
+
+        print_tree(gdata->root);
+
+        heap_printf("DONE\n");
+    }
+}
+

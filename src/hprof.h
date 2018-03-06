@@ -401,7 +401,8 @@ typedef struct {
     jboolean isLoaded;
 
     /* Tree for traces */
-    struct Node * root_traces;
+    Node * root;
+    Node * current_method_root;
 
 } GlobalData;
 

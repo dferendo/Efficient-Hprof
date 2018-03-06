@@ -5,14 +5,24 @@
 #ifndef TRIE_TEMP_NEW_TRIE_H
 #define TRIE_TEMP_NEW_TRIE_H
 
-struct Node;
+typedef struct NodeData {
+    int class_id;
+    int method_id;
+} NodeData;
 
-struct Node * initTree();
+typedef struct Node {
+    NodeData * data;
+    struct Node * parent;
+    struct Node ** children;
+    int size;
+} Node;
 
-struct Node * findOrCreateTreeChild(struct Node * currentNode, int data);
+Node * initTree();
 
-struct Node * moveToParent(struct Node * currentNode);
+Node * findInTree();
 
-void printTree(struct Node * root);
+Node * findOrCreateTreeChild(Node * currentNode, int class_id, int method_id);
+
+Node * moveToParent(Node * currentNode);
 
 #endif //TRIE_TEMP_NEW_TRIE_H
