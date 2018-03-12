@@ -205,7 +205,7 @@ my_crw_fatal_error_handler(const char * msg, const char *file, int line)
     char errmsg[256];
 
     (void)md_snprintf(errmsg, sizeof(errmsg),
-                "%s [%s:%d]", msg, file, line);
+                      "%s [%s:%d]", msg, file, line);
     errmsg[sizeof(errmsg)-1] = 0;
     HPROF_ERROR(JNI_TRUE, errmsg);
 }
@@ -315,7 +315,7 @@ make_unique_filename(char **filename)
 
         /* Construct the name */
         (void)md_snprintf(new_name, new_len,
-                   "%s.%d%s", prefix, pid, suffix);
+                          "%s.%d%s", prefix, pid, suffix);
         *filename = new_name;
         HPROF_FREE(old_name);
 
@@ -378,35 +378,35 @@ print_usage(void)
 {
 
     (void)fprintf(stdout,
-"\n"
-"     HPROF: Heap and CPU Profiling Agent (JVMTI Demonstration Code)\n"
-"\n"
-AGENTNAME " usage: java " AGENTLIB "=[help]|[<option>=<value>, ...]\n"
-"\n"
-"Option Name and Value  Description                    Default\n"
-"---------------------  -----------                    -------\n"
-"heap=dump|sites|all    heap profiling                 all\n"
-"cpu=samples|times|old  CPU usage                      off\n"
-"monitor=y|n            monitor contention             n\n"
-"format=a|b             text(txt) or binary output     a\n"
-"file=<file>            write data to file             " DEFAULT_OUTPUTFILE "[{" DEFAULT_TXT_SUFFIX "}]\n"
-"net=<host>:<port>      send data over a socket        off\n"
-"depth=<size>           stack trace depth              " TO_STR(DEFAULT_TRACE_DEPTH) "\n"
-"interval=<ms>          sample interval in ms          " TO_STR(DEFAULT_SAMPLE_INTERVAL) "\n"
-"cutoff=<value>         output cutoff point            " TO_STR(DEFAULT_CUTOFF_POINT) "\n"
-"lineno=y|n             line number in traces?         y\n"
-"thread=y|n             thread in traces?              n\n"
-"doe=y|n                dump on exit?                  y\n"
-"msa=y|n                Solaris micro state accounting n\n"
-"force=y|n              force output to <file>         y\n"
-"verbose=y|n            print messages about dumps     y\n"
-"\n"
-"Obsolete Options\n"
-"----------------\n"
-"gc_okay=y|n\n"
+                  "\n"
+                    "     HPROF: Heap and CPU Profiling Agent (JVMTI Demonstration Code)\n"
+                    "\n"
+                    AGENTNAME " usage: java " AGENTLIB "=[help]|[<option>=<value>, ...]\n"
+                    "\n"
+                    "Option Name and Value  Description                    Default\n"
+                    "---------------------  -----------                    -------\n"
+                    "heap=dump|sites|all    heap profiling                 all\n"
+                    "cpu=samples|times|old  CPU usage                      off\n"
+                    "monitor=y|n            monitor contention             n\n"
+                    "format=a|b             text(txt) or binary output     a\n"
+                    "file=<file>            write data to file             " DEFAULT_OUTPUTFILE "[{" DEFAULT_TXT_SUFFIX "}]\n"
+                    "net=<host>:<port>      send data over a socket        off\n"
+                    "depth=<size>           stack trace depth              " TO_STR(DEFAULT_TRACE_DEPTH) "\n"
+                    "interval=<ms>          sample interval in ms          " TO_STR(DEFAULT_SAMPLE_INTERVAL) "\n"
+                    "cutoff=<value>         output cutoff point            " TO_STR(DEFAULT_CUTOFF_POINT) "\n"
+                    "lineno=y|n             line number in traces?         y\n"
+                    "thread=y|n             thread in traces?              n\n"
+                    "doe=y|n                dump on exit?                  y\n"
+                    "msa=y|n                Solaris micro state accounting n\n"
+                    "force=y|n              force output to <file>         y\n"
+                    "verbose=y|n            print messages about dumps     y\n"
+                    "\n"
+                    "Obsolete Options\n"
+                    "----------------\n"
+                    "gc_okay=y|n\n"
 
 #ifdef DEBUG
-"\n"
+            "\n"
 "DEBUG Option           Description                    Default\n"
 "------------           -----------                    -------\n"
 "primfields=y|n         include primitive field values y\n"
@@ -434,54 +434,54 @@ AGENTNAME " usage: java " AGENTLIB "=[help]|[<option>=<value>, ...]\n"
 
 #endif
 
-"\n"
-"Examples\n"
-"--------\n"
-"  - Get sample cpu information every 20 millisec, with a stack depth of 3:\n"
-"      java " AGENTLIB "=cpu=samples,interval=20,depth=3 classname\n"
-"  - Get heap usage information based on the allocation sites:\n"
-"      java " AGENTLIB "=heap=sites classname\n"
+                    "\n"
+                    "Examples\n"
+                    "--------\n"
+                    "  - Get sample cpu information every 20 millisec, with a stack depth of 3:\n"
+                    "      java " AGENTLIB "=cpu=samples,interval=20,depth=3 classname\n"
+                    "  - Get heap usage information based on the allocation sites:\n"
+                    "      java " AGENTLIB "=heap=sites classname\n"
 
 #ifdef DEBUG
-"  - Using the external option addition with csh, log details on all runs:\n"
+            "  - Using the external option addition with csh, log details on all runs:\n"
 "      setenv _JAVA_HPROF_OPTIONS \"logflags=0xC\"\n"
 "      java " AGENTLIB "=cpu=samples classname\n"
 "    is the same as:\n"
 "      java " AGENTLIB "=cpu=samples,logflags=0xC classname\n"
 #endif
 
-"\n"
-"Notes\n"
-"-----\n"
-"  - The option format=b cannot be used with monitor=y.\n"
-"  - The option format=b cannot be used with cpu=old|times.\n"
-"  - Use of the " XRUN " interface can still be used, e.g.\n"
-"       java " XRUN ":[help]|[<option>=<value>, ...]\n"
-"    will behave exactly the same as:\n"
-"       java " AGENTLIB "=[help]|[<option>=<value>, ...]\n"
+                    "\n"
+                    "Notes\n"
+                    "-----\n"
+                    "  - The option format=b cannot be used with monitor=y.\n"
+                    "  - The option format=b cannot be used with cpu=old|times.\n"
+                    "  - Use of the " XRUN " interface can still be used, e.g.\n"
+                    "       java " XRUN ":[help]|[<option>=<value>, ...]\n"
+                    "    will behave exactly the same as:\n"
+                    "       java " AGENTLIB "=[help]|[<option>=<value>, ...]\n"
 
 #ifdef DEBUG
-"  - The debug options and environment variables are available with both java\n"
+            "  - The debug options and environment variables are available with both java\n"
 "    and java_g versions.\n"
 #endif
 
-"\n"
-"Warnings\n"
-"--------\n"
-"  - This is demonstration code for the JVMTI interface and use of BCI,\n"
-"    it is not an official product or formal part of the JDK.\n"
-"  - The " XRUN " interface will be removed in a future release.\n"
-"  - The option format=b is considered experimental, this format may change\n"
-"    in a future release.\n"
+                    "\n"
+                    "Warnings\n"
+                    "--------\n"
+                    "  - This is demonstration code for the JVMTI interface and use of BCI,\n"
+                    "    it is not an official product or formal part of the JDK.\n"
+                    "  - The " XRUN " interface will be removed in a future release.\n"
+                    "  - The option format=b is considered experimental, this format may change\n"
+                    "    in a future release.\n"
 
 #ifdef DEBUG
-"  - The obsolete options may be completely removed in a future release.\n"
+    "  - The obsolete options may be completely removed in a future release.\n"
 "  - The debug options and environment variables are not considered public\n"
 "    interfaces and can change or be removed with any type of update of\n"
 "    " AGENTNAME ", including patches.\n"
 #endif
 
-        );
+    );
 }
 
 static void
@@ -490,7 +490,7 @@ option_error(char *description)
     char errmsg[FILENAME_MAX+80];
 
     (void)md_snprintf(errmsg, sizeof(errmsg),
-           "%s option error: %s (%s)", AGENTNAME, description, gdata->options);
+                      "%s option error: %s (%s)", AGENTNAME, description, gdata->options);
     errmsg[sizeof(errmsg)-1] = 0;
     HPROF_ERROR(JNI_FALSE, errmsg);
     error_exit_process(1);
@@ -520,7 +520,7 @@ parse_options(char *command_line_options)
     }
 
     all_options = HPROF_MALLOC((int)strlen(command_line_options) +
-                                (int)strlen(extra_options) + 2);
+                               (int)strlen(extra_options) + 2);
     gdata->options = all_options;
     (void)strcpy(all_options, command_line_options);
     if ( extra_options[0] != 0 ) {
@@ -747,8 +747,8 @@ parse_options(char *command_line_options)
         (void)strcpy(gdata->output_filename, gdata->utf8_output_filename);
 #else
         (void)(gdata->npt->utf8ToPlatform)
-              (gdata->npt->utf, (jbyte*)gdata->utf8_output_filename, ulen,
-               gdata->output_filename, ulen*3+3);
+                (gdata->npt->utf, (jbyte*)gdata->utf8_output_filename, ulen,
+                 gdata->output_filename, ulen*3+3);
 #endif
     }
 
@@ -791,8 +791,8 @@ parse_options(char *command_line_options)
 
                 check_suffix = ".check" DEFAULT_TXT_SUFFIX;
                 gdata->checkfilename =
-                    HPROF_MALLOC((int)strlen(default_filename)+
-                                (int)strlen(check_suffix)+1);
+                        HPROF_MALLOC((int)strlen(default_filename)+
+                                     (int)strlen(check_suffix)+1);
                 (void)strcpy(gdata->checkfilename, default_filename);
                 (void)strcat(gdata->checkfilename, check_suffix);
                 (void)remove(gdata->checkfilename);
@@ -809,8 +809,8 @@ parse_options(char *command_line_options)
             char errmsg[FILENAME_MAX+80];
 
             (void)md_snprintf(errmsg, sizeof(errmsg),
-                     "can't create temp heap file: %s", gdata->heapfilename);
-                    errmsg[sizeof(errmsg)-1] = 0;
+                              "can't create temp heap file: %s", gdata->heapfilename);
+            errmsg[sizeof(errmsg)-1] = 0;
             HPROF_ERROR(JNI_TRUE, errmsg);
         }
     }
@@ -822,7 +822,7 @@ parse_options(char *command_line_options)
             char errmsg[120];
 
             (void)md_snprintf(errmsg, sizeof(errmsg),
-                "can't connect to %s:%u", gdata->net_hostname, gdata->net_port);
+                              "can't connect to %s:%u", gdata->net_hostname, gdata->net_port);
             errmsg[sizeof(errmsg)-1] = 0;
             HPROF_ERROR(JNI_FALSE, errmsg);
             error_exit_process(1);
@@ -845,7 +845,7 @@ parse_options(char *command_line_options)
             char errmsg[FILENAME_MAX+80];
 
             (void)md_snprintf(errmsg, sizeof(errmsg),
-                "can't create profile file: %s", gdata->output_filename);
+                              "can't create profile file: %s", gdata->output_filename);
             errmsg[sizeof(errmsg)-1] = 0;
             HPROF_ERROR(JNI_FALSE, errmsg);
             error_exit_process(1);
@@ -923,49 +923,49 @@ reset_class_load_status(JNIEnv *env, jthread thread)
 {
 
     WITH_LOCAL_REFS(env, 1) {
-        jint    class_count;
-        jclass *classes;
-        jint    i;
+                jint    class_count;
+                jclass *classes;
+                jint    i;
 
-        /* Get all classes from JVMTI, make sure they are in the class table. */
-        getLoadedClasses(&classes, &class_count);
+                /* Get all classes from JVMTI, make sure they are in the class table. */
+                getLoadedClasses(&classes, &class_count);
 
-        /* We don't know if the class list has changed really, so we
-         *    guess by the class count changing. Don't want to do
-         *    a bunch of work on classes when it's unnecessary.
-         *    I assume that even though we have global references on the
-         *    jclass object that the class is still considered unloaded.
-         *    (e.g. GC of jclass isn't required for it to be included
-         *    in the unloaded list, or not in the load list)
-         *    [Note: Use of Weak references was a performance problem.]
-         */
-        if ( class_count != gdata->class_count ) {
+                /* We don't know if the class list has changed really, so we
+                 *    guess by the class count changing. Don't want to do
+                 *    a bunch of work on classes when it's unnecessary.
+                 *    I assume that even though we have global references on the
+                 *    jclass object that the class is still considered unloaded.
+                 *    (e.g. GC of jclass isn't required for it to be included
+                 *    in the unloaded list, or not in the load list)
+                 *    [Note: Use of Weak references was a performance problem.]
+                 */
+                if ( class_count != gdata->class_count ) {
 
-            rawMonitorEnter(gdata->data_access_lock); {
+                    rawMonitorEnter(gdata->data_access_lock); {
 
-                /* Unmark the classes in the load list */
-                class_all_status_remove(CLASS_IN_LOAD_LIST);
+                        /* Unmark the classes in the load list */
+                        class_all_status_remove(CLASS_IN_LOAD_LIST);
 
-                /* Pretend like it was a class load event */
-                for ( i = 0 ; i < class_count ; i++ ) {
-                    jobject loader;
+                        /* Pretend like it was a class load event */
+                        for ( i = 0 ; i < class_count ; i++ ) {
+                            jobject loader;
 
-                    loader = getClassLoader(classes[i]);
-                    event_class_load(env, thread, classes[i], loader);
+                            loader = getClassLoader(classes[i]);
+                            event_class_load(env, thread, classes[i], loader);
+                        }
+
+                        /* Process the classes that have been unloaded */
+                        class_do_unloads(env);
+
+                    } rawMonitorExit(gdata->data_access_lock);
+
                 }
 
-                /* Process the classes that have been unloaded */
-                class_do_unloads(env);
+                /* Free the space and save the count. */
+                jvmtiDeallocate(classes);
+                gdata->class_count = class_count;
 
-            } rawMonitorExit(gdata->data_access_lock);
-
-        }
-
-        /* Free the space and save the count. */
-        jvmtiDeallocate(classes);
-        gdata->class_count = class_count;
-
-    } END_WITH_LOCAL_REFS;
+            } END_WITH_LOCAL_REFS;
 
 }
 
@@ -998,7 +998,7 @@ object_free_cleanup(JNIEnv *env, jboolean force_class_table_reset)
                 jlong tag;
 
                 tag = *(jlong*)stack_element(stack,i);
-                    object_index = tag_extract(tag);
+                object_index = tag_extract(tag);
 
                 (void)object_free(object_index);
             }
@@ -1094,47 +1094,47 @@ setup_event_mode(jboolean onload_set_only, jvmtiEventMode state)
 {
     if ( onload_set_only ) {
         setEventNotificationMode(state,
-                        JVMTI_EVENT_VM_INIT,                   NULL);
+                                 JVMTI_EVENT_VM_INIT,                   NULL);
         setEventNotificationMode(state,
-                        JVMTI_EVENT_VM_DEATH,                  NULL);
+                                 JVMTI_EVENT_VM_DEATH,                  NULL);
         if (gdata->bci) {
             setEventNotificationMode(state,
-                        JVMTI_EVENT_CLASS_FILE_LOAD_HOOK,      NULL);
+                                     JVMTI_EVENT_CLASS_FILE_LOAD_HOOK,      NULL);
         }
     } else {
         /* Enable all other JVMTI events of interest now. */
         setEventNotificationMode(state,
-                        JVMTI_EVENT_THREAD_START,              NULL);
+                                 JVMTI_EVENT_THREAD_START,              NULL);
         setEventNotificationMode(state,
-                        JVMTI_EVENT_THREAD_END,                NULL);
+                                 JVMTI_EVENT_THREAD_END,                NULL);
         setEventNotificationMode(state,
-                        JVMTI_EVENT_CLASS_LOAD,                NULL);
+                                 JVMTI_EVENT_CLASS_LOAD,                NULL);
         setEventNotificationMode(state,
-                        JVMTI_EVENT_CLASS_PREPARE,             NULL);
+                                 JVMTI_EVENT_CLASS_PREPARE,             NULL);
         setEventNotificationMode(state,
-                        JVMTI_EVENT_DATA_DUMP_REQUEST,         NULL);
+                                 JVMTI_EVENT_DATA_DUMP_REQUEST,         NULL);
         if (gdata->cpu_timing) {
             setEventNotificationMode(state,
-                        JVMTI_EVENT_EXCEPTION_CATCH,           NULL);
+                                     JVMTI_EVENT_EXCEPTION_CATCH,           NULL);
         }
         if (gdata->monitor_tracing) {
             setEventNotificationMode(state,
-                        JVMTI_EVENT_MONITOR_WAIT,              NULL);
+                                     JVMTI_EVENT_MONITOR_WAIT,              NULL);
             setEventNotificationMode(state,
-                        JVMTI_EVENT_MONITOR_WAITED,            NULL);
+                                     JVMTI_EVENT_MONITOR_WAITED,            NULL);
             setEventNotificationMode(state,
-                        JVMTI_EVENT_MONITOR_CONTENDED_ENTER,   NULL);
+                                     JVMTI_EVENT_MONITOR_CONTENDED_ENTER,   NULL);
             setEventNotificationMode(state,
-                        JVMTI_EVENT_MONITOR_CONTENDED_ENTERED, NULL);
+                                     JVMTI_EVENT_MONITOR_CONTENDED_ENTERED, NULL);
         }
         if (gdata->obj_watch) {
             setEventNotificationMode(state,
-                        JVMTI_EVENT_OBJECT_FREE,               NULL);
+                                     JVMTI_EVENT_OBJECT_FREE,               NULL);
         }
         setEventNotificationMode(state,
-                        JVMTI_EVENT_GARBAGE_COLLECTION_START,  NULL);
+                                 JVMTI_EVENT_GARBAGE_COLLECTION_START,  NULL);
         setEventNotificationMode(state,
-                        JVMTI_EVENT_GARBAGE_COLLECTION_FINISH, NULL);
+                                 JVMTI_EVENT_GARBAGE_COLLECTION_FINISH, NULL);
     }
 }
 
@@ -1178,7 +1178,7 @@ cbVMInit(jvmtiEnv *jvmti, JNIEnv *env, jthread thread)
 
         /* Find the thread jclass (does JNI calls) */
         gdata->thread_cnum = class_find_or_create("Ljava/lang/Thread;",
-                        loader_index);
+                                                  loader_index);
         class_add_status(gdata->thread_cnum, CLASS_SYSTEM);
 
         /* Issue fake system thread start */
@@ -1192,15 +1192,15 @@ cbVMInit(jvmtiEnv *jvmti, JNIEnv *env, jthread thread)
         cnum = class_find_or_create("Ljava/lang/Object;", loader_index);
 
         gdata->system_trace_index = tls_get_trace(tls_index, env,
-                                gdata->max_trace_depth, JNI_FALSE);
+                                                  gdata->max_trace_depth, JNI_FALSE);
         gdata->system_object_site_index = site_find_or_create(
-                    cnum, gdata->system_trace_index);
+                cnum, gdata->system_trace_index);
 
         /* Used to ID HPROF generated items */
         gdata->hprof_trace_index = tls_get_trace(tls_index, env,
-                                gdata->max_trace_depth, JNI_FALSE);
+                                                 gdata->max_trace_depth, JNI_FALSE);
         gdata->hprof_site_index = site_find_or_create(
-                    cnum, gdata->hprof_trace_index);
+                cnum, gdata->hprof_trace_index);
 
         if ( gdata->logflags & LOG_DUMP_LISTS ) {
             list_all_tables();
@@ -1432,8 +1432,8 @@ cbThreadStart(jvmtiEnv *jvmti, JNIEnv *env, jthread thread)
     LOG3("cbThreadStart", "thread is", (int)(long)(ptrdiff_t)thread);
 
     BEGIN_CALLBACK() {
-        event_thread_start(env, thread);
-    } END_CALLBACK();
+                event_thread_start(env, thread);
+            } END_CALLBACK();
 }
 
 /* JVMTI_EVENT_THREAD_END */
@@ -1443,142 +1443,140 @@ cbThreadEnd(jvmtiEnv *jvmti, JNIEnv *env, jthread thread)
     LOG3("cbThreadEnd", "thread is", (int)(long)(ptrdiff_t)thread);
 
     BEGIN_CALLBACK() {
-        event_thread_end(env, thread);
-    } END_CALLBACK();
+                event_thread_end(env, thread);
+            } END_CALLBACK();
 }
 
 /* JVMTI_EVENT_CLASS_FILE_LOAD_HOOK */
 static void JNICALL
 cbClassFileLoadHook(jvmtiEnv *jvmti_env, JNIEnv* env,
-                jclass class_being_redefined, jobject loader,
-                const char* name, jobject protection_domain,
-                jint class_data_len, const unsigned char* class_data,
-                jint* new_class_data_len, unsigned char** new_class_data)
+                    jclass class_being_redefined, jobject loader,
+                    const char* name, jobject protection_domain,
+                    jint class_data_len, const unsigned char* class_data,
+                    jint* new_class_data_len, unsigned char** new_class_data)
 {
 
     /* WARNING: This will be called before VM_INIT. */
 
     LOG2("cbClassFileLoadHook:",(name==NULL?"Unknown":name));
 
-    if (!gdata->bci) {
-        return;
-    }
+    return;
 
     BEGIN_CALLBACK() {
-        rawMonitorEnter(gdata->data_access_lock); {
-            const char *classname;
+                rawMonitorEnter(gdata->data_access_lock); {
+                    const char *classname;
 
-            if ( gdata->bci_counter == 0 ) {
-                /* Prime the system classes */
-                class_prime_system_classes();
-            }
+                    if ( gdata->bci_counter == 0 ) {
+                        /* Prime the system classes */
+                        class_prime_system_classes();
+                    }
 
-            gdata->bci_counter++;
+                    gdata->bci_counter++;
 
-            *new_class_data_len = 0;
-            *new_class_data     = NULL;
-
-            /* Name could be NULL */
-            if ( name == NULL ) {
-                classname = ((JavaCrwDemoClassname)
-                             (gdata->java_crw_demo_classname_function))
-                    (class_data, class_data_len, &my_crw_fatal_error_handler);
-                if ( classname == NULL ) {
-                    HPROF_ERROR(JNI_TRUE, "No classname in classfile");
-                }
-            } else {
-                classname = strdup(name);
-                if ( classname == NULL ) {
-                    HPROF_ERROR(JNI_TRUE, "Ran out of malloc() space");
-                }
-            }
-
-            /* The tracker class itself? */
-            if ( strcmp(classname, TRACKER_CLASS_NAME) != 0 ) {
-                ClassIndex            cnum;
-                int                   system_class;
-                unsigned char *       new_image;
-                long                  new_length;
-                int                   len;
-                char                 *signature;
-                LoaderIndex           loader_index;
-
-                LOG2("cbClassFileLoadHook injecting class" , classname);
-
-                /* Define a unique class number for this class */
-                len              = (int)strlen(classname);
-                signature        = HPROF_MALLOC(len+3);
-                signature[0]     = JVM_SIGNATURE_CLASS;
-                (void)memcpy(signature+1, classname, len);
-                signature[len+1] = JVM_SIGNATURE_ENDCLASS;
-                signature[len+2] = 0;
-                loader_index = loader_find_or_create(env,loader);
-                if ( class_being_redefined != NULL ) {
-                    cnum  = class_find_or_create(signature, loader_index);
-                } else {
-                    cnum  = class_create(signature, loader_index);
-                }
-                HPROF_FREE(signature);
-                signature        = NULL;
-
-                /* Make sure class doesn't get unloaded by accident */
-                class_add_status(cnum, CLASS_IN_LOAD_LIST);
-
-                /* Is it a system class? */
-                system_class = 0;
-                if (    (!gdata->jvm_initialized)
-                     && (!gdata->jvm_initializing)
-                     && ( ( class_get_status(cnum) & CLASS_SYSTEM) != 0
-                            || gdata->bci_counter < 8 ) ) {
-                    system_class = 1;
-                    LOG2(classname, " is a system class");
-                }
-
-                new_image = NULL;
-                new_length = 0;
-
-                /* Call the class file reader/write demo code */
-                ((JavaCrwDemo)(gdata->java_crw_demo_function))(
-                    cnum,
-                    classname,
-                    class_data,
-                    class_data_len,
-                    system_class,
-                    TRACKER_CLASS_NAME,
-                    TRACKER_CLASS_SIG,
-                    (gdata->cpu_timing)?TRACKER_CALL_NAME:NULL,
-                    (gdata->cpu_timing)?TRACKER_CALL_SIG:NULL,
-                    (gdata->cpu_timing)?TRACKER_RETURN_NAME:NULL,
-                    (gdata->cpu_timing)?TRACKER_RETURN_SIG:NULL,
-                    (gdata->obj_watch)?TRACKER_OBJECT_INIT_NAME:NULL,
-                    (gdata->obj_watch)?TRACKER_OBJECT_INIT_SIG:NULL,
-                    (gdata->obj_watch)?TRACKER_NEWARRAY_NAME:NULL,
-                    (gdata->obj_watch)?TRACKER_NEWARRAY_SIG:NULL,
-                    &new_image,
-                    &new_length,
-                    &my_crw_fatal_error_handler,
-                    &class_set_methods);
-
-                if ( new_length > 0 ) {
-                    unsigned char *jvmti_space;
-
-                    LOG2("cbClassFileLoadHook DID inject this class", classname);
-                    jvmti_space = (unsigned char *)jvmtiAllocate((jint)new_length);
-                    (void)memcpy((void*)jvmti_space, (void*)new_image, (int)new_length);
-                    *new_class_data_len = (jint)new_length;
-                    *new_class_data     = jvmti_space; /* VM will deallocate */
-                } else {
-                    LOG2("cbClassFileLoadHook DID NOT inject this class", classname);
                     *new_class_data_len = 0;
                     *new_class_data     = NULL;
-                }
-                if ( new_image != NULL ) {
-                    (void)free((void*)new_image); /* Free malloc() space with free() */
-                }
-            }
-            (void)free((void*)classname);
-        } rawMonitorExit(gdata->data_access_lock);
-    } END_CALLBACK();
+
+                    /* Name could be NULL */
+                    if ( name == NULL ) {
+                        classname = ((JavaCrwDemoClassname)
+                                (gdata->java_crw_demo_classname_function))
+                                (class_data, class_data_len, &my_crw_fatal_error_handler);
+                        if ( classname == NULL ) {
+                            HPROF_ERROR(JNI_TRUE, "No classname in classfile");
+                        }
+                    } else {
+                        classname = strdup(name);
+                        if ( classname == NULL ) {
+                            HPROF_ERROR(JNI_TRUE, "Ran out of malloc() space");
+                        }
+                    }
+
+                    /* The tracker class itself? */
+                    if ( strcmp(classname, TRACKER_CLASS_NAME) != 0 ) {
+                        ClassIndex            cnum;
+                        int                   system_class;
+                        unsigned char *       new_image;
+                        long                  new_length;
+                        int                   len;
+                        char                 *signature;
+                        LoaderIndex           loader_index;
+
+                        LOG2("cbClassFileLoadHook injecting class" , classname);
+
+                        /* Define a unique class number for this class */
+                        len              = (int)strlen(classname);
+                        signature        = HPROF_MALLOC(len+3);
+                        signature[0]     = JVM_SIGNATURE_CLASS;
+                        (void)memcpy(signature+1, classname, len);
+                        signature[len+1] = JVM_SIGNATURE_ENDCLASS;
+                        signature[len+2] = 0;
+                        loader_index = loader_find_or_create(env,loader);
+                        if ( class_being_redefined != NULL ) {
+                            cnum  = class_find_or_create(signature, loader_index);
+                        } else {
+                            cnum  = class_create(signature, loader_index);
+                        }
+                        HPROF_FREE(signature);
+                        signature        = NULL;
+
+                        /* Make sure class doesn't get unloaded by accident */
+                        class_add_status(cnum, CLASS_IN_LOAD_LIST);
+
+                        /* Is it a system class? */
+                        system_class = 0;
+                        if (    (!gdata->jvm_initialized)
+                                && (!gdata->jvm_initializing)
+                                && ( ( class_get_status(cnum) & CLASS_SYSTEM) != 0
+                                     || gdata->bci_counter < 8 ) ) {
+                            system_class = 1;
+                            LOG2(classname, " is a system class");
+                        }
+
+                        new_image = NULL;
+                        new_length = 0;
+
+                        /* Call the class file reader/write demo code */
+                        ((JavaCrwDemo)(gdata->java_crw_demo_function))(
+                                cnum,
+                                classname,
+                                class_data,
+                                class_data_len,
+                                system_class,
+                                TRACKER_CLASS_NAME,
+                                TRACKER_CLASS_SIG,
+                                (gdata->cpu_timing)?TRACKER_CALL_NAME:NULL,
+                                (gdata->cpu_timing)?TRACKER_CALL_SIG:NULL,
+                                (gdata->cpu_timing)?TRACKER_RETURN_NAME:NULL,
+                                (gdata->cpu_timing)?TRACKER_RETURN_SIG:NULL,
+                                (gdata->obj_watch)?TRACKER_OBJECT_INIT_NAME:NULL,
+                                (gdata->obj_watch)?TRACKER_OBJECT_INIT_SIG:NULL,
+                                (gdata->obj_watch)?TRACKER_NEWARRAY_NAME:NULL,
+                                (gdata->obj_watch)?TRACKER_NEWARRAY_SIG:NULL,
+                                &new_image,
+                                &new_length,
+                                &my_crw_fatal_error_handler,
+                                &class_set_methods);
+
+                        if ( new_length > 0 ) {
+                            unsigned char *jvmti_space;
+
+                            LOG2("cbClassFileLoadHook DID inject this class", classname);
+                            jvmti_space = (unsigned char *)jvmtiAllocate((jint)new_length);
+                            (void)memcpy((void*)jvmti_space, (void*)new_image, (int)new_length);
+                            *new_class_data_len = (jint)new_length;
+                            *new_class_data     = jvmti_space; /* VM will deallocate */
+                        } else {
+                            LOG2("cbClassFileLoadHook DID NOT inject this class", classname);
+                            *new_class_data_len = 0;
+                            *new_class_data     = NULL;
+                        }
+                        if ( new_image != NULL ) {
+                            (void)free((void*)new_image); /* Free malloc() space with free() */
+                        }
+                    }
+                    (void)free((void*)classname);
+                } rawMonitorExit(gdata->data_access_lock);
+            } END_CALLBACK();
 }
 
 /* JVMTI_EVENT_CLASS_LOAD */
@@ -1591,17 +1589,17 @@ cbClassLoad(jvmtiEnv *jvmti, JNIEnv *env, jthread thread, jclass klass)
     LOG("cbClassLoad");
 
     BEGIN_CALLBACK() {
-        rawMonitorEnter(gdata->data_access_lock); {
+                rawMonitorEnter(gdata->data_access_lock); {
 
-            WITH_LOCAL_REFS(env, 1) {
-                jobject loader;
+                    WITH_LOCAL_REFS(env, 1) {
+                                jobject loader;
 
-                loader = getClassLoader(klass);
-                event_class_load(env, thread, klass, loader);
-            } END_WITH_LOCAL_REFS;
+                                loader = getClassLoader(klass);
+                                event_class_load(env, thread, klass, loader);
+                            } END_WITH_LOCAL_REFS;
 
-        } rawMonitorExit(gdata->data_access_lock);
-    } END_CALLBACK();
+                } rawMonitorExit(gdata->data_access_lock);
+            } END_CALLBACK();
 }
 
 /* JVMTI_EVENT_CLASS_PREPARE */
@@ -1614,18 +1612,18 @@ cbClassPrepare(jvmtiEnv *jvmti, JNIEnv *env, jthread thread, jclass klass)
     LOG("cbClassPrepare");
 
     BEGIN_CALLBACK() {
-        rawMonitorEnter(gdata->data_access_lock); {
+                rawMonitorEnter(gdata->data_access_lock); {
 
-            WITH_LOCAL_REFS(env, 1) {
-                jobject loader;
+                    WITH_LOCAL_REFS(env, 1) {
+                                jobject loader;
 
-                loader = NULL;
-                loader = getClassLoader(klass);
-                event_class_prepare(env, thread, klass, loader);
-            } END_WITH_LOCAL_REFS;
+                                loader = NULL;
+                                loader = getClassLoader(klass);
+                                event_class_prepare(env, thread, klass, loader);
+                            } END_WITH_LOCAL_REFS;
 
-        } rawMonitorExit(gdata->data_access_lock);
-    } END_CALLBACK();
+                } rawMonitorExit(gdata->data_access_lock);
+            } END_CALLBACK();
 
 }
 
@@ -1638,52 +1636,52 @@ cbDataDumpRequest(jvmtiEnv *jvmti)
     LOG("cbDataDumpRequest");
 
     BEGIN_CALLBACK() {
-        need_to_dump = JNI_FALSE;
-        rawMonitorEnter(gdata->dump_lock); {
-            if (!gdata->dump_in_process) {
-                need_to_dump    = JNI_TRUE;
-                gdata->dump_in_process = JNI_TRUE;
-            }
-        } rawMonitorExit(gdata->dump_lock);
+                need_to_dump = JNI_FALSE;
+                rawMonitorEnter(gdata->dump_lock); {
+                    if (!gdata->dump_in_process) {
+                        need_to_dump    = JNI_TRUE;
+                        gdata->dump_in_process = JNI_TRUE;
+                    }
+                } rawMonitorExit(gdata->dump_lock);
 
-        if (need_to_dump) {
-            dump_all_data(getEnv());
+                if (need_to_dump) {
+                    dump_all_data(getEnv());
 
-            rawMonitorEnter(gdata->dump_lock); {
-                gdata->dump_in_process = JNI_FALSE;
-            } rawMonitorExit(gdata->dump_lock);
+                    rawMonitorEnter(gdata->dump_lock); {
+                        gdata->dump_in_process = JNI_FALSE;
+                    } rawMonitorExit(gdata->dump_lock);
 
-            if (gdata->cpu_sampling && !gdata->jvm_shut_down) {
-                cpu_sample_on(NULL, 0); /* resume sampling */
-            }
-        }
-    } END_CALLBACK();
+                    if (gdata->cpu_sampling && !gdata->jvm_shut_down) {
+                        cpu_sample_on(NULL, 0); /* resume sampling */
+                    }
+                }
+            } END_CALLBACK();
 
 }
 
 /* JVMTI_EVENT_EXCEPTION_CATCH */
 static void JNICALL
 cbExceptionCatch(jvmtiEnv *jvmti, JNIEnv* env,
-                jthread thread, jmethodID method, jlocation location,
-                jobject exception)
+                 jthread thread, jmethodID method, jlocation location,
+                 jobject exception)
 {
     LOG("cbExceptionCatch");
 
     BEGIN_CALLBACK() {
-        event_exception_catch(env, thread, method, location, exception);
-    } END_CALLBACK();
+                event_exception_catch(env, thread, method, location, exception);
+            } END_CALLBACK();
 }
 
 /* JVMTI_EVENT_MONITOR_WAIT */
 static void JNICALL
 cbMonitorWait(jvmtiEnv *jvmti, JNIEnv* env,
-                jthread thread, jobject object, jlong timeout)
+              jthread thread, jobject object, jlong timeout)
 {
     LOG("cbMonitorWait");
 
     BEGIN_CALLBACK() {
-        monitor_wait_event(env, thread, object, timeout);
-    } END_CALLBACK();
+                monitor_wait_event(env, thread, object, timeout);
+            } END_CALLBACK();
 }
 
 /* JVMTI_EVENT_MONITOR_WAITED */
@@ -1694,32 +1692,32 @@ cbMonitorWaited(jvmtiEnv *jvmti, JNIEnv* env,
     LOG("cbMonitorWaited");
 
     BEGIN_CALLBACK() {
-        monitor_waited_event(env, thread, object, timed_out);
-    } END_CALLBACK();
+                monitor_waited_event(env, thread, object, timed_out);
+            } END_CALLBACK();
 }
 
 /* JVMTI_EVENT_MONITOR_CONTENDED_ENTER */
 static void JNICALL
 cbMonitorContendedEnter(jvmtiEnv *jvmti, JNIEnv* env,
-                jthread thread, jobject object)
+                        jthread thread, jobject object)
 {
     LOG("cbMonitorContendedEnter");
 
     BEGIN_CALLBACK() {
-        monitor_contended_enter_event(env, thread, object);
-    } END_CALLBACK();
+                monitor_contended_enter_event(env, thread, object);
+            } END_CALLBACK();
 }
 
 /* JVMTI_EVENT_MONITOR_CONTENDED_ENTERED */
 static void JNICALL
 cbMonitorContendedEntered(jvmtiEnv *jvmti, JNIEnv* env,
-                jthread thread, jobject object)
+                          jthread thread, jobject object)
 {
     LOG("cbMonitorContendedEntered");
 
     BEGIN_CALLBACK() {
-        monitor_contended_entered_event(env, thread, object);
-    } END_CALLBACK();
+                monitor_contended_entered_event(env, thread, object);
+            } END_CALLBACK();
 }
 
 /* JVMTI_EVENT_GARBAGE_COLLECTION_START */
@@ -1852,17 +1850,17 @@ getCapabilities(void)
         needed_capabilities.can_generate_object_free_events      = 1;
     }
     if (gdata->cpu_timing || gdata->cpu_sampling) {
-        #if 0 /* Not needed until we call JVMTI for CpuTime */
+#if 0 /* Not needed until we call JVMTI for CpuTime */
         needed_capabilities.can_get_thread_cpu_time              = 1;
         needed_capabilities.can_get_current_thread_cpu_time      = 1;
-        #endif
+#endif
         needed_capabilities.can_generate_exception_events        = 1;
     }
     if (gdata->monitor_tracing) {
-        #if 0 /* Not needed until we call JVMTI for CpuTime */
+#if 0 /* Not needed until we call JVMTI for CpuTime */
         needed_capabilities.can_get_thread_cpu_time              = 1;
         needed_capabilities.can_get_current_thread_cpu_time      = 1;
-        #endif
+#endif
         needed_capabilities.can_get_owned_monitor_info           = 1;
         needed_capabilities.can_get_current_contended_monitor    = 1;
         needed_capabilities.can_get_monitor_info                 = 1;
@@ -1874,9 +1872,9 @@ getCapabilities(void)
 
     /* Some capabilities would be nicer to have */
     needed_capabilities.can_get_source_file_name        =
-        potential_capabilities.can_get_source_file_name;
+            potential_capabilities.can_get_source_file_name;
     needed_capabilities.can_get_line_numbers    =
-        potential_capabilities.can_get_line_numbers;
+            potential_capabilities.can_get_line_numbers;
 
     /* Add the capabilities */
     addCapabilities(&needed_capabilities);
@@ -1936,7 +1934,7 @@ lookup_library_symbol(void *library, char **symbols, int nsymbols)
         char errmsg[256];
 
         (void)md_snprintf(errmsg, sizeof(errmsg),
-                    "Cannot find library symbol '%s'", symbols[0]);
+                          "Cannot find library symbol '%s'", symbols[0]);
         HPROF_ERROR(JNI_TRUE, errmsg);
     }
     return addr;
@@ -1989,9 +1987,9 @@ Agent_OnLoad(JavaVM *vm, char *options, void *reserved)
 #endif
 
     /* Lock needed to protect debug_malloc() code, which is not MT safe */
-    #ifdef DEBUG
-        gdata->debug_malloc_lock = createRawMonitor("HPROF debug_malloc lock");
-    #endif
+#ifdef DEBUG
+    gdata->debug_malloc_lock = createRawMonitor("HPROF debug_malloc lock");
+#endif
 
     parse_options(options);
 
@@ -2059,14 +2057,14 @@ Agent_OnLoad(JavaVM *vm, char *options, void *reserved)
         { /* "java_crw_demo" */
             static char *symbols[]  = JAVA_CRW_DEMO_SYMBOLS;
             gdata->java_crw_demo_function =
-                   lookup_library_symbol(gdata->java_crw_demo_library,
-                              symbols, (int)(sizeof(symbols)/sizeof(char*)));
+                    lookup_library_symbol(gdata->java_crw_demo_library,
+                                          symbols, (int)(sizeof(symbols)/sizeof(char*)));
         }
         { /* "java_crw_demo_classname" */
             static char *symbols[] = JAVA_CRW_DEMO_CLASSNAME_SYMBOLS;
             gdata->java_crw_demo_classname_function =
-                   lookup_library_symbol(gdata->java_crw_demo_library,
-                              symbols, (int)(sizeof(symbols)/sizeof(char*)));
+                    lookup_library_symbol(gdata->java_crw_demo_library,
+                                          symbols, (int)(sizeof(symbols)/sizeof(char*)));
         }
     }
 
@@ -2146,10 +2144,10 @@ Agent_OnUnload(JavaVM *vm)
         destroyRawMonitor(gdata->cpu_sample_lock);
         gdata->cpu_sample_lock = NULL;
     }
-    #ifdef DEBUG
-        destroyRawMonitor(gdata->debug_malloc_lock);
+#ifdef DEBUG
+    destroyRawMonitor(gdata->debug_malloc_lock);
         gdata->debug_malloc_lock = NULL;
-    #endif
+#endif
 
     /* Unload java_crw_demo library */
     if ( gdata->bci && gdata->java_crw_demo_library != NULL ) {
