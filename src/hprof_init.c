@@ -1802,20 +1802,20 @@ set_callbacks(jboolean on)
     callbacks.VMInit                     = &cbVMInit;
     /* JVMTI_EVENT_VM_DEATH */
     callbacks.VMDeath                    = &cbVMDeath;
-    /* JVMTI_EVENT_THREAD_START */
-    callbacks.ThreadStart                = &cbThreadStart;
-    /* JVMTI_EVENT_THREAD_END */
-    callbacks.ThreadEnd                  = &cbThreadEnd;
+//    /* JVMTI_EVENT_THREAD_START */
+//    callbacks.ThreadStart                = &cbThreadStart;
+//    /* JVMTI_EVENT_THREAD_END */
+//    callbacks.ThreadEnd                  = &cbThreadEnd;
     /* JVMTI_EVENT_CLASS_FILE_LOAD_HOOK */
     callbacks.ClassFileLoadHook          = &cbClassFileLoadHook;
-    /* JVMTI_EVENT_CLASS_LOAD */
-    callbacks.ClassLoad                  = &cbClassLoad;
-    /* JVMTI_EVENT_CLASS_PREPARE */
-    callbacks.ClassPrepare               = &cbClassPrepare;
+//    /* JVMTI_EVENT_CLASS_LOAD */
+//    callbacks.ClassLoad                  = &cbClassLoad;
+//    /* JVMTI_EVENT_CLASS_PREPARE */
+//    callbacks.ClassPrepare               = &cbClassPrepare;
     /* JVMTI_EVENT_DATA_DUMP_REQUEST */
     callbacks.DataDumpRequest            = &cbDataDumpRequest;
-    /* JVMTI_EVENT_EXCEPTION_CATCH */
-    callbacks.ExceptionCatch             = &cbExceptionCatch;
+//    /* JVMTI_EVENT_EXCEPTION_CATCH */
+//    callbacks.ExceptionCatch             = &cbExceptionCatch;
     /* JVMTI_EVENT_MONITOR_WAIT */
     callbacks.MonitorWait                = &cbMonitorWait;
     /* JVMTI_EVENT_MONITOR_WAITED */
