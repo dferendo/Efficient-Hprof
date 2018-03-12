@@ -790,10 +790,10 @@ tls_get_tracker_status(JNIEnv *env, jthread thread, jboolean skip_init,
         return status;
     }
     if ( ptrace_index != NULL ) {
-        setup_trace_buffers(info, gdata->max_trace_depth);
-        *ptrace_index = get_trace(thread, thread_serial_num,
-                            gdata->max_trace_depth, skip_init,
-                            info->frames_buffer, info->jframes_buffer);
+//        setup_trace_buffers(info, gdata->max_trace_depth);
+//        *ptrace_index = get_trace(thread, thread_serial_num,
+//                            gdata->max_trace_depth, skip_init,
+//                            info->frames_buffer, info->jframes_buffer);
     }
     if ( pthread_serial_num != NULL ) {
         *pthread_serial_num = thread_serial_num;
