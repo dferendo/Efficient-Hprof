@@ -145,9 +145,9 @@ static void JNICALL
 Tracker_nativeCallSite
   (JNIEnv *env, jclass clazz, jobject thread, jint cnum, jint mnum)
 {
-    BEGIN_TRACKER_CALLBACK() {
-        event_call(env, thread, cnum, mnum);
-    } END_TRACKER_CALLBACK();
+//    BEGIN_TRACKER_CALLBACK() {
+//        event_call(env, thread, cnum, mnum);
+//    } END_TRACKER_CALLBACK();
 }
 
 /*
