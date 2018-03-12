@@ -131,9 +131,9 @@ static void JNICALL
 Tracker_nativeObjectInit
   (JNIEnv *env, jclass clazz, jobject thread, jobject obj)
 {
-    BEGIN_TRACKER_CALLBACK() {
-        event_object_init(env, thread, obj);
-    } END_TRACKER_CALLBACK();
+//    BEGIN_TRACKER_CALLBACK() {
+//        event_object_init(env, thread, obj);
+//    } END_TRACKER_CALLBACK();
 }
 
 /*
