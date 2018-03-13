@@ -150,18 +150,43 @@ event_newarray(JNIEnv *env, jthread thread, jobject object)
 void
 event_call(JNIEnv *env, jthread thread, ClassIndex cnum, MethodIndex mnum)
 {
-//    printf("Entered method %s\n", string_get(class_get_signature(cnum)));
+    /* Called via BCI Tracker class */
 
-//    TlsIndex tls_index;
-//    struct Node * root;
-//
-//    // Get thread root node.
-//    tls_index = tls_find_or_create(env, thread);
-//
-//    root = tls_get_node(tls_index, thread);
-//
-//    // Check if the thread
+    /* Be very careful what is called here, watch out for recursion. */
 
+    TlsIndex tls_index;
+    jint     *pstatus;
+    Node     *trace_node;
+
+//    printf("%s\n", string_get(class_get_signature(cnum)));
+
+    HPROF_ASSERT(env!=NULL);
+    HPROF_ASSERT(thread!=NULL);
+    if (cnum == 0 || cnum == gdata->tracker_cnum) {
+        jclass newExcCls = (*env)->FindClass(env, "java/lang/IllegalArgumentException");
+        (*env)->ThrowNew(env, newExcCls, "Illegal cnum.");
+
+        return;
+    }
+
+    /* Prevent recursion into any BCI function for this thread (pstatus). */
+    if ( tls_get_tracker_status(env, thread, JNI_FALSE,
+                                &pstatus, &tls_index, NULL, NULL) == 0 ) {
+        (*pstatus) = 1;
+        // TODO: Put this in the tls_get_tracker_status method.
+        tls_index = tls_find_or_create(env, thread);
+
+        // Get the current node
+        trace_node = tls_get_current_node(tls_index);
+
+        // Add method call to child
+        trace_node = findOrCreateTreeChild(trace_node, cnum, mnum);
+
+        // Update node
+        tls_set_current_node(tls_index, trace_node);
+
+        (*pstatus) = 0;
+    }
 }
 
 /* Handle tracking of an exception catch */
@@ -192,7 +217,43 @@ event_exception_catch(JNIEnv *env, jthread thread, jmethodID method,
 void
 event_return(JNIEnv *env, jthread thread, ClassIndex cnum, MethodIndex mnum)
 {
-//    printf("Returned method %s\n", string_get(class_get_signature(cnum)));
+    /* Called via BCI Tracker class */
+
+    /* Be very careful what is called here, watch out for recursion. */
+
+    TlsIndex tls_index;
+    jint     *pstatus;
+    Node     *trace_node;
+
+    HPROF_ASSERT(env!=NULL);
+    HPROF_ASSERT(thread!=NULL);
+
+    if (cnum == 0 || cnum == gdata->tracker_cnum) {
+        jclass newExcCls = (*env)->FindClass(env, "java/lang/IllegalArgumentException");
+        (*env)->ThrowNew(env, newExcCls, "Illegal cnum.");
+
+        return;
+    }
+
+    /* Prevent recursion into any BCI function for this thread (pstatus). */
+    if ( tls_get_tracker_status(env, thread, JNI_FALSE,
+                                &pstatus, &tls_index, NULL, NULL) == 0 ) {
+        (*pstatus) = 1;
+
+        // TODO: Put this in the tls_get_tracker_status method.
+        tls_index = tls_find_or_create(env, thread);
+
+        // Get the current node
+        trace_node = tls_get_current_node(tls_index);
+
+        // Add method call to child
+        trace_node = moveToParent(trace_node);
+
+        // Update node
+        tls_set_current_node(tls_index, trace_node);
+
+        (*pstatus) = 0;
+    }
 }
 
 /* Handle a class prepare (should have been already loaded) */
@@ -289,13 +350,6 @@ void
 event_thread_start(JNIEnv *env, jthread thread)
 {
     /* Called via JVMTI_EVENT_THREAD_START event */
-
-    // TODO: Get the parent of the thread and set the starting node of this thread to that thread.
-    // TODO: MAYBE USE ASSUMPTION THREAD GROUPS ONLY??
-
-    // TODO: ALSO WE CAN GET THE STACK TRACE AND MATCH IT IN THE TREE
-
-    // TODO: OR SEPARATE THEM INTO DIFFERENT TREES?
 
     TlsIndex    tls_index;
     ObjectIndex object_index;

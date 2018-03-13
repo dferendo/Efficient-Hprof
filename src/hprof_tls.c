@@ -100,7 +100,8 @@ typedef struct TlsInfo {
     ObjectIndex     thread_object_index;/* If heap=dump */
     jlong           monitor_start_time; /* Start time for monitor */
     jint            in_heap_dump;       /* If we are an object in the dump */
-    struct Node *   thread_root_node;   /* Keep the current trace node of the thread */
+    Node           *thread_root_node;   /* Root node of the tree */
+    Node           *thread_current_node;/* Keep the current trace node of the thread */
 } TlsInfo;
 
 typedef struct SearchData {
@@ -688,6 +689,7 @@ tls_find_or_create(JNIEnv *env, jthread thread)
     static TlsInfo  empty_info;
     TlsInfo         info;
     TlsIndex        index;
+    Node       *root;
 
     HPROF_ASSERT(env!=NULL);
     HPROF_ASSERT(thread!=NULL);
@@ -711,6 +713,13 @@ tls_find_or_create(JNIEnv *env, jthread thread)
     info.stack             = stack_init(INITIAL_THREAD_STACK_LIMIT,
                                 INITIAL_THREAD_STACK_LIMIT,
                                 (int)sizeof(StackElement));
+
+    root = initTree();
+
+    // Set the node of the newly created thread
+    info.thread_root_node = root;
+    info.thread_current_node = root;
+
     setup_trace_buffers(&info, gdata->max_trace_depth);
     info.globalref = newWeakGlobalReference(env, thread);
     index = table_create_entry(gdata->tls_table, &thread_serial_num, (int)sizeof(SerialNumber), (void*)&info);
@@ -1190,11 +1199,29 @@ tls_find(SerialNumber thread_serial_num)
     return index;
 }
 
-struct Node * tls_get_node(TlsIndex index, jthread thread) {
+Node * tls_get_root_node(TlsIndex index) {
     TlsInfo  *    info;
 
     info               = get_info(index);
     HPROF_ASSERT(info!=NULL);
 
     return info->thread_root_node;
+}
+
+Node * tls_get_current_node(TlsIndex index) {
+    TlsInfo  *    info;
+
+    info               = get_info(index);
+    HPROF_ASSERT(info!=NULL);
+
+    return info->thread_current_node;
+}
+
+void tls_set_current_node(TlsIndex index, Node *node) {
+    TlsInfo  *    info;
+
+    info               = get_info(index);
+    HPROF_ASSERT(info!=NULL);
+
+    info->thread_current_node = node;
 }

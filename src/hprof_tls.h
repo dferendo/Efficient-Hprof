@@ -86,6 +86,9 @@ void         tls_clear_in_heap_dump(void);
 
 TlsIndex     tls_find(SerialNumber thread_serial_num);
 
-struct Node * tls_get_node(TlsIndex index, jthread thread);
+struct Node * tls_get_root_node(TlsIndex index);
+
+struct Node * tls_get_current_node(TlsIndex index);
+void tls_set_current_node(TlsIndex index, struct Node *node);
 
 #endif
