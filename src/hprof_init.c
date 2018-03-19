@@ -193,6 +193,8 @@ get_gdata(void)
     data.gref_serial_number_counter   = data.gref_serial_number_start;
 
     data.unknown_thread_serial_num    = data.thread_serial_number_counter++;
+
+    data.trace_tables_count = 0;
     return &data;
 }
 
@@ -1546,14 +1548,14 @@ cbClassFileLoadHook(jvmtiEnv *jvmti_env, JNIEnv* env,
                     system_class,
                     TRACKER_CLASS_NAME,
                     TRACKER_CLASS_SIG,
-                    (gdata->cpu_timing)?TRACKER_CALL_NAME:NULL,
-                    (gdata->cpu_timing)?TRACKER_CALL_SIG:NULL,
-                    (gdata->cpu_timing)?TRACKER_RETURN_NAME:NULL,
-                    (gdata->cpu_timing)?TRACKER_RETURN_SIG:NULL,
-                    (gdata->obj_watch)?TRACKER_OBJECT_INIT_NAME:NULL,
-                    (gdata->obj_watch)?TRACKER_OBJECT_INIT_SIG:NULL,
-                    (gdata->obj_watch)?TRACKER_NEWARRAY_NAME:NULL,
-                    (gdata->obj_watch)?TRACKER_NEWARRAY_SIG:NULL,
+                    TRACKER_CALL_NAME,
+                    TRACKER_CALL_SIG,
+                    TRACKER_RETURN_NAME,
+                    TRACKER_RETURN_SIG,
+                    TRACKER_OBJECT_INIT_NAME,
+                    TRACKER_OBJECT_INIT_SIG,
+                    TRACKER_NEWARRAY_NAME,
+                    TRACKER_NEWARRAY_SIG,
                     &new_image,
                     &new_length,
                     &my_crw_fatal_error_handler,

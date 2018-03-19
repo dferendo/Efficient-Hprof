@@ -198,10 +198,17 @@ typedef struct ConstantPoolValue {
 #include "hprof_listener.h"
 #include "hprof_cpu.h"
 #include "hprof_tag.h"
+#include "hprof_tree.h"
 
 /* Global data structure */
 
 struct LineTable;
+
+typedef struct ThreadTraceData {
+    jthread         globalref;          /* Global reference for thread */
+    Node * rootNode;
+    Node * currentNode;
+} ThreadTraceData;
 
 typedef struct {
 
@@ -398,6 +405,10 @@ typedef struct {
 
     /* Indication that the agent has been loaded */
     jboolean isLoaded;
+
+    /* Trace information */
+    ThreadTraceData trace_tables[5000];
+    int trace_tables_count;
 
 } GlobalData;
 

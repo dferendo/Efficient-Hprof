@@ -1188,3 +1188,43 @@ tls_find(SerialNumber thread_serial_num)
           (void*)&thread_serial_num, (int)sizeof(SerialNumber));
     return index;
 }
+
+int
+trace_array_find_or_create(JNIEnv *env, jthread thread)
+{
+    int index;
+    Node * root_node;
+    ThreadTraceData info;
+
+    HPROF_ASSERT(env != NULL);
+    HPROF_ASSERT(thread != NULL);
+
+    // Get the index of the array from the thread local storage from the JVMTI
+    index = (int)(ptrdiff_t)getThreadLocalStorage(thread);
+    
+    // getThreadLocalStorage will return 0 if thread is not stored yet. Check if it refers to
+    // thread at index 0
+    if (index == 0) {
+        if (isSameObject(env, thread, gdata->trace_tables[index].globalref)) {
+            return index;
+        }
+        // Otherwise, create the new thread
+    } else {
+        HPROF_ASSERT(isSameObject(env, thread, gdata->trace_tables[index].globalref));
+        return index;
+    }
+
+    // If thread is not found, create an entry in the array
+    root_node = initTree();
+
+    info.globalref = newWeakGlobalReference(env, thread);
+    info.rootNode = root_node;
+    info.currentNode = root_node;
+
+    // Set the data in the array
+    gdata->trace_tables[index] = info;
+
+    setThreadLocalStorage(thread, (void*)(ptrdiff_t)index);
+
+    return index;
+}

@@ -86,4 +86,6 @@ void         tls_clear_in_heap_dump(void);
 
 TlsIndex     tls_find(SerialNumber thread_serial_num);
 
+int          trace_array_find_or_create(JNIEnv *env, jthread thread);
+
 #endif
