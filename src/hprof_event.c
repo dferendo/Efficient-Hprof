@@ -378,6 +378,7 @@ event_thread_start(JNIEnv *env, jthread thread)
     TraceIndex  trace_index;
     jlong       tag;
     SerialNumber thread_serial_num;
+    int index;
 
     HPROF_ASSERT(env!=NULL);
     HPROF_ASSERT(thread!=NULL);
@@ -385,6 +386,11 @@ event_thread_start(JNIEnv *env, jthread thread)
     tls_index = tls_find_or_create(env, thread);
     thread_serial_num = tls_get_thread_serial_number(tls_index);
     trace_index = get_current(tls_index, env, JNI_FALSE);
+
+    // Create thread
+    index = trace_array_find_or_create(env, thread);
+
+    printf("Thread: %u was given index %d\n", thread_serial_num, index);
 
     tag = getTag(thread);
     if ( tag == (jlong)0 ) {

@@ -127,6 +127,11 @@ typedef struct SampleData {
     jint         sample_status;
 } SampleData;
 
+typedef struct ThreadStorage {
+    TlsIndex index;
+    int thread_index;
+} ThreadStorage;
+
 /* Private internal functions. */
 
 static SerialNumber
@@ -687,19 +692,30 @@ tls_find_or_create(JNIEnv *env, jthread thread)
     static TlsInfo  empty_info;
     TlsInfo         info;
     TlsIndex        index;
+    ThreadStorage   * storage;
 
     HPROF_ASSERT(env!=NULL);
     HPROF_ASSERT(thread!=NULL);
 
     /*LINTED*/
-    index = (TlsIndex)(ptrdiff_t)getThreadLocalStorage(thread);
+    storage = (ThreadStorage *) getThreadLocalStorage(thread);
+
+    if (storage != NULL) {
+        index = storage->index;
+    } else {
+        index = 0;
+    }
+
     if ( index != 0 ) {
         HPROF_ASSERT(isSameObject(env, thread, get_info(index)->globalref));
         return index;
     }
     index = search(env, thread);
     if ( index != 0 ) {
-        setThreadLocalStorage(thread, (void*)(ptrdiff_t)index);
+        storage = (ThreadStorage *) malloc(sizeof(ThreadStorage));
+        storage->index = index;
+        storage->thread_index = -1;
+        setThreadLocalStorage(thread, (void*)storage);
         return index;
     }
     thread_serial_num      = gdata->thread_serial_number_counter++;
@@ -713,7 +729,11 @@ tls_find_or_create(JNIEnv *env, jthread thread)
     setup_trace_buffers(&info, gdata->max_trace_depth);
     info.globalref = newWeakGlobalReference(env, thread);
     index = table_create_entry(gdata->tls_table, &thread_serial_num, (int)sizeof(SerialNumber), (void*)&info);
-    setThreadLocalStorage(thread, (void*)(ptrdiff_t)index);
+
+    storage = (ThreadStorage *) malloc(sizeof(ThreadStorage));
+    storage->index = index;
+    storage->thread_index = -1;
+    setThreadLocalStorage(thread, (void*)storage);
     HPROF_ASSERT(search(env,thread)==index);
     return index;
 }
@@ -1192,39 +1212,40 @@ tls_find(SerialNumber thread_serial_num)
 int
 trace_array_find_or_create(JNIEnv *env, jthread thread)
 {
-    int index;
     Node * root_node;
     ThreadTraceData info;
+    ThreadStorage   * storage;
+    int index;
 
     HPROF_ASSERT(env != NULL);
     HPROF_ASSERT(thread != NULL);
 
-    // Get the index of the array from the thread local storage from the JVMTI
-    index = (int)(ptrdiff_t)getThreadLocalStorage(thread);
-    
-    // getThreadLocalStorage will return 0 if thread is not stored yet. Check if it refers to
-    // thread at index 0
-    if (index == 0) {
-        if (isSameObject(env, thread, gdata->trace_tables[index].globalref)) {
-            return index;
-        }
-        // Otherwise, create the new thread
-    } else {
-        HPROF_ASSERT(isSameObject(env, thread, gdata->trace_tables[index].globalref));
+    storage = (ThreadStorage *) getThreadLocalStorage(thread);
+
+    // Storage should be created for the thread
+    HPROF_ASSERT(storage != NULL);
+
+    // Check if thread index was created, if not create it
+    if (storage->thread_index == -1) {
+        // If thread is not found, create an entry in the array
+        root_node = initTree();
+
+        info.globalref = newWeakGlobalReference(env, thread);
+        info.rootNode = root_node;
+        info.currentNode = root_node;
+
+        index = gdata->trace_tables_count++;
+
+        // Set the data in the array
+        gdata->trace_tables[index] = info;
+
+        // Update the thread storage
+        storage->thread_index = index;
+
+        setThreadLocalStorage(thread, (void*)storage);
+
         return index;
     }
 
-    // If thread is not found, create an entry in the array
-    root_node = initTree();
-
-    info.globalref = newWeakGlobalReference(env, thread);
-    info.rootNode = root_node;
-    info.currentNode = root_node;
-
-    // Set the data in the array
-    gdata->trace_tables[index] = info;
-
-    setThreadLocalStorage(thread, (void*)(ptrdiff_t)index);
-
-    return index;
+    return storage->thread_index;
 }
