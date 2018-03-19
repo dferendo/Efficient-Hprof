@@ -1222,8 +1222,12 @@ trace_array_find_or_create(JNIEnv *env, jthread thread)
 
     storage = (ThreadStorage *) getThreadLocalStorage(thread);
 
-    // Storage should be created for the thread
-    HPROF_ASSERT(storage != NULL);
+    // Check if this is the first instance of the thread, if so create it.
+    if (storage == NULL) {
+        tls_find_or_create(env, thread);
+    }
+
+    storage = (ThreadStorage *) getThreadLocalStorage(thread);
 
     // Check if thread index was created, if not create it
     if (storage->thread_index == -1) {
