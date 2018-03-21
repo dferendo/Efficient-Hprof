@@ -186,36 +186,40 @@ event_newarray(JNIEnv *env, jthread thread, jobject object)
 void
 event_call(JNIEnv *env, jthread thread, ClassIndex cnum, MethodIndex mnum)
 {
-    trace_array_find_or_create(env, thread);
     /* Called via BCI Tracker class */
 
     /* Be very careful what is called here, watch out for recursion. */
+    ThreadTraceData data;
+    int index;
+    Node * child_node;
 
-//    TlsIndex tls_index;
-//    jint     *pstatus;
-//
-//    HPROF_ASSERT(env!=NULL);
-//    HPROF_ASSERT(thread!=NULL);
-//    if (cnum == 0 || cnum == gdata->tracker_cnum) {
-//        jclass newExcCls = (*env)->FindClass(env, "java/lang/IllegalArgumentException");
-//        (*env)->ThrowNew(env, newExcCls, "Illegal cnum.");
-//
-//        return;
-//    }
-//
-//    /* Prevent recursion into any BCI function for this thread (pstatus). */
-//    if ( tls_get_tracker_status(env, thread, JNI_FALSE,
-//             &pstatus, &tls_index, NULL, NULL) == 0 ) {
-//        jmethodID     method;
-//
-//        (*pstatus) = 1;
-//        method      = class_get_methodID(env, cnum, mnum);
-//        if (method != NULL) {
-//            tls_push_method(tls_index, method);
-//        }
-//
-//        (*pstatus) = 0;
-//    }
+    HPROF_ASSERT(env!=NULL);
+    HPROF_ASSERT(thread!=NULL);
+    if (cnum == 0 || cnum == gdata->tracker_cnum) {
+        jclass newExcCls = (*env)->FindClass(env, "java/lang/IllegalArgumentException");
+        (*env)->ThrowNew(env, newExcCls, "Illegal cnum.");
+
+        return;
+    }
+
+    // Get the thread index of the thread
+    index = trace_array_find_or_create(env, thread);
+    data = gdata->trace_tables[index];
+
+    /* Prevent recursion into any BCI function for this thread (tracker status). */
+    if (data.tracker_status == 0) {
+        data.tracker_status = 1;
+
+        // TODO: Memory allocation problems.
+
+        // Add Node
+        child_node = findOrCreateTreeChild(data.currentNode, cnum, mnum);
+
+        // Update Node
+        data.currentNode = child_node;
+
+        data.tracker_status = 0;
+    }
 }
 
 /* Handle tracking of an exception catch */

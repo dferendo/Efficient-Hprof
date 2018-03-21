@@ -206,6 +206,7 @@ struct LineTable;
 
 typedef struct ThreadTraceData {
     jthread         globalref;          /* Global reference for thread */
+    jint            tracker_status;     /* If we are inside Tracker class */
     Node * rootNode;
     Node * currentNode;
 } ThreadTraceData;
