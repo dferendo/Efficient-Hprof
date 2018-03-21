@@ -903,3 +903,17 @@ site_heapdump(JNIEnv *env)
 
     } rawMonitorExit(gdata->data_access_lock);
 }
+
+void tree_dump(JNIEnv *env) {
+
+    // Lock data
+    rawMonitorEnter(gdata->data_access_lock); {
+        // Write Header
+        tree_write_header();
+
+        // Write Footer
+        tree_write_footer();
+
+    }rawMonitorExit(gdata->data_access_lock);
+
+};

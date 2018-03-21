@@ -213,10 +213,10 @@ event_call(JNIEnv *env, jthread thread, ClassIndex cnum, MethodIndex mnum)
         // TODO: Memory allocation problems.
 
         // Add Node
-        child_node = findOrCreateTreeChild(data.currentNode, cnum, mnum);
+//        child_node = findOrCreateTreeChild(data.currentNode, cnum, mnum);
 
         // Update Node
-        data.currentNode = child_node;
+//        data.currentNode = child_node;
 
         data.tracker_status = 0;
     }
@@ -237,6 +237,8 @@ event_exception_catch(JNIEnv *env, jthread thread, jmethodID method,
     HPROF_ASSERT(env!=NULL);
     HPROF_ASSERT(thread!=NULL);
     HPROF_ASSERT(method!=NULL);
+
+    // TODO: Exceptions.
 
     /* Prevent recursion into any BCI function for this thread (pstatus). */
     if ( tls_get_tracker_status(env, thread, JNI_FALSE,
@@ -278,10 +280,10 @@ event_return(JNIEnv *env, jthread thread, ClassIndex cnum, MethodIndex mnum)
         // TODO: Memory allocation problems.
 
         // Add Node
-        child_node = moveToParent(data.currentNode);
+//        child_node = moveToParent(data.currentNode);
 
         // Update Node
-        data.currentNode = child_node;
+//        data.currentNode = child_node;
 
         data.tracker_status = 0;
     }

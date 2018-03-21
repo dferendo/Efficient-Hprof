@@ -53,4 +53,6 @@ void         site_write(JNIEnv *env, int flags, double cutoff);
 
 void         site_heapdump(JNIEnv *env);
 
+void tree_dump(JNIEnv *env);
+
 #endif

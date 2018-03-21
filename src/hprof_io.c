@@ -1951,3 +1951,11 @@ io_heap_footer(void)
         }
     }
 }
+
+void tree_write_header(void) {
+    write_printf("TREE DUMP START\n");
+}
+
+void tree_write_footer(void) {
+    write_printf("TREE END START\n");
+}

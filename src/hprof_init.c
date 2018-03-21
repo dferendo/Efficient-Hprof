@@ -893,6 +893,9 @@ dump_all_data(JNIEnv *env)
         verbose_message(" Java heap ...");
         /* Update the class table */
         reset_class_load_status(env, NULL);
+        // Dump tree information
+        tree_dump(env);
+
         site_heapdump(env);
     }
     if (gdata->alloc_sites) {
