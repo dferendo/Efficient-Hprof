@@ -13,7 +13,7 @@ declare -a libraries=("Nohprof" "libadding_call_return_bci_calls_calls_do_nothin
 				"libremove_get_trace_and_any_allocation_method.so")
 
 # Array of programs to test using dacapo benchmarks
-declare -a programs=("avrora" "batik" "fop" "h2" "jython" "luindex" "lusearch" "pmd" "sunflow" "tradebeans" "tradesoap" "xalan")
+declare -a programs=("avrora" "batik" "fop" "h2" "jython" "luindex" "lusearch" "pmd" "sunflow" "tradebeans" "xalan")
 
 # Array of sizes found in dacapo benchmarks
 declare -a sizes=("small")
