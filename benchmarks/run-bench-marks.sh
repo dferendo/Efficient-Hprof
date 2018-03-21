@@ -16,7 +16,7 @@ declare -a libraries=("Nohprof" "libadding_call_return_bci_calls_calls_do_nothin
 declare -a programs=("avrora" "batik" "fop" "h2" "jython" "luindex" "lusearch" "pmd" "sunflow" "tradebeans" "xalan")
 
 # Array of sizes found in dacapo benchmarks
-declare -a sizes=("small")
+declare -a sizes=("default")
 # declare -a sizes=("small" "default" "large")
 
 for library in "${libraries[@]}"
