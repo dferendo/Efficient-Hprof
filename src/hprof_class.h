@@ -74,4 +74,6 @@ void            class_prime_system_classes(void);
 jint            class_get_all_fields(JNIEnv *env, ClassIndex cnum,
                                      jint *pfield_count, FieldInfo **pfield);
 
+char *          class_get_method_name(JNIEnv *env, ClassIndex index, MethodIndex mnum);
+
 #endif

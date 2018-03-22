@@ -684,3 +684,33 @@ class_get_all_fields(JNIEnv *env, ClassIndex index,
     *pfield       = finfo;
     return ret;
 }
+
+
+char *
+class_get_method_name(JNIEnv *env, ClassIndex index, MethodIndex mnum)
+{
+    ClassInfo *info;
+    jmethodID  method;
+
+    info = get_info(index);
+    if (mnum >= info->method_count) {
+        jclass newExcCls = (*env)->FindClass(env, "java/lang/IllegalArgumentException");
+        (*env)->ThrowNew(env, newExcCls, "Illegal mnum");
+
+        return NULL;
+    }
+    method = info->method[mnum].method_id;
+    if ( method == NULL ) {
+        char * name;
+
+        name  = (char *)string_get(info->method[mnum].name_index);
+        if (name==NULL) {
+            jclass newExcCls = (*env)->FindClass(env, "java/lang/IllegalArgumentException");
+            (*env)->ThrowNew(env, newExcCls, "Name not found");
+
+            return NULL;
+        }
+        return name;
+    }
+    return "";
+}

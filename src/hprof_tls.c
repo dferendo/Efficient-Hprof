@@ -1238,6 +1238,7 @@ trace_array_find_or_create(JNIEnv *env, jthread thread)
         info.rootNode = root_node;
         info.currentNode = root_node;
 
+        // TODO: Lock.
         index = gdata->trace_tables_count++;
 
         // Set the data in the array

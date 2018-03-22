@@ -186,10 +186,13 @@ event_newarray(JNIEnv *env, jthread thread, jobject object)
 void
 event_call(JNIEnv *env, jthread thread, ClassIndex cnum, MethodIndex mnum)
 {
+    // Print class name
+    printf("%s.%s\n", string_get(class_get_signature(cnum)), class_get_method_name(env, cnum, mnum));
+
     /* Called via BCI Tracker class */
 
     /* Be very careful what is called here, watch out for recursion. */
-    ThreadTraceData data;
+    ThreadTraceData * data;
     int index;
     Node * child_node;
 
@@ -204,22 +207,13 @@ event_call(JNIEnv *env, jthread thread, ClassIndex cnum, MethodIndex mnum)
 
     // Get the thread index of the thread
     index = trace_array_find_or_create(env, thread);
-    data = gdata->trace_tables[index];
+    data = &gdata->trace_tables[index];
 
-    /* Prevent recursion into any BCI function for this thread (tracker status). */
-    if (data.tracker_status == 0) {
-        data.tracker_status = 1;
+    // Add Node
+    child_node = findOrCreateTreeChild(data->currentNode, cnum, mnum);
 
-        // TODO: Memory allocation problems.
-
-        // Add Node
-//        child_node = findOrCreateTreeChild(data.currentNode, cnum, mnum);
-
-        // Update Node
-//        data.currentNode = child_node;
-
-        data.tracker_status = 0;
-    }
+    // Update Node
+    data->currentNode = child_node;
 }
 
 /* Handle tracking of an exception catch */
@@ -256,37 +250,37 @@ event_return(JNIEnv *env, jthread thread, ClassIndex cnum, MethodIndex mnum)
     /* Called via BCI Tracker class */
 
     /* Be very careful what is called here, watch out for recursion. */
-    ThreadTraceData data;
-    int index;
-    Node * child_node;
-
-    HPROF_ASSERT(env!=NULL);
-    HPROF_ASSERT(thread!=NULL);
-    if (cnum == 0 || cnum == gdata->tracker_cnum) {
-        jclass newExcCls = (*env)->FindClass(env, "java/lang/IllegalArgumentException");
-        (*env)->ThrowNew(env, newExcCls, "Illegal cnum.");
-
-        return;
-    }
-
-    // Get the thread index of the thread
-    index = trace_array_find_or_create(env, thread);
-    data = gdata->trace_tables[index];
-
-    /* Prevent recursion into any BCI function for this thread (tracker status). */
-    if (data.tracker_status == 0) {
-        data.tracker_status = 1;
-
-        // TODO: Memory allocation problems.
-
-        // Add Node
-//        child_node = moveToParent(data.currentNode);
-
-        // Update Node
-//        data.currentNode = child_node;
-
-        data.tracker_status = 0;
-    }
+//    ThreadTraceData data;
+//    int index;
+//    Node * child_node;
+//
+//    HPROF_ASSERT(env!=NULL);
+//    HPROF_ASSERT(thread!=NULL);
+//    if (cnum == 0 || cnum == gdata->tracker_cnum) {
+//        jclass newExcCls = (*env)->FindClass(env, "java/lang/IllegalArgumentException");
+//        (*env)->ThrowNew(env, newExcCls, "Illegal cnum.");
+//
+//        return;
+//    }
+//
+//    // Get the thread index of the thread
+//    index = trace_array_find_or_create(env, thread);
+//    data = gdata->trace_tables[index];
+//
+//    /* Prevent recursion into any BCI function for this thread (tracker status). */
+//    if (data.tracker_status == 0) {
+//        data.tracker_status = 1;
+//
+//        // TODO: Memory allocation problems.
+//
+//        // Add Node
+////        child_node = moveToParent(data.currentNode);
+//
+//        // Update Node
+////        data.currentNode = child_node;
+//
+//        data.tracker_status = 0;
+//    }
 }
 
 /* Handle a class prepare (should have been already loaded) */
