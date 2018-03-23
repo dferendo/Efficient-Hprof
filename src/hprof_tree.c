@@ -66,6 +66,9 @@ Node * findOrCreateTreeChild(Node * currentNode, StringIndex class_string, Strin
     // Allocate memory for data
     data = (NodeData *) malloc(sizeof(NodeData));
 
+    data->class_id = class_string;
+    data->method_id = method_string;
+
     // Update child
     newNode->size = 0;
     newNode->data = data;

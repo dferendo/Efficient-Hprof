@@ -213,7 +213,7 @@ event_call(JNIEnv *env, jthread thread, ClassIndex cnum, MethodIndex mnum)
     // Add Node
     child_node = findOrCreateTreeChild(data->currentNode, class_get_signature(cnum),
                                        class_get_method_name(env, cnum, mnum),
-                                       data->current_node_number++);
+                                       ++data->current_node_number);
 
     // Update Node
     data->currentNode = child_node;
