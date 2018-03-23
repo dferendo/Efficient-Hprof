@@ -39,6 +39,7 @@
 
 
 #include "hprof.h"
+#include "hprof_tree.h"
 
 /* Thread Local Storage Table and method entry/exit handling. */
 
@@ -1237,9 +1238,11 @@ trace_array_find_or_create(JNIEnv *env, jthread thread)
         info.globalref = newWeakGlobalReference(env, thread);
         info.rootNode = root_node;
         info.currentNode = root_node;
+        info.current_node_number = 0;
 
-        // TODO: Lock.
-        index = gdata->trace_tables_count++;
+        rawMonitorEnter(gdata->data_access_lock); {
+            index = gdata->trace_tables_count++;
+        } rawMonitorExit(gdata->data_access_lock);
 
         // Set the data in the array
         gdata->trace_tables[index] = info;

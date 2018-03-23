@@ -5,23 +5,13 @@
 #ifndef TRIE_TEMP_NEW_TRIE_H
 #define TRIE_TEMP_NEW_TRIE_H
 
-typedef struct NodeData {
-    int class_id;
-    int method_id;
-} NodeData;
-
-typedef struct Node {
-    NodeData * data;
-    struct Node * parent;
-    struct Node ** children;
-    int size;
-} Node;
+#include "hprof.h"
 
 Node * initTree();
 
 Node * findInTree();
 
-Node * findOrCreateTreeChild(Node * currentNode, int class_id, int method_id);
+Node * findOrCreateTreeChild(Node * currentNode, StringIndex class_string, StringIndex method_string, int node_number);
 
 Node * moveToParent(Node * currentNode);
 

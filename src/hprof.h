@@ -173,6 +173,22 @@ typedef struct ConstantPoolValue {
     jvalue      value;
 } ConstantPoolValue;
 
+
+// TODO: Put this in hprof_tree.h
+typedef struct NodeData {
+    StringIndex class_id;
+    StringIndex method_id;
+} NodeData;
+
+typedef struct Node {
+    NodeData * data;
+    struct Node * parent;
+    struct Node ** children;
+    int size;
+    int node_number;
+} Node;
+
+
 /* All machine independent functions */
 
 #include "hprof_error.h"
@@ -198,7 +214,6 @@ typedef struct ConstantPoolValue {
 #include "hprof_listener.h"
 #include "hprof_cpu.h"
 #include "hprof_tag.h"
-#include "hprof_tree.h"
 
 /* Global data structure */
 
@@ -209,6 +224,7 @@ typedef struct ThreadTraceData {
     jint            tracker_status;     /* If we are inside Tracker class */
     Node * rootNode;
     Node * currentNode;
+    int             current_node_number;    /* Assign a number to each node */
 } ThreadTraceData;
 
 typedef struct {

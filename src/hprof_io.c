@@ -1959,3 +1959,7 @@ void tree_write_header(void) {
 void tree_write_footer(void) {
     write_printf("TREE END START\n");
 }
+
+void print_tree_node(char * string) {
+    write_printf(string);
+}

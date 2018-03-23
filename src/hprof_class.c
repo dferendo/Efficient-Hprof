@@ -686,7 +686,7 @@ class_get_all_fields(JNIEnv *env, ClassIndex index,
 }
 
 
-char *
+StringIndex
 class_get_method_name(JNIEnv *env, ClassIndex index, MethodIndex mnum)
 {
     ClassInfo *info;
@@ -701,10 +701,13 @@ class_get_method_name(JNIEnv *env, ClassIndex index, MethodIndex mnum)
     }
     method = info->method[mnum].method_id;
     if ( method == NULL ) {
-        char * name;
+        StringIndex name;
+        char * temp;
 
-        name  = (char *)string_get(info->method[mnum].name_index);
-        if (name==NULL) {
+        name = info->method[mnum].name_index;
+        temp  = string_get(name);
+
+        if (temp==NULL) {
             jclass newExcCls = (*env)->FindClass(env, "java/lang/IllegalArgumentException");
             (*env)->ThrowNew(env, newExcCls, "Name not found");
 
@@ -712,5 +715,5 @@ class_get_method_name(JNIEnv *env, ClassIndex index, MethodIndex mnum)
         }
         return name;
     }
-    return "";
+    return NULL;
 }

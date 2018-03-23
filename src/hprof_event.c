@@ -44,6 +44,7 @@
  */
 
 #include "hprof.h"
+#include "hprof_tree.h"
 
 /* Private internal functions. */
 
@@ -187,7 +188,7 @@ void
 event_call(JNIEnv *env, jthread thread, ClassIndex cnum, MethodIndex mnum)
 {
     // Print class name
-    printf("%s.%s\n", string_get(class_get_signature(cnum)), class_get_method_name(env, cnum, mnum));
+    printf("%s.%s\n", string_get(class_get_signature(cnum)), string_get(class_get_method_name(env, cnum, mnum)));
 
     /* Called via BCI Tracker class */
 
@@ -210,7 +211,9 @@ event_call(JNIEnv *env, jthread thread, ClassIndex cnum, MethodIndex mnum)
     data = &gdata->trace_tables[index];
 
     // Add Node
-    child_node = findOrCreateTreeChild(data->currentNode, cnum, mnum);
+    child_node = findOrCreateTreeChild(data->currentNode, class_get_signature(cnum),
+                                       class_get_method_name(env, cnum, mnum),
+                                       data->current_node_number++);
 
     // Update Node
     data->currentNode = child_node;

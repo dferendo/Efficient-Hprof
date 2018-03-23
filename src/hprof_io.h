@@ -168,5 +168,6 @@ void io_heap_footer(void);
 
 void tree_write_header(void);
 void tree_write_footer(void);
+void print_tree_node(char * string);
 
 #endif

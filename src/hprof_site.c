@@ -58,6 +58,7 @@
  */
 
 #include "hprof.h"
+#include "hprof_tree.h"
 
 typedef struct SiteKey {
     ClassIndex cnum;         /* Unique class number */
@@ -904,12 +905,39 @@ site_heapdump(JNIEnv *env)
     } rawMonitorExit(gdata->data_access_lock);
 }
 
+void print_tree(JNIEnv *env, int thread_index, Node * root) {
+    char str[200];
+    char str[]
+    int i;
+
+    for (i = 0; i < root->size; i++) {
+
+    }
+
+    // If root, skip class/method
+    if (root->parent == NULL) {
+        sprintf(str, "Thread %d Node %d (ROOT) \n",  thread_index, root->node_number);
+    } else {
+        sprintf(str, "Thread %d Node %d (%s %s)\n",  thread_index, root->node_number,
+                string_get(root->data->class_id), string_get(root->data->method_id));
+    }
+
+    // Print the current node
+    print_tree_node(str);
+}
+
 void tree_dump(JNIEnv *env) {
+    int i;
 
     // Lock data
     rawMonitorEnter(gdata->data_access_lock); {
         // Write Header
         tree_write_header();
+
+        // Print the tree for all used threads in the program
+        for (i = 0; i < gdata->trace_tables_count; i++) {
+            print_tree(env, i, gdata->trace_tables[i].rootNode);
+        }
 
         // Write Footer
         tree_write_footer();

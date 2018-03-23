@@ -25,18 +25,19 @@ Node * initTree() {
     newTree->data = NULL;
     newTree->children = NULL;
     newTree->size = 0;
+    newTree->node_number = 0;
 
     return newTree;
 }
 
-Node * findOrCreateTreeChild(Node * currentNode, int class_id, int method_id) {
+Node * findOrCreateTreeChild(Node * currentNode, StringIndex class_string, StringIndex method_string, int node_number) {
     Node * newNode;
     NodeData * data;
 
     // Check if child is already created
     for (int i = 0; i < currentNode->size; i++) {
-        if (currentNode->children[i]->data->class_id == class_id &&
-                currentNode->children[i]->data->method_id == method_id) {
+        if (currentNode->children[i]->data->class_id == class_string &&
+                currentNode->children[i]->data->method_id == method_string) {
             return currentNode->children[i];
         }
     }
@@ -69,6 +70,7 @@ Node * findOrCreateTreeChild(Node * currentNode, int class_id, int method_id) {
     newNode->size = 0;
     newNode->data = data;
     newNode->parent = currentNode;
+    newNode->node_number = node_number;
 
     // Update parent
     currentNode->children[currentNode->size] = newNode;
