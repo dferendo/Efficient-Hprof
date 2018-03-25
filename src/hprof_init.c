@@ -1110,47 +1110,45 @@ setup_event_mode(jboolean onload_set_only, jvmtiEventMode state)
 {
     if ( onload_set_only ) {
         setEventNotificationMode(state,
-                        JVMTI_EVENT_VM_INIT,                   NULL);
+                                 JVMTI_EVENT_VM_INIT,                   NULL);
         setEventNotificationMode(state,
-                        JVMTI_EVENT_VM_DEATH,                  NULL);
+                                 JVMTI_EVENT_VM_DEATH,                  NULL);
         if (gdata->bci) {
             setEventNotificationMode(state,
-                        JVMTI_EVENT_CLASS_FILE_LOAD_HOOK,      NULL);
+                                     JVMTI_EVENT_CLASS_FILE_LOAD_HOOK,      NULL);
         }
     } else {
         /* Enable all other JVMTI events of interest now. */
         setEventNotificationMode(state,
-                        JVMTI_EVENT_THREAD_START,              NULL);
+                                 JVMTI_EVENT_THREAD_START,              NULL);
         setEventNotificationMode(state,
-                        JVMTI_EVENT_THREAD_END,                NULL);
+                                 JVMTI_EVENT_THREAD_END,                NULL);
         setEventNotificationMode(state,
-                        JVMTI_EVENT_CLASS_LOAD,                NULL);
+                                 JVMTI_EVENT_CLASS_LOAD,                NULL);
         setEventNotificationMode(state,
-                        JVMTI_EVENT_CLASS_PREPARE,             NULL);
+                                 JVMTI_EVENT_CLASS_PREPARE,             NULL);
         setEventNotificationMode(state,
-                        JVMTI_EVENT_DATA_DUMP_REQUEST,         NULL);
-        if (gdata->cpu_timing) {
-            setEventNotificationMode(state,
-                        JVMTI_EVENT_EXCEPTION_CATCH,           NULL);
-        }
+                                 JVMTI_EVENT_DATA_DUMP_REQUEST,         NULL);
+        setEventNotificationMode(state,
+                                 JVMTI_EVENT_EXCEPTION_CATCH,           NULL);
         if (gdata->monitor_tracing) {
             setEventNotificationMode(state,
-                        JVMTI_EVENT_MONITOR_WAIT,              NULL);
+                                     JVMTI_EVENT_MONITOR_WAIT,              NULL);
             setEventNotificationMode(state,
-                        JVMTI_EVENT_MONITOR_WAITED,            NULL);
+                                     JVMTI_EVENT_MONITOR_WAITED,            NULL);
             setEventNotificationMode(state,
-                        JVMTI_EVENT_MONITOR_CONTENDED_ENTER,   NULL);
+                                     JVMTI_EVENT_MONITOR_CONTENDED_ENTER,   NULL);
             setEventNotificationMode(state,
-                        JVMTI_EVENT_MONITOR_CONTENDED_ENTERED, NULL);
+                                     JVMTI_EVENT_MONITOR_CONTENDED_ENTERED, NULL);
         }
         if (gdata->obj_watch) {
             setEventNotificationMode(state,
-                        JVMTI_EVENT_OBJECT_FREE,               NULL);
+                                     JVMTI_EVENT_OBJECT_FREE,               NULL);
         }
         setEventNotificationMode(state,
-                        JVMTI_EVENT_GARBAGE_COLLECTION_START,  NULL);
+                                 JVMTI_EVENT_GARBAGE_COLLECTION_START,  NULL);
         setEventNotificationMode(state,
-                        JVMTI_EVENT_GARBAGE_COLLECTION_FINISH, NULL);
+                                 JVMTI_EVENT_GARBAGE_COLLECTION_FINISH, NULL);
     }
 }
 
@@ -1894,13 +1892,13 @@ getCapabilities(void)
     }
     if (gdata->obj_watch) {
         needed_capabilities.can_generate_object_free_events      = 1;
+        needed_capabilities.can_generate_exception_events        = 1;
     }
     if (gdata->cpu_timing || gdata->cpu_sampling) {
         #if 0 /* Not needed until we call JVMTI for CpuTime */
         needed_capabilities.can_get_thread_cpu_time              = 1;
         needed_capabilities.can_get_current_thread_cpu_time      = 1;
         #endif
-        needed_capabilities.can_generate_exception_events        = 1;
     }
     if (gdata->monitor_tracing) {
         #if 0 /* Not needed until we call JVMTI for CpuTime */

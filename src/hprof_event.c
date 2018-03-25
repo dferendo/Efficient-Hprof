@@ -237,13 +237,15 @@ event_exception_catch(JNIEnv *env, jthread thread, jmethodID method,
 
     // TODO: Exceptions.
 
-    /* Prevent recursion into any BCI function for this thread (pstatus). */
-    if ( tls_get_tracker_status(env, thread, JNI_FALSE,
-             &pstatus, &tls_index, NULL, NULL) == 0 ) {
-        (*pstatus) = 1;
-         tls_pop_exception_catch(tls_index, thread, method);
-        (*pstatus) = 0;
-    }
+    printf("Exception is thrown\n");
+
+//    /* Prevent recursion into any BCI function for this thread (pstatus). */
+//    if ( tls_get_tracker_status(env, thread, JNI_FALSE,
+//             &pstatus, &tls_index, NULL, NULL) == 0 ) {
+//        (*pstatus) = 1;
+//         tls_pop_exception_catch(tls_index, thread, method);
+//        (*pstatus) = 0;
+//    }
 }
 
 /* Handle tracking of a method return pop one (maybe more) methods. */
