@@ -697,7 +697,7 @@ class_get_method_name(JNIEnv *env, ClassIndex index, MethodIndex mnum)
         jclass newExcCls = (*env)->FindClass(env, "java/lang/IllegalArgumentException");
         (*env)->ThrowNew(env, newExcCls, "Illegal mnum");
 
-        return NULL;
+        return 0;
     }
     method = info->method[mnum].method_id;
     if ( method == NULL ) {
@@ -711,9 +711,9 @@ class_get_method_name(JNIEnv *env, ClassIndex index, MethodIndex mnum)
             jclass newExcCls = (*env)->FindClass(env, "java/lang/IllegalArgumentException");
             (*env)->ThrowNew(env, newExcCls, "Name not found");
 
-            return NULL;
+            return 0;
         }
         return name;
     }
-    return NULL;
+    return 0;
 }
