@@ -6,3 +6,11 @@
 
    Methods tried: Looping through the tables was not correct since jmethodID is NULL for most of the classes.  
    Methods tried: Use JVMTI https://docs.oracle.com/javase/8/docs/platform/jvmti/jvmti.html#GetMethodName.
+
+3) Benchmarking: Registering in progress with AWS.
+
+4) Documentation.
+
+5) How to link object table with the tree.
+
+6) Correctness evaluation.
