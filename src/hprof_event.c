@@ -188,7 +188,7 @@ void
 event_call(JNIEnv *env, jthread thread, ClassIndex cnum, MethodIndex mnum)
 {
     // Print class name
-    printf("%s.%s\n", string_get(class_get_signature(cnum)), string_get(class_get_method_name(env, cnum, mnum)));
+    printf("Call %s.%s\n", string_get(class_get_signature(cnum)), string_get(class_get_method_name(env, cnum, mnum)));
 
     /* Called via BCI Tracker class */
 
@@ -228,24 +228,34 @@ event_exception_catch(JNIEnv *env, jthread thread, jmethodID method,
 
     /* Be very careful what is called here, watch out for recursion. */
 
-    TlsIndex tls_index;
-    jint     *pstatus;
+    ThreadTraceData * data;
+    int index;
+    char *msig;
+    char *mname;
+    Node * new_node;
 
     HPROF_ASSERT(env!=NULL);
     HPROF_ASSERT(thread!=NULL);
     HPROF_ASSERT(method!=NULL);
 
-    // TODO: Exceptions.
+    index = trace_array_find_or_create(env, thread);
+    data = &gdata->trace_tables[index];
 
-    printf("Exception is thrown\n");
+    // Check if the current Node in the root. In this case there are no methods to go.
+    // This can occur if methods are skipped for efficiency
+    if (data->currentNode->parent == NULL) {
+        return;
+    }
 
-//    /* Prevent recursion into any BCI function for this thread (pstatus). */
-//    if ( tls_get_tracker_status(env, thread, JNI_FALSE,
-//             &pstatus, &tls_index, NULL, NULL) == 0 ) {
-//        (*pstatus) = 1;
-//         tls_pop_exception_catch(tls_index, thread, method);
-//        (*pstatus) = 0;
-//    }
+    // Get the method name and signature from the given jmethodId
+    getMethodName(method, &mname, &msig);
+
+    new_node = moveToPreviousNode(data->currentNode, mname);
+
+    if (new_node != NULL) {
+        data->currentNode = new_node;
+    }
+
 }
 
 /* Handle tracking of a method return pop one (maybe more) methods. */
@@ -253,7 +263,7 @@ void
 event_return(JNIEnv *env, jthread thread, ClassIndex cnum, MethodIndex mnum)
 {
     // Print class name
-    printf("%s.%s\n", string_get(class_get_signature(cnum)), string_get(class_get_method_name(env, cnum, mnum)));
+    printf("Return: %s.%s\n", string_get(class_get_signature(cnum)), string_get(class_get_method_name(env, cnum, mnum)));
 
     /* Called via BCI Tracker class */
 

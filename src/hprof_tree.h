@@ -15,4 +15,6 @@ Node * findOrCreateTreeChild(Node * currentNode, StringIndex class_string, Strin
 
 Node * moveToParent(Node * currentNode);
 
+Node * moveToPreviousNode(Node * currentNode, char * node_to_move);
+
 #endif //TRIE_TEMP_NEW_TRIE_H

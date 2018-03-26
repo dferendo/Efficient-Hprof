@@ -7,8 +7,10 @@ public class Test {
 		try {
 		test.method2();
 		} catch (Exception e) {
-			System.out.printf("Test");
+
 		}
+
+		test.method1();
 		}
 
 	public void method1() {

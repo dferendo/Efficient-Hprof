@@ -89,3 +89,20 @@ Node * moveToParent(Node * currentNode) {
 
     return currentNode->parent;
 }
+
+Node * moveToPreviousNode(Node * currentNode, char * node_to_move) {
+    Node * parent;
+
+    if (strcmp(string_get(currentNode->data->method_id), node_to_move) == 0) {
+        return currentNode;
+    } else {
+        parent = currentNode->parent;
+
+        // This error arises when methods are skipped for efficiency
+        if (parent == NULL) {
+            return NULL;
+        } else {
+            return moveToPreviousNode(currentNode->parent, node_to_move);
+        }
+    }
+}
