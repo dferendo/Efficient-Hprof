@@ -11,10 +11,12 @@ SOLVED: 3) How to get the current method with jMethodId from exceptions? Maybe l
 
 4) Documentation.
 
-5) How to link object table with the tree.
+SOLVED: 5) How to link object table with the tree.
 
 6) Correctness evaluation.
 
 7) Fixed *** stack smashing detected *** caused by printing of the tree.
 
 8) Change Title IMP.
+
+9) TESTING REQUIRED.
