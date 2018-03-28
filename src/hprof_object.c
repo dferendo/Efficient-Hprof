@@ -91,6 +91,8 @@ typedef struct ObjectKey {
 typedef struct ObjectInfo {
     RefIndex     references;        /* Linked list of refs in this object */
     SerialNumber thread_serial_num; /* Thread serial number for allocation */
+    Node *      node_created_at;       /* The node were the site is allocated at */
+    int         thread_index;          /* The index of the thread were it was created */
 } ObjectInfo;
 
 /* Private internal functions. */
@@ -184,6 +186,8 @@ object_new(SiteIndex site_index, jint size, ObjectKind kind, SerialNumber thread
 
         i = empty_info;
         i.thread_serial_num = thread_serial_num;
+        i.thread_index = -1;
+        i.node_created_at = NULL;
         key.serial_num = gdata->object_serial_number_counter++;
         index = table_create_entry(gdata->object_table,
                             &key, (int)sizeof(ObjectKey), &i);
@@ -325,8 +329,8 @@ object_reference_dump(JNIEnv *env)
 
 
 ObjectIndex
-object_new_node(SiteIndex site_index, jint size, ObjectKind kind, SerialNumber thread_serial_num, int thread_index,
-                Node * node)
+object_new_node(SiteIndex site_index, jint size, ObjectKind kind, SerialNumber thread_serial_num,
+                int thread_index, Node * node)
 {
     ObjectIndex index;
     ObjectKey   key;
@@ -342,6 +346,9 @@ object_new_node(SiteIndex site_index, jint size, ObjectKind kind, SerialNumber t
 
         i = empty_info;
         i.thread_serial_num = thread_serial_num;
+        i.thread_index = thread_index;
+        i.node_created_at = node;
+
         key.serial_num = gdata->object_serial_number_counter++;
         index = table_create_entry(gdata->object_table,
                                    &key, (int)sizeof(ObjectKey), &i);
@@ -351,6 +358,24 @@ object_new_node(SiteIndex site_index, jint size, ObjectKind kind, SerialNumber t
         index = table_find_or_create_entry(gdata->object_table,
                                            &key, (int)sizeof(ObjectKey), NULL, NULL);
     }
-    site_update_stats_node(site_index, size, 1, node, thread_index);
+    site_update_stats(site_index, size, 1);
     return index;
+}
+
+int
+object_get_thread_index(ObjectIndex index)
+{
+    ObjectInfo *info;
+
+    info = get_info(index);
+    return info->thread_index;
+}
+
+Node *
+object_get_node(ObjectIndex index)
+{
+    ObjectInfo *info;
+
+    info = get_info(index);
+    return info->node_created_at;
 }

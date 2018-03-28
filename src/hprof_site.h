@@ -55,9 +55,4 @@ void         site_heapdump(JNIEnv *env);
 
 void tree_dump(JNIEnv *env);
 
-void site_update_stats_node(SiteIndex index, jint size, jint hits, Node * node, int thread_index);
-SiteIndex    site_find_or_create_node(ClassIndex cnum);
-Node * get_node_info(SiteIndex index);
-int    get_thread_index_info(SiteIndex index);
-
 #endif

@@ -124,7 +124,7 @@ any_allocation(JNIEnv *env, SerialNumber thread_serial_num, jobject object, int 
     /* Get and tag the klass */
     klass = getObjectClass(env, object);
     cnum = find_cnum(env, klass, getClassLoader(klass));
-    site_index = site_find_or_create_node(cnum);
+    site_index = site_find_or_create(cnum, gdata->system_trace_index);
     tag_class(env, klass, cnum, thread_serial_num, site_index);
 
     /* Tag the object */

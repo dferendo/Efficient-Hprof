@@ -62,4 +62,8 @@ void         object_reference_dump(JNIEnv *env);
 ObjectIndex  object_new_node(SiteIndex site_index, jint size, ObjectKind kind, SerialNumber thread_serial_num,
                              int thread_index, Node * node);
 
+int object_get_thread_index(ObjectIndex index);
+
+Node * object_get_node(ObjectIndex index);
+
 #endif
