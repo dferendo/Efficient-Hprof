@@ -93,6 +93,10 @@ Node * moveToParent(Node * currentNode) {
 Node * moveToPreviousNode(Node * currentNode, char * node_to_move) {
     Node * parent;
 
+    if (currentNode->data == NULL) {
+        return NULL;
+    }
+
     if (strcmp(string_get(currentNode->data->method_id), node_to_move) == 0) {
         return currentNode;
     } else {

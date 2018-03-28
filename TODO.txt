@@ -1,8 +1,8 @@
-1) Ask about native methods regarding exceptions? Answer  If the exception is caught in a Java programming language method, the event is generated when the catch clause is reached. If the exception is caught in a native method, the event is generated as soon as control is returned to a Java programming language method.
+SOLVED: 1) Ask about native methods regarding exceptions? Answer  If the exception is caught in a Java programming language method, the event is generated when the catch clause is reached. If the exception is caught in a native method, the event is generated as soon as control is returned to a Java programming language method.
 
-2) Exceptions are not triggering events? Answer: event callback was off
+SOLVED: 2) Exceptions are not triggering events? Answer: event callback was off
 
-3) How to get the current method with jMethodId from exceptions? Maybe loop through the whole table and get the method which contains the same jmethodID??? (Dunno know how).
+SOLVED: 3) How to get the current method with jMethodId from exceptions? Maybe loop through the whole table and get the method which contains the same jmethodID??? (Dunno know how).
 
    Methods tried: Looping through the tables was not correct since jmethodID is NULL for most of the classes.  
    Methods tried: Use JVMTI https://docs.oracle.com/javase/8/docs/platform/jvmti/jvmti.html#GetMethodName.
@@ -14,3 +14,7 @@
 5) How to link object table with the tree.
 
 6) Correctness evaluation.
+
+7) Fixed *** stack smashing detected *** caused by printing of the tree.
+
+8) Change Title IMP.

@@ -6,3 +6,7 @@ text.txt
 /benchmarks/java.hprof.txt
 *.TMP
 *.class
+/benchmarks/Class Tests/.idea/
+*.iml
+/benchmarks/CorrectImplementationTest/.idea/
+/benchmarks/CorrectImplementationTest/venv/

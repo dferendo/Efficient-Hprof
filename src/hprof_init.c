@@ -259,11 +259,11 @@ connect_to_socket(char *hostname, unsigned short port)
 
 int ignore_class_for_method_call_events(const char *classname) {
 
-    if (strstr(classname, "java") != NULL) {
-        return JNI_TRUE;
-    } else if (strstr(classname, "sun") != NULL) {
-        return JNI_TRUE;
-    }
+//    if (strstr(classname, "java") != NULL) {
+//        return JNI_TRUE;
+//    } else if (strstr(classname, "sun") != NULL) {
+//        return JNI_TRUE;
+//    }
 
     return JNI_FALSE;
 }
