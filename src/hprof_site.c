@@ -71,6 +71,8 @@ typedef struct SiteInfo {
     unsigned    n_alloced_bytes;       /* Total bytes allocated from here */
     unsigned    n_live_instances;      /* Live instances for this site. */
     unsigned    n_live_bytes;          /* Live byte count for this site. */
+    Node *      node_created_at;       /* The node were the site is allocated at */
+    int         thread_index;          /* The index of the thread were it was created */
 } SiteInfo;
 
 typedef struct IterateInfo {
@@ -111,7 +113,7 @@ site_get_trace_index(SiteIndex index)
     return pkey->trace_index;
 }
 
-static SiteInfo *
+SiteInfo *
 get_info(SiteIndex index)
 {
     SiteInfo *info;
@@ -302,6 +304,7 @@ site_find_or_create(ClassIndex cnum, TraceIndex trace_index)
     HPROF_ASSERT(trace_index!=0);
     key.cnum        = cnum;
     key.trace_index = trace_index;
+
     index = table_find_or_create_entry(gdata->site_table,
                             &key, (int)sizeof(key), NULL, NULL);
     return index;
@@ -957,3 +960,67 @@ void tree_dump(JNIEnv *env) {
     }rawMonitorExit(gdata->data_access_lock);
 
 };
+
+void
+site_update_stats_node(SiteIndex index, jint size, jint hits, Node * node, int thread_index)
+{
+    SiteInfo *info;
+
+    table_lock_enter(gdata->site_table); {
+        info = get_info(index);
+
+        info->n_live_instances          += hits;
+        info->n_live_bytes              += size;
+        info->changed                   = 1;
+        info->node_created_at           = node;
+        info->thread_index              = thread_index;
+
+        gdata->total_live_bytes         += size;
+        gdata->total_live_instances     += hits;
+
+        if ( size > 0 ) {
+            info->n_alloced_instances   += hits;
+            info->n_alloced_bytes       += size;
+            gdata->total_alloced_bytes =
+                    jlong_add(gdata->total_alloced_bytes, jint_to_jlong(size));
+            gdata->total_alloced_instances =
+                    jlong_add(gdata->total_alloced_instances, jint_to_jlong(hits));
+        }
+    } table_lock_exit(gdata->site_table);
+}
+
+SiteIndex
+site_find_or_create_node(ClassIndex cnum)
+{
+    SiteIndex index;
+    static SiteKey  empty_key;
+    SiteKey   key;
+
+    key = empty_key;
+    HPROF_ASSERT(cnum!=0);
+    HPROF_ASSERT(trace_index!=0);
+    key.cnum        = cnum;
+    key.trace_index = gdata->system_trace_index;
+
+    index = table_find_or_create_entry(gdata->site_table,
+                                       &key, (int)sizeof(key), NULL, NULL);
+    return index;
+}
+
+Node *
+get_node_info(SiteIndex index)
+{
+    SiteInfo *info;
+
+    info = (SiteInfo*)table_get_info(gdata->site_table, index);
+    return info->node_created_at;
+}
+
+int
+get_thread_index_info(SiteIndex index)
+{
+    SiteInfo *info;
+
+    info = (SiteInfo*)table_get_info(gdata->site_table, index);
+    return info->thread_index;
+}

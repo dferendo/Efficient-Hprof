@@ -132,3 +132,19 @@ tag_class(JNIEnv *env, jclass klass, ClassIndex cnum,
         class_set_object_index(cnum, object_index);
     }
 }
+
+void
+tag_new_object_node(jobject object, ObjectKind kind, SerialNumber thread_serial_num,
+               jint size, SiteIndex site_index, int thread_index, Node * node)
+{
+    ObjectIndex  object_index;
+    jlong        tag;
+
+    HPROF_ASSERT(site_index!=0);
+    /* New object for this site. */
+    object_index = object_new_node(site_index, size, kind, thread_serial_num, thread_index, node);
+    /* Create and set the tag. */
+    tag = tag_create(object_index);
+    setTag(object, tag);
+    LOG3("tag_new_object", "tag", (int)tag);
+}

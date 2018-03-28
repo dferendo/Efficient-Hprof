@@ -59,4 +59,7 @@ void         object_set_references(ObjectIndex index, RefIndex ref_index);
 void         object_clear_references(void);
 void         object_reference_dump(JNIEnv *env);
 
+ObjectIndex  object_new_node(SiteIndex site_index, jint size, ObjectKind kind, SerialNumber thread_serial_num,
+                             int thread_index, Node * node);
+
 #endif

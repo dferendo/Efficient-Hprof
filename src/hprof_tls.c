@@ -1257,3 +1257,17 @@ trace_array_find_or_create(JNIEnv *env, jthread thread)
 
     return storage->thread_index;
 }
+
+
+SerialNumber tls_get_thread_serial_num(JNIEnv *env, jthread thread)
+{
+    TlsInfo      *info;
+    TlsIndex      index;
+    SerialNumber  thread_serial_num;
+    jint          status;
+
+    index             = tls_find_or_create(env, thread);
+    thread_serial_num = get_key(index);
+
+    return thread_serial_num;
+}

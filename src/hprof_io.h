@@ -170,4 +170,9 @@ void tree_write_header(void);
 void tree_write_footer(void);
 void print_tree_node(char * string);
 
+void
+io_heap_instance_dump_node(ClassIndex cnum, ObjectIndex obj_id,
+                           ObjectIndex class_id, jint size, char *sig,
+                           FieldInfo *fields, jvalue *fvalues, jint n_fields, int node_number, int thread_index);
+
 #endif

@@ -699,8 +699,26 @@ dump_instance(JNIEnv *env, ObjectIndex object_index, RefIndex list)
                     (jint)size, num_elements, sig, values, class_index);
         }
     } else {
-        io_heap_instance_dump(cnum, object_index, trace_serial_num,
-                    class_index, (jint)size, sig, fields, fvalues, n_fields);
+        Node * node;
+        int thread_index;
+
+        thread_index = site_get_trace_index(site_index);
+
+        if (thread_index == gdata->system_trace_index) {
+            node = get_node_info(site_index);
+            thread_index = get_thread_index_info(site_index);
+
+            if (node == NULL) {
+                io_heap_instance_dump(cnum, object_index, trace_serial_num,
+                                      class_index, (jint)size, sig, fields, fvalues, n_fields);
+            } else {
+                io_heap_instance_dump_node(cnum, object_index,
+                                           class_index, (jint)size, sig, fields, fvalues, n_fields, node->node_number, thread_index);
+            }
+        } else {
+            io_heap_instance_dump(cnum, object_index, trace_serial_num,
+                                  class_index, (jint)size, sig, fields, fvalues, n_fields);
+        }
     }
     if ( values != NULL ) {
         HPROF_FREE(values);

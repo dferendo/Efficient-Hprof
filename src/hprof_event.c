@@ -107,8 +107,7 @@ get_super(JNIEnv *env, jclass klass)
 
 /* Record an allocation. Could be jobject, jclass, jarray or primitive type. */
 static void
-any_allocation(JNIEnv *env, SerialNumber thread_serial_num,
-               TraceIndex trace_index, jobject object)
+any_allocation(JNIEnv *env, SerialNumber thread_serial_num, jobject object, int thread_index, Node * node)
 {
     SiteIndex    site_index;
     ClassIndex   cnum;
@@ -125,12 +124,12 @@ any_allocation(JNIEnv *env, SerialNumber thread_serial_num,
     /* Get and tag the klass */
     klass = getObjectClass(env, object);
     cnum = find_cnum(env, klass, getClassLoader(klass));
-    site_index = site_find_or_create(cnum, trace_index);
+    site_index = site_find_or_create_node(cnum);
     tag_class(env, klass, cnum, thread_serial_num, site_index);
 
     /* Tag the object */
     size  = (jint)getObjectSize(object);
-    tag_new_object(object, OBJECT_NORMAL, thread_serial_num, size, site_index);
+    tag_new_object_node(object, OBJECT_NORMAL, thread_serial_num, size, site_index, thread_index, node);
 }
 
 /* Handle a java.lang.Object.<init> object allocation. */
@@ -141,21 +140,21 @@ event_object_init(JNIEnv *env, jthread thread, jobject object)
 
     /* Be very careful what is called here, watch out for recursion. */
 
-//    jint        *pstatus;
-//    TraceIndex   trace_index;
-//    SerialNumber thread_serial_num;
-//
-//    HPROF_ASSERT(env!=NULL);
-//    HPROF_ASSERT(thread!=NULL);
-//    HPROF_ASSERT(object!=NULL);
-//
-//    /* Prevent recursion into any BCI function for this thread (pstatus). */
-//    if ( tls_get_tracker_status(env, thread, JNI_TRUE,
-//             &pstatus, NULL, &thread_serial_num, &trace_index) == 0 ) {
-//        (*pstatus) = 1;
-//        any_allocation(env, thread_serial_num, trace_index, object);
-//        (*pstatus) = 0;
-//    }
+    ThreadTraceData * data;
+    int index;
+    SerialNumber thread_serial_num;
+
+    HPROF_ASSERT(env!=NULL);
+    HPROF_ASSERT(thread!=NULL);
+    HPROF_ASSERT(object!=NULL);
+
+    // Get the thread index of the thread
+    index = trace_array_find_or_create(env, thread);
+    data = &gdata->trace_tables[index];
+
+    thread_serial_num = tls_get_thread_serial_num(env, thread);
+
+    any_allocation(env, thread_serial_num, object, index, data->currentNode);
 }
 
 /* Handle any newarray opcode allocation. */
@@ -187,9 +186,6 @@ event_newarray(JNIEnv *env, jthread thread, jobject object)
 void
 event_call(JNIEnv *env, jthread thread, ClassIndex cnum, MethodIndex mnum)
 {
-    // Print class name
-    printf("Call %s.%s\n", string_get(class_get_signature(cnum)), string_get(class_get_method_name(env, cnum, mnum)));
-
     /* Called via BCI Tracker class */
 
     /* Be very careful what is called here, watch out for recursion. */
@@ -262,9 +258,6 @@ event_exception_catch(JNIEnv *env, jthread thread, jmethodID method,
 void
 event_return(JNIEnv *env, jthread thread, ClassIndex cnum, MethodIndex mnum)
 {
-    // Print class name
-    printf("Return: %s.%s\n", string_get(class_get_signature(cnum)), string_get(class_get_method_name(env, cnum, mnum)));
-
     /* Called via BCI Tracker class */
 
     /* Be very careful what is called here, watch out for recursion. */

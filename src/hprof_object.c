@@ -322,3 +322,35 @@ object_reference_dump(JNIEnv *env)
     table_walk_items(gdata->object_table, &dump_instance_references, (void*)env);
     table_walk_items(gdata->object_table, &dump_class_references, (void*)env);
 }
+
+
+ObjectIndex
+object_new_node(SiteIndex site_index, jint size, ObjectKind kind, SerialNumber thread_serial_num, int thread_index,
+                Node * node)
+{
+    ObjectIndex index;
+    ObjectKey   key;
+    static ObjectKey empty_key;
+
+    key            = empty_key;
+    key.site_index = site_index;
+    key.size       = size;
+    key.kind       = kind;
+    if ( gdata->heap_dump ) {
+        static ObjectInfo empty_info;
+        ObjectInfo i;
+
+        i = empty_info;
+        i.thread_serial_num = thread_serial_num;
+        key.serial_num = gdata->object_serial_number_counter++;
+        index = table_create_entry(gdata->object_table,
+                                   &key, (int)sizeof(ObjectKey), &i);
+    } else {
+        key.serial_num =
+                class_get_serial_number(site_get_class_index(site_index));
+        index = table_find_or_create_entry(gdata->object_table,
+                                           &key, (int)sizeof(ObjectKey), NULL, NULL);
+    }
+    site_update_stats_node(site_index, size, 1, node, thread_index);
+    return index;
+}

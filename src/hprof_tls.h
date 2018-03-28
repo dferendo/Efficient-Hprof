@@ -88,4 +88,6 @@ TlsIndex     tls_find(SerialNumber thread_serial_num);
 
 int          trace_array_find_or_create(JNIEnv *env, jthread thread);
 
+SerialNumber tls_get_thread_serial_num(JNIEnv *env, jthread thread);
+
 #endif
