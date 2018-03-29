@@ -175,4 +175,13 @@ io_heap_instance_dump_node(ClassIndex cnum, ObjectIndex obj_id,
                            ObjectIndex class_id, jint size, char *sig,
                            FieldInfo *fields, jvalue *fvalues, jint n_fields, int node_number, int thread_index);
 
+void
+io_heap_prim_array_node(ObjectIndex obj_id, SerialNumber trace_serial_num,
+                        jint size, jint num_elements, char *sig, void *elements, int thread_index, int node_number);
+
+void
+io_heap_object_array_node(ObjectIndex obj_id, SerialNumber trace_serial_num,
+                          jint size, jint num_elements, char *sig, ObjectIndex *values,
+                          ObjectIndex class_id, int thread_index, int node_number);
+
 #endif

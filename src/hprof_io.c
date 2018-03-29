@@ -2033,3 +2033,65 @@ io_heap_instance_dump_node(ClassIndex cnum, ObjectIndex obj_id,
         }
     }
 }
+
+void
+io_heap_prim_array_node(ObjectIndex obj_id, SerialNumber trace_serial_num,
+                   jint size, jint num_elements, char *sig, void *elements, int thread_index, int node_number)
+{
+    CHECK_TRACE_SERIAL_NO(trace_serial_num);
+    if (gdata->output_format == 'b') {
+        HprofType kind;
+        jint  esize;
+
+        type_array(sig, &kind, &esize);
+        HPROF_ASSERT(HPROF_TYPE_IS_PRIMITIVE(kind));
+        heap_tag(HPROF_GC_PRIM_ARRAY_DUMP);
+        heap_id(obj_id);
+        heap_u4(trace_serial_num);
+        heap_u4(num_elements);
+        heap_u1(kind);
+        heap_elements(kind, num_elements, esize, elements);
+    } else {
+        char *name;
+
+        name = signature_to_name(sig);
+        heap_printf("ARR %x (sz=%u, thread=%d, node=%d, nelems=%u, elem type=%s)\n",
+                    obj_id, size, thread_index, node_number, num_elements, name);
+        HPROF_FREE(name);
+    }
+}
+
+void
+io_heap_object_array_node(ObjectIndex obj_id, SerialNumber trace_serial_num,
+                     jint size, jint num_elements, char *sig, ObjectIndex *values,
+                     ObjectIndex class_id, int thread_index, int node_number)
+{
+    CHECK_TRACE_SERIAL_NO(trace_serial_num);
+    if (gdata->output_format == 'b') {
+
+        heap_tag(HPROF_GC_OBJ_ARRAY_DUMP);
+        heap_id(obj_id);
+        heap_u4(trace_serial_num);
+        heap_u4(num_elements);
+        heap_id(class_id);
+        heap_elements(HPROF_NORMAL_OBJECT, num_elements,
+                      (jint)sizeof(HprofId), (void*)values);
+    } else {
+        char *name;
+        int i;
+
+        name = signature_to_name(sig);
+        heap_printf("ARR %x (sz=%u, thread=%d, node=%d, nelems=%u, elem type=%s@%x)\n",
+                    obj_id, size, thread_index, node_number , num_elements,
+                    name, class_id);
+        for (i = 0; i < num_elements; i++) {
+            ObjectIndex id;
+
+            id = values[i];
+            if (id != 0) {
+                heap_printf("\t[%u]\t\t%x\n", i, id);
+            }
+        }
+        HPROF_FREE(name);
+    }
+}

@@ -688,23 +688,34 @@ dump_instance(JNIEnv *env, ObjectIndex object_index, RefIndex list)
         index = info->next;
     }
 
+    Node * node;
+    int thread_index;
+
+    node = object_get_node(object_index);
+    thread_index = object_get_thread_index(object_index);
+
     if ( is_array == JNI_TRUE ) {
         if ( is_prim_array == JNI_TRUE ) {
             HPROF_ASSERT(values==NULL);
-            io_heap_prim_array(object_index, trace_serial_num,
-                    (jint)size, num_elements, sig, elements);
+            if (node == NULL) {
+                io_heap_prim_array(object_index, trace_serial_num,
+                                   (jint)size, num_elements, sig, elements);
+            } else {
+                io_heap_prim_array_node(object_index, trace_serial_num,
+                                        (jint)size, num_elements, sig, elements, thread_index, node->node_number);
+            }
         } else {
             HPROF_ASSERT(elements==NULL);
-            io_heap_object_array(object_index, trace_serial_num,
-                    (jint)size, num_elements, sig, values, class_index);
+            if (node == NULL) {
+                io_heap_object_array(object_index, trace_serial_num,
+                                     (jint)size, num_elements, sig, values, class_index);
+            } else {
+                io_heap_object_array_node(object_index, trace_serial_num,
+                                          (jint)size, num_elements, sig, values, class_index, thread_index,
+                                          node->node_number);
+            }
         }
     } else {
-        Node * node;
-        int thread_index;
-
-        node = object_get_node(object_index);
-        thread_index = object_get_thread_index(object_index);
-
         if (node == NULL) {
             io_heap_instance_dump(cnum, object_index, trace_serial_num,
                                   class_index, (jint)size, sig, fields, fvalues, n_fields);

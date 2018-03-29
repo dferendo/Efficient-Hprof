@@ -44,14 +44,15 @@
 jlong        tag_create(ObjectIndex object_index);
 ObjectIndex  tag_extract(jlong tag);
 
-void         tag_new_object(jobject object, ObjectKind kind,
-                SerialNumber thread_serial_num,
-                jint size, SiteIndex site_index);
 void         tag_class(JNIEnv *env, jclass klass, ClassIndex cnum,
                 SerialNumber thread_serial_num, SiteIndex site_index);
 
 void
 tag_new_object_node(jobject object, ObjectKind kind, SerialNumber thread_serial_num,
                     jint size, SiteIndex site_index, int thread_index, Node * node);
+
+void
+tag_class_node(JNIEnv *env, jclass klass, ClassIndex cnum,
+               SerialNumber thread_serial_num, SiteIndex site_index, int thread_index, Node * node);
 
 #endif
