@@ -907,7 +907,7 @@ site_heapdump(JNIEnv *env)
 }
 
 void print_tree(int thread_index, Node * root) {
-    char str[300];
+    char str[200];
     int i;
 
     // If root, skip class/method
@@ -919,19 +919,22 @@ void print_tree(int thread_index, Node * root) {
                 string_get(root->data->method_id));
     }
 
+    print_tree_node(str);
+
     // Check for children
     if (root->size != 0) {
-        sprintf(str + strlen(str), " : Children ");
+        sprintf(str, " : Children ");
+
+        print_tree_node(str);
 
         for (i = 0; i < root->size; i++) {
-            sprintf(str + strlen(str), "Node %d ", root->children[i]->node_number);
+            sprintf(str, "Node %d ", root->children[i]->node_number);
+            print_tree_node(str);
         }
     }
 
-    sprintf(str + strlen(str), "\n");
-
     // Print the current node
-    print_tree_node(str);
+    print_tree_node("\n");
 
     // Repeat for the child nodes
     for (i = 0; i < root->size; i++) {

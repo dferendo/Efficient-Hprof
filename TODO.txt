@@ -15,8 +15,8 @@ SOLVED: 5) How to link object table with the tree.
 
 6) Correctness evaluation.
 
-7) Fixed *** stack smashing detected *** caused by printing of the tree.
+SOLVED: 7) Fixed *** stack smashing detected *** caused by printing of the tree.
 
-8) Change Title IMP.
+SOLVED: 8) Change Title IMP.
 
 9) TESTING REQUIRED.
