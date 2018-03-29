@@ -485,11 +485,18 @@ dump_class_and_supers(JNIEnv *env, ObjectIndex object_index, RefIndex list)
     if ( cpool_count > 0 ) {
         cpool = (ConstantPoolValue*)stack_element(cpool_values, 0);
     }
+    Node * node;
+    int thread_index;
+
+    node = object_get_node(object_index);
+    thread_index = object_get_thread_index(object_index);
+
     io_heap_class_dump(cnum, sig, object_index, trace_serial_num,
             super_index,
             loader_object_index(env, loader_index),
             signers_index, domain_index,
-            (jint)size, cpool_count, cpool, n_fields, fields, fvalues);
+            (jint)size, cpool_count, cpool, n_fields, fields, fvalues,
+            thread_index, node->node_number);
 
     stack_term(cpool_values);
     if ( fvalues != NULL ) {

@@ -74,48 +74,6 @@ tag_extract(jlong tag)
     return  (ObjectIndex)(tag & 0xFFFFFFFF);
 }
 
-/* Tag a jclass jobject if it hasn't been tagged. */
-void
-tag_class(JNIEnv *env, jclass klass, ClassIndex cnum,
-                SerialNumber thread_serial_num, SiteIndex site_index)
-{
-    ObjectIndex object_index;
-
-    /* If the ClassIndex has an ObjectIndex, then we have tagged it. */
-    object_index = class_get_object_index(cnum);
-
-    if ( object_index == 0 ) {
-        jint        size;
-        jlong        tag;
-
-        HPROF_ASSERT(site_index!=0);
-
-        /* If we don't know the size of a java.lang.Class object, get it */
-        size =  gdata->system_class_size;
-        if ( size == 0 ) {
-            size  = (jint)getObjectSize(klass);
-            gdata->system_class_size = size;
-        }
-
-        /* Tag this java.lang.Class object if it hasn't been already */
-        tag = getTag(klass);
-        if ( tag == (jlong)0 ) {
-            /* New object for this site. */
-            object_index = object_new(site_index, size, OBJECT_CLASS,
-                                        thread_serial_num);
-            /* Create and set the tag. */
-            tag = tag_create(object_index);
-            setTag(klass, tag);
-        } else {
-            /* Get the ObjectIndex from the tag. */
-            object_index = tag_extract(tag);
-        }
-
-        /* Record this object index in the Class table */
-        class_set_object_index(cnum, object_index);
-    }
-}
-
 void
 tag_new_object_node(jobject object, ObjectKind kind, SerialNumber thread_serial_num,
                jint size, SiteIndex site_index, int thread_index, Node * node)

@@ -310,6 +310,8 @@ event_class_load(JNIEnv *env, jthread thread, jclass klass, jobject loader)
     /* Called via JVMTI_EVENT_CLASS_LOAD event or reset_class_load_status() */
 
     ClassIndex   cnum;
+    ThreadTraceData * data;
+    int index;
 
     HPROF_ASSERT(env!=NULL);
     HPROF_ASSERT(klass!=NULL);
@@ -353,8 +355,12 @@ event_class_load(JNIEnv *env, jthread thread, jclass klass, jobject loader)
         /*    Note that the target cnum, not the cnum for java.lang.Class. */
         site_index = site_find_or_create(cnum, trace_index);
 
+        // Get the thread index of the thread
+        index = trace_array_find_or_create(env, thread);
+        data = &gdata->trace_tables[index];
+
         /* Tag this java.lang.Class object */
-        tag_class(env, klass, cnum, thread_serial_num, site_index);
+        tag_class_node(env, klass, cnum, thread_serial_num, site_index, index, data->currentNode);
 
         class_add_status(cnum, CLASS_LOADED);
 
@@ -385,6 +391,8 @@ event_thread_start(JNIEnv *env, jthread thread)
     TraceIndex  trace_index;
     jlong       tag;
     SerialNumber thread_serial_num;
+    ThreadTraceData * data;
+    int index;
 
     HPROF_ASSERT(env!=NULL);
     HPROF_ASSERT(thread!=NULL);
@@ -393,8 +401,10 @@ event_thread_start(JNIEnv *env, jthread thread)
     thread_serial_num = tls_get_thread_serial_number(tls_index);
     trace_index = get_current(tls_index, env, JNI_FALSE);
 
-    // Create thread for the array
-    trace_array_find_or_create(env, thread);
+    // Get the thread index of the thread
+    index = trace_array_find_or_create(env, thread);
+    data = &gdata->trace_tables[index];
+
 
     tag = getTag(thread);
     if ( tag == (jlong)0 ) {
@@ -404,8 +414,8 @@ event_thread_start(JNIEnv *env, jthread thread)
         size = (jint)getObjectSize(thread);
         site_index = site_find_or_create(gdata->thread_cnum, trace_index);
         /*  We create a new object with this thread's serial number */
-        object_index = object_new(site_index, size, OBJECT_NORMAL,
-                                              thread_serial_num);
+        object_index = object_new_node(site_index, size, OBJECT_NORMAL,
+                                              thread_serial_num, index, data->currentNode);
     } else {
         object_index = tag_extract(tag);
         /* Normally the Thread object is created and tagged before we get

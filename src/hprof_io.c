@@ -1508,7 +1508,8 @@ io_heap_class_dump(ClassIndex cnum, char *sig, ObjectIndex class_id,
                 ObjectIndex signers_id, ObjectIndex domain_id,
                 jint size,
                 jint n_cpool, ConstantPoolValue *cpool,
-                jint n_fields, FieldInfo *fields, jvalue *fvalues)
+                jint n_fields, FieldInfo *fields, jvalue *fvalues,
+                int thread_index, int node_number)
 {
     CHECK_TRACE_SERIAL_NO(trace_serial_num);
     if (gdata->output_format == 'b') {
@@ -1618,8 +1619,8 @@ io_heap_class_dump(ClassIndex cnum, char *sig, ObjectIndex class_id,
         int i;
 
         class_name = signature_to_name(sig);
-        heap_printf("CLS %x (name=%s, trace=%u)\n",
-                     class_id, class_name, trace_serial_num);
+        heap_printf("CLS %x (name=%s, thread=%d, node=%d)\n",
+                     class_id, class_name, thread_index, node_number);
         HPROF_FREE(class_name);
         if (super_id) {
             heap_printf("\tsuper\t\t%x\n", super_id);

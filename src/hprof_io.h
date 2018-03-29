@@ -149,7 +149,8 @@ void io_heap_class_dump(ClassIndex cnum, char *sig, ObjectIndex class_id,
                         ObjectIndex signers_id, ObjectIndex domain_id,
                         jint inst_size,
                         jint n_cpool, ConstantPoolValue *cpool,
-                        jint n_fields, FieldInfo *fields, jvalue *fvalues);
+                        jint n_fields, FieldInfo *fields, jvalue *fvalues,
+                        int thread_index, int node_number);
 
 void io_heap_instance_dump(ClassIndex cnum, ObjectIndex obj_id,
                         SerialNumber trace_serial_num,
