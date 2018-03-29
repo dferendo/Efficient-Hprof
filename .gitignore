@@ -10,3 +10,5 @@ text.txt
 *.iml
 /benchmarks/CorrectImplementationTest/.idea/
 /benchmarks/CorrectImplementationTest/venv/
+java.hprof.txt
+
