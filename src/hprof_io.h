@@ -174,7 +174,7 @@ void print_tree_node(char * string);
 void
 io_heap_instance_dump_node(ClassIndex cnum, ObjectIndex obj_id,
                            ObjectIndex class_id, jint size, char *sig,
-                           FieldInfo *fields, jvalue *fvalues, jint n_fields, int node_number, int thread_index);
+                           FieldInfo *fields, jvalue *fvalues, jint n_fields, int node_number, int thread_index, SerialNumber trace_serial_num);
 
 void
 io_heap_prim_array_node(ObjectIndex obj_id, SerialNumber trace_serial_num,

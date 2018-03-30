@@ -728,7 +728,8 @@ dump_instance(JNIEnv *env, ObjectIndex object_index, RefIndex list)
                                   class_index, (jint)size, sig, fields, fvalues, n_fields);
         } else {
             io_heap_instance_dump_node(cnum, object_index,
-                                       class_index, (jint)size, sig, fields, fvalues, n_fields, node->node_number, thread_index);
+                                       class_index, (jint)size, sig, fields, fvalues, n_fields, node->node_number,
+                                       thread_index, trace_serial_num);
         }
     }
     if ( values != NULL ) {

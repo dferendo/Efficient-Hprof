@@ -1619,8 +1619,8 @@ io_heap_class_dump(ClassIndex cnum, char *sig, ObjectIndex class_id,
         int i;
 
         class_name = signature_to_name(sig);
-        heap_printf("CLS %x (name=%s, thread=%d, node=%d)\n",
-                     class_id, class_name, thread_index, node_number);
+        heap_printf("CLS %x (name=%s, trace=%u, thread=%d, node=%d)\n",
+                     class_id, class_name, trace_serial_num, thread_index, node_number);
         HPROF_FREE(class_name);
         if (super_id) {
             heap_printf("\tsuper\t\t%x\n", super_id);
@@ -1967,8 +1967,8 @@ void print_tree_node(char * string) {
 
 void
 io_heap_instance_dump_node(ClassIndex cnum, ObjectIndex obj_id,
-                      ObjectIndex class_id, jint size, char *sig,
-                      FieldInfo *fields, jvalue *fvalues, jint n_fields, int node_number, int thread_index)
+                           ObjectIndex class_id, jint size, char *sig,
+                           FieldInfo *fields, jvalue *fvalues, jint n_fields, int node_number, int thread_index, SerialNumber trace_serial_num)
 {
     if (gdata->output_format == 'b') {
         jint inst_size;
@@ -2007,8 +2007,8 @@ io_heap_instance_dump_node(ClassIndex cnum, ObjectIndex obj_id,
         int i;
 
         class_name = signature_to_name(sig);
-        heap_printf("OBJ %x (sz=%u, thread=%d, node=%d ,class=%s@%x)\n",
-                    obj_id, size, thread_index, node_number, class_name, class_id);
+        heap_printf("OBJ %x (sz=%u, trace=%u, thread=%d, node=%d ,class=%s@%x)\n",
+                    obj_id, size, trace_serial_num, thread_index, node_number, class_name, class_id);
         HPROF_FREE(class_name);
 
         for (i = 0; i < n_fields; i++) {
@@ -2056,8 +2056,8 @@ io_heap_prim_array_node(ObjectIndex obj_id, SerialNumber trace_serial_num,
         char *name;
 
         name = signature_to_name(sig);
-        heap_printf("ARR %x (sz=%u, thread=%d, node=%d, nelems=%u, elem type=%s)\n",
-                    obj_id, size, thread_index, node_number, num_elements, name);
+        heap_printf("ARR %x (sz=%u, trace=%u, thread=%d, node=%d, nelems=%u, elem type=%s)\n",
+                    obj_id, size, trace_serial_num, thread_index, node_number, num_elements, name);
         HPROF_FREE(name);
     }
 }
@@ -2082,8 +2082,8 @@ io_heap_object_array_node(ObjectIndex obj_id, SerialNumber trace_serial_num,
         int i;
 
         name = signature_to_name(sig);
-        heap_printf("ARR %x (sz=%u, thread=%d, node=%d, nelems=%u, elem type=%s@%x)\n",
-                    obj_id, size, thread_index, node_number , num_elements,
+        heap_printf("ARR %x (sz=%u, trace=%u, thread=%d, node=%d, nelems=%u, elem type=%s@%x)\n",
+                    obj_id, size, trace_serial_num, thread_index, node_number , num_elements,
                     name, class_id);
         for (i = 0; i < num_elements; i++) {
             ObjectIndex id;
