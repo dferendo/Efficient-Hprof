@@ -2007,7 +2007,7 @@ io_heap_instance_dump_node(ClassIndex cnum, ObjectIndex obj_id,
         int i;
 
         class_name = signature_to_name(sig);
-        heap_printf("OBJ %x (sz=%u, trace=%u, thread=%d, node=%d ,class=%s@%x)\n",
+        heap_printf("OBJ %x (sz=%u, trace=%u, thread=%d, node=%d, class=%s@%x)\n",
                     obj_id, size, trace_serial_num, thread_index, node_number, class_name, class_id);
         HPROF_FREE(class_name);
 
