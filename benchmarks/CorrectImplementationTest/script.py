@@ -1,8 +1,14 @@
 import sys
 from pathlib import Path
 
+correct_object = 0
+failed_object = 0
+
 
 def compare_trace_and_node(line, file):
+    global correct_object
+    global failed_object
+
     hprof_text_seek = open(str(file), 'r')
     object_variables = line.split()
     trace = -1
@@ -63,8 +69,10 @@ def compare_trace_and_node(line, file):
     # Root is the same as having no stack traces
     if new_node_string == "ROOT":
         if trace_string == "<empty>":
+            correct_object += 1
             return True
         else:
+            failed_object += 1
             print("FAILED:")
             print(trace_string)
             print(node_string)
@@ -81,8 +89,10 @@ def compare_trace_and_node(line, file):
     new_trace_string = trace_string.strip()[0:trace_string.find("(")]
 
     if new_node_string == new_trace_string:
+        correct_object += 1
         return True
     else:
+        failed_object += 1
         print("FAILED:")
         print(trace_string)
         print(node_string)
@@ -118,6 +128,8 @@ def begin_parsing(hprof_file_path):
                 #	constant pool entry 80	500000ef
                 #	constant pool entry 17	50000169
                 continue
+
+    print("Successful objects: %d, Failed objects: %d" % (correct_object, failed_object))
 
 
 if __name__ == '__main__':
