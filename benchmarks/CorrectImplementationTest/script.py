@@ -12,6 +12,9 @@ def compare_trace_and_node(line, file):
     trace_string = ""
     node_string = ""
 
+    new_trace_string = ""
+    new_node_string = ""
+
     # Get the trace, thread and node
     for word in object_variables:
         if "trace=" in word:
@@ -39,7 +42,37 @@ def compare_trace_and_node(line, file):
     assert trace_string != ""
     assert node_string != ""
 
-    print("Comparing %s with %s" % (trace_string, node_string))
+    new_node_string = node_string[node_string.find("(") + 1:node_string.find(")")]
+
+    trace_string = trace_string.strip()
+
+    # Root is the same as having no stack traces
+    if new_node_string == "ROOT":
+        if trace_string == "<empty>":
+            return True
+        else:
+            print("FAILED:")
+            print(trace_string)
+            print(node_string)
+            return False
+
+    # Node string formation
+    # Remove L from first character
+    new_node_string = new_node_string[1:]
+    # Replace / with . and connect the class with the method
+    new_node_string = new_node_string.replace('/', '.').replace('; ', '.')
+
+    # Trace string formation
+    # Remove line number
+    new_trace_string = trace_string.strip()[0:trace_string.find("(")]
+
+    if new_node_string == new_trace_string:
+        return True
+    else:
+        print("FAILED:")
+        print(trace_string)
+        print(node_string)
+        return False
 
 
 def begin_parsing(hprof_file_path):
