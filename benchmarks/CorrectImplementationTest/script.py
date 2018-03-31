@@ -12,8 +12,7 @@ def compare_trace_and_node(line, file):
     trace_string = ""
     node_string = ""
 
-    new_trace_string = ""
-    new_node_string = ""
+    previous_string = ""
 
     # Get the trace, thread and node
     for word in object_variables:
@@ -33,7 +32,22 @@ def compare_trace_and_node(line, file):
         if ("Thread %d Node %d (" % (thread, node)) in line:
             node_string = line
         elif ("TRACE %d:" % trace) in line:
+            # Check if native methods were registered
+            # If so get the method were there were no native methods
             trace_string = hprof_text_seek.__next__()
+            while 'Unknown line' in trace_string:
+                # Went through all methods without a non native call, register error
+                if ("TRACE %d:" % trace) in trace_string:
+                    # Assign trace string to the last method of the trace if all methods are natives
+                    # (does not go over another trace)
+                    if previous_string == "":
+                        trace_string = line
+                    else:
+                        trace_string = previous_string
+                    break
+
+                previous_string = trace_string
+                trace_string = hprof_text_seek.__next__()
 
         # If both found, end searching
         if node_string != "" and trace_string != "":
