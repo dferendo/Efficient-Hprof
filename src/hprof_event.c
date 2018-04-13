@@ -234,6 +234,8 @@ event_exception_catch(JNIEnv *env, jthread thread, jmethodID method,
     HPROF_ASSERT(thread!=NULL);
     HPROF_ASSERT(method!=NULL);
 
+    //TODO: for class see method get_frame_details
+
     index = trace_array_find_or_create(env, thread);
     data = &gdata->trace_tables[index];
 

@@ -220,11 +220,9 @@ typedef struct Node {
 struct LineTable;
 
 typedef struct ThreadTraceData {
-    jthread         globalref;          /* Global reference for thread */
-    jint            tracker_status;     /* If we are inside Tracker class */
     Node * rootNode;
     Node * currentNode;
-    int             current_node_number;    /* Assign a number to each node */
+    int    current_node_number;    /* Assign a number to each node */
 } ThreadTraceData;
 
 typedef struct {
