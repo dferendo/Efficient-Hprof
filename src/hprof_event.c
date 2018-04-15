@@ -149,12 +149,12 @@ event_object_init(JNIEnv *env, jthread thread, jobject object)
     HPROF_ASSERT(object!=NULL);
 
     /* Prevent recursion into any BCI function for this thread (pstatus). */
-    if ( tls_get_tracker_status(env, thread, JNI_TRUE,
-             &pstatus, NULL, &thread_serial_num, &trace_index) == 0 ) {
-        (*pstatus) = 1;
-//        any_allocation(env, thread_serial_num, trace_index, object);
-        (*pstatus) = 0;
-    }
+//    if ( tls_get_tracker_status(env, thread, JNI_TRUE,
+//             &pstatus, NULL, &thread_serial_num, &trace_index) == 0 ) {
+//        (*pstatus) = 1;
+////        any_allocation(env, thread_serial_num, trace_index, object);
+//        (*pstatus) = 0;
+//    }
 }
 
 /* Handle any newarray opcode allocation. */
