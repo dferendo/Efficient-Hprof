@@ -8,12 +8,6 @@
 #include <stdio.h>
 
 
-Node * findInTree() {
-    // TODO: Implement?
-    return NULL;
-}
-
-
 Node * initTree() {
     Node * newTree = (Node *) malloc(sizeof(Node));
 
@@ -90,14 +84,15 @@ Node * moveToParent(Node * currentNode) {
     return currentNode->parent;
 }
 
-Node * moveToPreviousNode(Node * currentNode, char * node_to_move) {
+Node * moveToPreviousNode(Node * currentNode, char * method_name, StringIndex class_string) {
     Node * parent;
 
     if (currentNode->data == NULL) {
         return NULL;
     }
 
-    if (strcmp(string_get(currentNode->data->method_id), node_to_move) == 0) {
+    if (strcmp(string_get(currentNode->data->method_id), method_name) == 0 &&
+        currentNode->data->class_id == class_string) {
         return currentNode;
     } else {
         parent = currentNode->parent;
@@ -106,7 +101,7 @@ Node * moveToPreviousNode(Node * currentNode, char * node_to_move) {
         if (parent == NULL) {
             return NULL;
         } else {
-            return moveToPreviousNode(currentNode->parent, node_to_move);
+            return moveToPreviousNode(currentNode->parent, method_name, class_string);
         }
     }
 }

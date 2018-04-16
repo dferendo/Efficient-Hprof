@@ -225,16 +225,18 @@ event_exception_catch(JNIEnv *env, jthread thread, jmethodID method,
     /* Be very careful what is called here, watch out for recursion. */
 
     ThreadTraceData * data;
-    int index;
-    char *msig;
-    char *mname;
+    LoaderIndex loader_index;
+    ClassIndex cnum;
     Node * new_node;
+    jclass klass;
+    int index;
+    char *msig, *mname, *pcsig;
+
+    jobject     loader;
 
     HPROF_ASSERT(env!=NULL);
     HPROF_ASSERT(thread!=NULL);
     HPROF_ASSERT(method!=NULL);
-
-    //TODO: for class see method get_frame_details
 
     index = trace_array_find_or_create(env, thread);
     data = &gdata->trace_tables[index];
@@ -248,7 +250,15 @@ event_exception_catch(JNIEnv *env, jthread thread, jmethodID method,
     // Get the method name and signature from the given jmethodId
     getMethodName(method, &mname, &msig);
 
-    new_node = moveToPreviousNode(data->currentNode, mname);
+    // Get the class name
+    getMethodClass(method, &klass);
+    getClassSignature(klass, &pcsig, NULL);
+
+    loader = getClassLoader(klass);
+    loader_index = loader_find_or_create(env, loader);
+    cnum = class_find_or_create(pcsig, loader_index);
+
+    new_node = moveToPreviousNode(data->currentNode, mname, class_get_signature(cnum));
 
     if (new_node != NULL) {
         data->currentNode = new_node;

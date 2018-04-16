@@ -9,12 +9,10 @@
 
 Node * initTree();
 
-Node * findInTree();
-
 Node * findOrCreateTreeChild(Node * currentNode, StringIndex class_string, StringIndex method_string, int node_number);
 
 Node * moveToParent(Node * currentNode);
 
-Node * moveToPreviousNode(Node * currentNode, char * node_to_move);
+Node * moveToPreviousNode(Node * currentNode, char * method_name, StringIndex class_string);
 
 #endif //TRIE_TEMP_NEW_TRIE_H

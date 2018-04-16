@@ -1235,7 +1235,6 @@ trace_array_find_or_create(JNIEnv *env, jthread thread)
         // If thread is not found, create an entry in the array
         root_node = initTree();
 
-        info.globalref = newWeakGlobalReference(env, thread);
         info.rootNode = root_node;
         info.currentNode = root_node;
         info.current_node_number = 0;
