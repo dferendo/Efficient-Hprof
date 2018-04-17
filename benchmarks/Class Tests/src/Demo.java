@@ -11,16 +11,17 @@ public class Demo {
         try {
             demo.throwExceptionIfNotEqual(number1, number2);
         } catch (Exception e) {
-
+	    
         }
 
         // Does not throw exception
         try {
             demo.throwExceptionIfNotEqual(number1, number1);
         } catch (Exception e) {
-
+	    
         }
-
+	
+	demo.doesNotThrowException(number1, number1);
     }
 
     public void throwExceptionIfNotEqual(Calculate x, Calculate y) throws Exception {
@@ -29,6 +30,16 @@ public class Demo {
 
         if (addValueX != addValueY) {
             throw new Exception();
+        }
+
+    }
+
+    public void doesNotThrowException(Calculate x, Calculate y) {
+        int addValueX = x.add();
+        int addValueY = y.add();
+
+        if (addValueX != addValueY) {
+            return;
         }
 
     }
