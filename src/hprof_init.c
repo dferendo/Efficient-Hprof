@@ -1554,30 +1554,30 @@ cbClassFileLoadHook(jvmtiEnv *jvmti_env, JNIEnv* env,
 
                 skip_class = ignore_class_for_method_call_events(classname);
 
-                // TODO: For testing only instrument objects allocated by the class
-                if (skip_class == JNI_TRUE) {
-                    /* Call the class file reader/write demo code */
-                    ((JavaCrwDemo) (gdata->java_crw_demo_function))(
-                            cnum,
-                            classname,
-                            class_data,
-                            class_data_len,
-                            system_class,
-                            TRACKER_CLASS_NAME,
-                            TRACKER_CLASS_SIG,
-                            NULL,
-                            NULL,
-                            NULL,
-                            NULL,
-                            NULL,
-                            NULL,
-                            NULL,
-                            NULL,
-                            &new_image,
-                            &new_length,
-                            &my_crw_fatal_error_handler,
-                            &class_set_methods);
-                } else {
+//                // TODO: For testing only instrument objects allocated by the class
+//                if (skip_class == JNI_TRUE) {
+//                    /* Call the class file reader/write demo code */
+//                    ((JavaCrwDemo) (gdata->java_crw_demo_function))(
+//                            cnum,
+//                            classname,
+//                            class_data,
+//                            class_data_len,
+//                            system_class,
+//                            TRACKER_CLASS_NAME,
+//                            TRACKER_CLASS_SIG,
+//                            NULL,
+//                            NULL,
+//                            NULL,
+//                            NULL,
+//                            NULL,
+//                            NULL,
+//                            NULL,
+//                            NULL,
+//                            &new_image,
+//                            &new_length,
+//                            &my_crw_fatal_error_handler,
+//                            &class_set_methods);
+//                } else {
                     /* Call the class file reader/write demo code */
                     ((JavaCrwDemo) (gdata->java_crw_demo_function))(
                             cnum,
@@ -1599,7 +1599,7 @@ cbClassFileLoadHook(jvmtiEnv *jvmti_env, JNIEnv* env,
                             &new_length,
                             &my_crw_fatal_error_handler,
                             &class_set_methods);
-                }
+//                }
 
                 if ( new_length > 0 ) {
                     unsigned char *jvmti_space;
