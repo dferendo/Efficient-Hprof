@@ -24,14 +24,14 @@ Node * initTree() {
     return newTree;
 }
 
-Node * findOrCreateTreeChild(Node * currentNode, StringIndex class_string, StringIndex method_string, int node_number) {
+Node * findOrCreateTreeChild(Node * currentNode, ClassIndex cnum, MethodIndex mnum, int node_number) {
     Node * newNode;
     NodeData * data;
 
     // Check if child is already created
     for (int i = 0; i < currentNode->size; i++) {
-        if (currentNode->children[i]->data->class_id == class_string &&
-                currentNode->children[i]->data->method_id == method_string) {
+        if (currentNode->children[i]->data->cnum == cnum &&
+                currentNode->children[i]->data->mnum == mnum) {
             return currentNode->children[i];
         }
     }
@@ -60,8 +60,8 @@ Node * findOrCreateTreeChild(Node * currentNode, StringIndex class_string, Strin
     // Allocate memory for data
     data = (NodeData *) malloc(sizeof(NodeData));
 
-    data->class_id = class_string;
-    data->method_id = method_string;
+    data->cnum = cnum;
+    data->mnum = mnum;
 
     // Update child
     newNode->size = 0;
@@ -84,15 +84,15 @@ Node * moveToParent(Node * currentNode) {
     return currentNode->parent;
 }
 
-Node * moveToPreviousNode(Node * currentNode, char * method_name, StringIndex class_string) {
+Node * moveToPreviousNode(JNIEnv *env, Node * currentNode, char * method_name, ClassIndex cnum) {
     Node * parent;
 
     if (currentNode->data == NULL) {
         return NULL;
     }
 
-    if (strcmp(string_get(currentNode->data->method_id), method_name) == 0 &&
-        currentNode->data->class_id == class_string) {
+    if (strcmp(string_get(class_get_method_name(env, cnum, currentNode->data->mnum)), method_name) == 0 &&
+        currentNode->data->cnum == cnum) {
         return currentNode;
     } else {
         parent = currentNode->parent;
@@ -101,7 +101,7 @@ Node * moveToPreviousNode(Node * currentNode, char * method_name, StringIndex cl
         if (parent == NULL) {
             return NULL;
         } else {
-            return moveToPreviousNode(currentNode->parent, method_name, class_string);
+            return moveToPreviousNode(env, currentNode->parent, method_name, cnum);
         }
     }
 }

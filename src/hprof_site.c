@@ -906,7 +906,7 @@ site_heapdump(JNIEnv *env)
     } rawMonitorExit(gdata->data_access_lock);
 }
 
-void print_tree(int thread_index, Node * root) {
+void print_tree(JNIEnv *env, int thread_index, Node * root) {
     char str[200];
     int i;
 
@@ -915,8 +915,8 @@ void print_tree(int thread_index, Node * root) {
         sprintf(str, "Thread %d Node %d (ROOT)",  thread_index, root->node_number);
     } else {
         sprintf(str, "Thread %d Node %d (%s %s)",  thread_index, root->node_number,
-                string_get(root->data->class_id),
-                string_get(root->data->method_id));
+                string_get(class_get_signature(root->data->cnum)),
+                string_get(class_get_method_name(env, root->data->cnum, root->data->mnum)));
     }
 
     print_tree_node(str);
@@ -938,7 +938,7 @@ void print_tree(int thread_index, Node * root) {
 
     // Repeat for the child nodes
     for (i = 0; i < root->size; i++) {
-        print_tree(thread_index, root->children[i]);
+        print_tree(env, thread_index, root->children[i]);
     }
 }
 
@@ -952,7 +952,7 @@ void tree_dump(JNIEnv *env) {
 
         // Print the tree for all used threads in the program
         for (i = 0; i < gdata->trace_tables_count; i++) {
-            print_tree(i, gdata->trace_tables[i].rootNode);
+            print_tree(env, i, gdata->trace_tables[i].rootNode);
         }
 
         // Write Footer

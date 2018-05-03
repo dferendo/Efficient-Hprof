@@ -207,9 +207,7 @@ event_call(JNIEnv *env, jthread thread, ClassIndex cnum, MethodIndex mnum)
     data = &gdata->trace_tables[index];
 
     // Add Node
-    child_node = findOrCreateTreeChild(data->currentNode, class_get_signature(cnum),
-                                       class_get_method_name(env, cnum, mnum),
-                                       ++data->current_node_number);
+    child_node = findOrCreateTreeChild(data->currentNode, cnum, mnum, ++data->current_node_number);
 
     // Update Node
     data->currentNode = child_node;
@@ -248,21 +246,21 @@ event_exception_catch(JNIEnv *env, jthread thread, jmethodID method,
     }
 
     // Get the method name and signature from the given jmethodId
-    getMethodName(method, &mname, &msig);
-
-    // Get the class name
-    getMethodClass(method, &klass);
-    getClassSignature(klass, &pcsig, NULL);
-
-    loader = getClassLoader(klass);
-    loader_index = loader_find_or_create(env, loader);
-    cnum = class_find_or_create(pcsig, loader_index);
-
-    new_node = moveToPreviousNode(data->currentNode, mname, class_get_signature(cnum));
-
-    if (new_node != NULL) {
-        data->currentNode = new_node;
-    }
+//    getMethodName(method, &mname, &msig);
+//
+//    // Get the class name
+//    getMethodClass(method, &klass);
+//    getClassSignature(klass, &pcsig, NULL);
+//
+//    loader = getClassLoader(klass);
+//    loader_index = loader_find_or_create(env, loader);
+//    cnum = class_find_or_create(pcsig, loader_index);
+//
+//    new_node = moveToPreviousNode(env, data->currentNode, mname, class_get_signature(cnum));
+//
+//    if (new_node != NULL) {
+//        data->currentNode = new_node;
+//    }
 
 }
 

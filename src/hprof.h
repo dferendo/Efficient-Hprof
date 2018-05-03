@@ -176,8 +176,8 @@ typedef struct ConstantPoolValue {
 
 // TODO: Put this in hprof_tree.h
 typedef struct NodeData {
-    StringIndex class_id;
-    StringIndex method_id;
+    ClassIndex cnum;
+    MethodIndex mnum;
 } NodeData;
 
 typedef struct Node {
