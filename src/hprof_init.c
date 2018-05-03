@@ -257,17 +257,6 @@ connect_to_socket(char *hostname, unsigned short port)
     return fd;
 }
 
-int ignore_class_for_method_call_events(const char *classname) {
-
-//    if (strstr(classname, "java") != NULL) {
-//        return JNI_TRUE;
-//    } else if (strstr(classname, "sun") != NULL) {
-//        return JNI_TRUE;
-//    }
-
-    return JNI_FALSE;
-}
-
 /* Accept a filename, and adjust the name so that it is unique for this PID */
 static void
 make_unique_filename(char **filename)
@@ -1516,7 +1505,6 @@ cbClassFileLoadHook(jvmtiEnv *jvmti_env, JNIEnv* env,
                 int                   len;
                 char                 *signature;
                 LoaderIndex           loader_index;
-                int                   skip_class;
 
                 LOG2("cbClassFileLoadHook injecting class" , classname);
 
@@ -1552,54 +1540,27 @@ cbClassFileLoadHook(jvmtiEnv *jvmti_env, JNIEnv* env,
                 new_image = NULL;
                 new_length = 0;
 
-                skip_class = ignore_class_for_method_call_events(classname);
-
-//                // TODO: For testing only instrument objects allocated by the class
-//                if (skip_class == JNI_TRUE) {
-//                    /* Call the class file reader/write demo code */
-//                    ((JavaCrwDemo) (gdata->java_crw_demo_function))(
-//                            cnum,
-//                            classname,
-//                            class_data,
-//                            class_data_len,
-//                            system_class,
-//                            TRACKER_CLASS_NAME,
-//                            TRACKER_CLASS_SIG,
-//                            NULL,
-//                            NULL,
-//                            NULL,
-//                            NULL,
-//                            NULL,
-//                            NULL,
-//                            NULL,
-//                            NULL,
-//                            &new_image,
-//                            &new_length,
-//                            &my_crw_fatal_error_handler,
-//                            &class_set_methods);
-//                } else {
-                    /* Call the class file reader/write demo code */
-                    ((JavaCrwDemo) (gdata->java_crw_demo_function))(
-                            cnum,
-                            classname,
-                            class_data,
-                            class_data_len,
-                            system_class,
-                            TRACKER_CLASS_NAME,
-                            TRACKER_CLASS_SIG,
-                            (gdata->obj_watch) ? TRACKER_CALL_NAME : NULL,
-                            (gdata->obj_watch) ? TRACKER_CALL_SIG : NULL,
-                            (gdata->obj_watch) ? TRACKER_RETURN_NAME : NULL,
-                            (gdata->obj_watch) ? TRACKER_RETURN_SIG : NULL,
-                            (gdata->obj_watch) ? TRACKER_OBJECT_INIT_NAME : NULL,
-                            (gdata->obj_watch) ? TRACKER_OBJECT_INIT_SIG : NULL,
-                            (gdata->obj_watch) ? TRACKER_NEWARRAY_NAME : NULL,
-                            (gdata->obj_watch) ? TRACKER_NEWARRAY_SIG : NULL,
-                            &new_image,
-                            &new_length,
-                            &my_crw_fatal_error_handler,
-                            &class_set_methods);
-//                }
+                /* Call the class file reader/write demo code */
+                ((JavaCrwDemo) (gdata->java_crw_demo_function))(
+                        cnum,
+                        classname,
+                        class_data,
+                        class_data_len,
+                        system_class,
+                        TRACKER_CLASS_NAME,
+                        TRACKER_CLASS_SIG,
+                        (gdata->obj_watch) ? TRACKER_CALL_NAME : NULL,
+                        (gdata->obj_watch) ? TRACKER_CALL_SIG : NULL,
+                        (gdata->obj_watch) ? TRACKER_RETURN_NAME : NULL,
+                        (gdata->obj_watch) ? TRACKER_RETURN_SIG : NULL,
+                        (gdata->obj_watch) ? TRACKER_OBJECT_INIT_NAME : NULL,
+                        (gdata->obj_watch) ? TRACKER_OBJECT_INIT_SIG : NULL,
+                        (gdata->obj_watch) ? TRACKER_NEWARRAY_NAME : NULL,
+                        (gdata->obj_watch) ? TRACKER_NEWARRAY_SIG : NULL,
+                        &new_image,
+                        &new_length,
+                        &my_crw_fatal_error_handler,
+                        &class_set_methods);
 
                 if ( new_length > 0 ) {
                     unsigned char *jvmti_space;
