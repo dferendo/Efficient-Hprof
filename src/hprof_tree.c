@@ -91,7 +91,7 @@ Node * moveToPreviousNode(JNIEnv *env, Node * currentNode, char * method_name, C
         return NULL;
     }
 
-    if (strcmp(string_get(class_get_method_name(env, cnum, currentNode->data->mnum)), method_name) == 0 &&
+    if (strcmp(string_get(class_get_method_name(env, currentNode->data->cnum, currentNode->data->mnum)), method_name) == 0 &&
         currentNode->data->cnum == cnum) {
         return currentNode;
     } else {
