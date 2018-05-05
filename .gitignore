@@ -11,4 +11,5 @@ text.txt
 /benchmarks/CorrectImplementationTest/.idea/
 /benchmarks/CorrectImplementationTest/venv/
 java.hprof.txt
-
+*.jar
+/Test/DaCapo-Benchmarks-Tests/scratch/
