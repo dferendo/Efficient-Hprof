@@ -208,3 +208,11 @@ frame_get_status(FrameIndex index)
     info = get_info(index);
     return (jint)info->status;
 }
+
+jmethodID get_frame_jmethodID(FrameIndex index) {
+    FrameKey * key;
+
+    key       = get_pkey(index);
+
+    return key->method;
+}

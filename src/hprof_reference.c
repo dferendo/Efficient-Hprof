@@ -698,10 +698,11 @@ dump_instance(JNIEnv *env, ObjectIndex object_index, RefIndex list)
     Node * node;
     int thread_index;
     ClassIndex cnum_node;
+    jmethodID hprof_normal;
+    jmethodID new_hprof;
 
     node = object_get_node(object_index);
     thread_index = object_get_thread_index(object_index);
-    cnum_node = object_get_class_index(object_index);
 
     if ( is_array == JNI_TRUE ) {
         if ( is_prim_array == JNI_TRUE ) {
@@ -742,6 +743,19 @@ dump_instance(JNIEnv *env, ObjectIndex object_index, RefIndex list)
     }
     if ( elements != NULL ) {
         /* Do NOT free elements, it's a key in the table, leave it be */
+    }
+
+    if (node != NULL && node->data != NULL) {
+        cnum_node = node->data->cnum;
+        hprof_normal = get_jmethod_ID(trace_index);
+        new_hprof = class_get_methodID(env, node->data->cnum, node->data->mnum);
+
+//        printf("0x%08x 0x%08x %p %p\n", cnum, cnum_node, (void*)hprof_normal, (void*)new_hprof);
+        if (hprof_normal == new_hprof) {
+            printf("Same\n");
+        } else {
+            printf("Not Same\n");
+        }
     }
 }
 

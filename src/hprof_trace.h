@@ -71,4 +71,6 @@ void         trace_output_unmarked(JNIEnv *env);
 void         trace_output_cost(JNIEnv *env, double cutoff);
 void         trace_output_cost_in_prof_format(JNIEnv *env);
 
+jmethodID get_jmethod_ID(TraceIndex index);
+
 #endif

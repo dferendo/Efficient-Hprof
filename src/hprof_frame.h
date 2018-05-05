@@ -51,4 +51,6 @@ void       frame_get_location(FrameIndex frame_num, SerialNumber *serial_num,
 void       frame_set_status(FrameIndex frame_num, jint status);
 jint       frame_get_status(FrameIndex frame_num);
 
+jmethodID get_frame_jmethodID(FrameIndex index);
+
 #endif

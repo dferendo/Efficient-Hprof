@@ -379,12 +379,3 @@ object_get_node(ObjectIndex index)
     info = get_info(index);
     return info->node_created_at;
 }
-
-ClassIndex
-object_get_class_index(ObjectIndex index)
-{
-    ObjectInfo *info;
-
-    info = get_info(index);
-    return info->node_created_at->data->cnum;
-}

@@ -867,3 +867,9 @@ trace_clear_cost(void)
 {
     table_walk_items(gdata->trace_table, &clear_cost, NULL);
 }
+
+jmethodID
+get_jmethod_ID(TraceIndex index)
+{
+    return get_frame_jmethodID(get_pkey(index)->frames[0]);
+}
