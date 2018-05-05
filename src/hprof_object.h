@@ -66,4 +66,6 @@ int object_get_thread_index(ObjectIndex index);
 
 Node * object_get_node(ObjectIndex index);
 
+ClassIndex object_get_class_index(ObjectIndex index);
+
 #endif

@@ -697,9 +697,11 @@ dump_instance(JNIEnv *env, ObjectIndex object_index, RefIndex list)
 
     Node * node;
     int thread_index;
+    ClassIndex cnum_node;
 
     node = object_get_node(object_index);
     thread_index = object_get_thread_index(object_index);
+    cnum_node = object_get_class_index(object_index);
 
     if ( is_array == JNI_TRUE ) {
         if ( is_prim_array == JNI_TRUE ) {
