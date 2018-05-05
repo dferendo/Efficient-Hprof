@@ -272,7 +272,7 @@ system_error(const char *system_call, int rc, int errnum)
         (void)strcpy(details,"Unknown system error condition");
     }
     (void)md_snprintf(buf, sizeof(buf), "System %s failed: %s\n",
-                            system_call, details);
+                      system_call, details);
     HPROF_ERROR(JNI_TRUE, buf);
 }
 
@@ -301,7 +301,7 @@ write_flush(void)
     HPROF_ASSERT(gdata->fd >= 0);
     if (gdata->write_buffer_index) {
         system_write(gdata->fd, gdata->write_buffer, gdata->write_buffer_index,
-                                gdata->socket);
+                     gdata->socket);
         gdata->write_buffer_index = 0;
     }
 }
@@ -313,7 +313,7 @@ heap_flush(void)
     if (gdata->heap_buffer_index) {
         gdata->heap_write_count += (jlong)gdata->heap_buffer_index;
         system_write(gdata->heap_fd, gdata->heap_buffer, gdata->heap_buffer_index,
-                                JNI_FALSE);
+                     JNI_FALSE);
         gdata->heap_buffer_index = 0;
     }
 }
@@ -781,9 +781,9 @@ io_write_class_unload(SerialNumber class_serial_num, ObjectIndex index)
 
 void
 io_write_sites_header(const char * comment_str, jint flags, double cutoff,
-                    jint total_live_bytes, jint total_live_instances,
-                    jlong total_alloced_bytes, jlong total_alloced_instances,
-                    jint count)
+                      jint total_live_bytes, jint total_live_instances,
+                      jlong total_alloced_bytes, jlong total_alloced_instances,
+                      jint count)
 {
     if ( gdata->output_format == 'b') {
         write_header(HPROF_ALLOC_SITES, 2 + (8 * 4) + (count * (4 * 6 + 1)));
@@ -800,18 +800,18 @@ io_write_sites_header(const char * comment_str, jint flags, double cutoff,
         t = time(0);
         write_printf("SITES BEGIN (ordered by %s) %s", comment_str, ctime(&t));
         write_printf(
-            "          percent          live          alloc'ed  stack class\n");
+                "          percent          live          alloc'ed  stack class\n");
         write_printf(
-            " rank   self  accum     bytes objs     bytes  objs trace name\n");
+                " rank   self  accum     bytes objs     bytes  objs trace name\n");
     }
 }
 
 void
 io_write_sites_elem(jint index, double ratio, double accum_percent,
-                char *sig, SerialNumber class_serial_num,
-                SerialNumber trace_serial_num, jint n_live_bytes,
-                jint n_live_instances, jint n_alloced_bytes,
-                jint n_alloced_instances)
+                    char *sig, SerialNumber class_serial_num,
+                    SerialNumber trace_serial_num, jint n_live_bytes,
+                    jint n_live_instances, jint n_alloced_bytes,
+                    jint n_alloced_instances)
 {
     CHECK_CLASS_SERIAL_NO(class_serial_num);
     CHECK_TRACE_SERIAL_NO(trace_serial_num);
@@ -857,9 +857,9 @@ io_write_sites_footer(void)
 
 void
 io_write_thread_start(SerialNumber thread_serial_num,
-                        ObjectIndex thread_obj_id,
-                        SerialNumber trace_serial_num, char *thread_name,
-                        char *thread_group_name, char *thread_parent_name)
+                      ObjectIndex thread_obj_id,
+                      SerialNumber trace_serial_num, char *thread_name,
+                      char *thread_group_name, char *thread_parent_name)
 {
     CHECK_THREAD_SERIAL_NO(thread_serial_num);
     CHECK_TRACE_SERIAL_NO(trace_serial_num);
@@ -930,7 +930,7 @@ io_write_frame(FrameIndex index, SerialNumber frame_serial_num,
 
 void
 io_write_trace_header(SerialNumber trace_serial_num,
-                SerialNumber thread_serial_num, jint n_frames, char *phase_str)
+                      SerialNumber thread_serial_num, jint n_frames, char *phase_str)
 {
     CHECK_TRACE_SERIAL_NO(trace_serial_num);
     if (gdata->output_format == 'b') {
@@ -988,7 +988,7 @@ io_write_trace_elem(SerialNumber trace_serial_num, FrameIndex frame_index,
 
 void
 io_write_trace_footer(SerialNumber trace_serial_num,
-                SerialNumber thread_serial_num, jint n_frames)
+                      SerialNumber thread_serial_num, jint n_frames)
 {
 }
 
@@ -1014,7 +1014,7 @@ io_write_cpu_samples_header(jlong total_cost, jint n_items)
         }
         t = time(0);
         write_printf("%s BEGIN (total = %d) %s", record_name,
-                     /*jlong*/(int)total_cost, ctime(&t));
+                /*jlong*/(int)total_cost, ctime(&t));
         if ( n_items > 0 ) {
             write_printf("rank   self  accum   count trace method\n");
         }
@@ -1023,8 +1023,8 @@ io_write_cpu_samples_header(jlong total_cost, jint n_items)
 
 void
 io_write_cpu_samples_elem(jint index, double percent, double accum,
-                jint num_hits, jlong cost, SerialNumber trace_serial_num,
-                jint n_frames, char *csig, char *mname)
+                          jint num_hits, jlong cost, SerialNumber trace_serial_num,
+                          jint n_frames, char *csig, char *mname)
 {
     CHECK_TRACE_SERIAL_NO(trace_serial_num);
     if (gdata->output_format == 'b') {
@@ -1065,7 +1065,7 @@ io_write_cpu_samples_footer(void)
 
 void
 io_write_heap_summary(jlong total_live_bytes, jlong total_live_instances,
-                jlong total_alloced_bytes, jlong total_alloced_instances)
+                      jlong total_alloced_bytes, jlong total_alloced_instances)
 {
     if (gdata->output_format == 'b') {
         write_header(HPROF_HEAP_SUMMARY, 4 * 6);
@@ -1086,8 +1086,8 @@ io_write_oldprof_header(void)
 
 void
 io_write_oldprof_elem(jint num_hits, jint num_frames, char *csig_callee,
-            char *mname_callee, char *msig_callee, char *csig_caller,
-            char *mname_caller, char *msig_caller, jlong cost)
+                      char *mname_callee, char *msig_callee, char *csig_caller,
+                      char *mname_caller, char *msig_caller, jlong cost)
 {
     if ( gdata->old_timing_format ) {
         char * class_name_callee;
@@ -1098,13 +1098,13 @@ io_write_oldprof_elem(jint num_hits, jint num_frames, char *csig_callee,
         write_printf("%d ", num_hits);
         if (num_frames >= 1) {
             write_printf("%s.%s%s ", class_name_callee,
-                 mname_callee,  msig_callee);
+                         mname_callee,  msig_callee);
         } else {
             write_printf("%s ", "<unknown callee>");
         }
         if (num_frames > 1) {
             write_printf("%s.%s%s ", class_name_caller,
-                 mname_caller,  msig_caller);
+                         mname_caller,  msig_caller);
         } else {
             write_printf("%s ", "<unknown caller>");
         }
@@ -1129,7 +1129,7 @@ io_write_monitor_header(jlong total_time)
 
         t = time(0);
         write_printf("MONITOR TIME BEGIN (total = %u ms) %s",
-                                (int)total_time, ctime(&t));
+                     (int)total_time, ctime(&t));
         if (total_time > 0) {
             write_printf("rank   self  accum   count trace monitor\n");
         }
@@ -1138,7 +1138,7 @@ io_write_monitor_header(jlong total_time)
 
 void
 io_write_monitor_elem(jint index, double percent, double accum,
-            jint num_hits, SerialNumber trace_serial_num, char *sig)
+                      jint num_hits, SerialNumber trace_serial_num, char *sig)
 {
     CHECK_TRACE_SERIAL_NO(trace_serial_num);
     if (gdata->output_format == 'b') {
@@ -1172,47 +1172,47 @@ io_write_monitor_sleep(jlong timeout, SerialNumber thread_serial_num)
     } else {
         if ( thread_serial_num == 0 ) {
             write_printf("SLEEP: timeout=%d, <unknown thread>\n",
-                        (int)timeout);
+                         (int)timeout);
         } else {
             CHECK_THREAD_SERIAL_NO(thread_serial_num);
             write_printf("SLEEP: timeout=%d, thread %d\n",
-                        (int)timeout, thread_serial_num);
+                         (int)timeout, thread_serial_num);
         }
     }
 }
 
 void
 io_write_monitor_wait(char *sig, jlong timeout,
-                SerialNumber thread_serial_num)
+                      SerialNumber thread_serial_num)
 {
     if (gdata->output_format == 'b') {
         not_implemented();
     } else {
         if ( thread_serial_num == 0 ) {
             write_printf("WAIT: MONITOR %s, timeout=%d, <unknown thread>\n",
-                        sig, (int)timeout);
+                         sig, (int)timeout);
         } else {
             CHECK_THREAD_SERIAL_NO(thread_serial_num);
             write_printf("WAIT: MONITOR %s, timeout=%d, thread %d\n",
-                        sig, (int)timeout, thread_serial_num);
+                         sig, (int)timeout, thread_serial_num);
         }
     }
 }
 
 void
 io_write_monitor_waited(char *sig, jlong time_waited,
-                SerialNumber thread_serial_num)
+                        SerialNumber thread_serial_num)
 {
     if (gdata->output_format == 'b') {
         not_implemented();
     } else {
         if ( thread_serial_num == 0 ) {
             write_printf("WAITED: MONITOR %s, time_waited=%d, <unknown thread>\n",
-                        sig, (int)time_waited);
+                         sig, (int)time_waited);
         } else {
             CHECK_THREAD_SERIAL_NO(thread_serial_num);
             write_printf("WAITED: MONITOR %s, time_waited=%d, thread %d\n",
-                        sig, (int)time_waited, thread_serial_num);
+                         sig, (int)time_waited, thread_serial_num);
         }
     }
 }
@@ -1228,7 +1228,7 @@ io_write_monitor_exit(char *sig, SerialNumber thread_serial_num)
         } else {
             CHECK_THREAD_SERIAL_NO(thread_serial_num);
             write_printf("EXIT: MONITOR %s, thread %d\n",
-                        sig, thread_serial_num);
+                         sig, thread_serial_num);
         }
     }
 }
@@ -1245,8 +1245,8 @@ io_write_monitor_dump_header(void)
 
 void
 io_write_monitor_dump_thread_state(SerialNumber thread_serial_num,
-                      SerialNumber trace_serial_num,
-                      jint threadState)
+                                   SerialNumber trace_serial_num,
+                                   jint threadState)
 {
     CHECK_THREAD_SERIAL_NO(thread_serial_num);
     CHECK_TRACE_SERIAL_NO(trace_serial_num);
@@ -1292,9 +1292,9 @@ io_write_monitor_dump_thread_state(SerialNumber thread_serial_num,
 
 void
 io_write_monitor_dump_state(char *sig, SerialNumber thread_serial_num,
-                    jint entry_count,
-                    SerialNumber *waiters, jint waiter_count,
-                    SerialNumber *notify_waiters, jint notify_waiter_count)
+                            jint entry_count,
+                            SerialNumber *waiters, jint waiter_count,
+                            SerialNumber *notify_waiters, jint notify_waiter_count)
 {
     if (gdata->output_format == 'b') {
         not_implemented();
@@ -1305,20 +1305,20 @@ io_write_monitor_dump_state(char *sig, SerialNumber thread_serial_num,
             CHECK_THREAD_SERIAL_NO(thread_serial_num);
             write_printf("    MONITOR %s\n", sig);
             write_printf("\towner: thread %d, entry count: %d\n",
-                thread_serial_num, entry_count);
+                         thread_serial_num, entry_count);
         } else {
             write_printf("    MONITOR %s unowned\n", sig);
         }
         write_printf("\twaiting to enter:");
         for (i = 0; i < waiter_count; i++) {
             write_thread_serial_number(waiters[i],
-                                (i != (waiter_count-1)));
+                                       (i != (waiter_count-1)));
         }
         write_printf("\n");
         write_printf("\twaiting to be notified:");
         for (i = 0; i < notify_waiter_count; i++) {
             write_thread_serial_number(notify_waiters[i],
-                                (i != (notify_waiter_count-1)));
+                                       (i != (notify_waiter_count-1)));
         }
         write_printf("\n");
     }
@@ -1345,25 +1345,25 @@ io_heap_header(jlong total_live_instances, jlong total_live_bytes)
 
         t = time(0);
         heap_printf("HEAP DUMP BEGIN (%u objects, %u bytes) %s",
-                        /*jlong*/(int)total_live_instances,
-                        /*jlong*/(int)total_live_bytes, ctime(&t));
+                /*jlong*/(int)total_live_instances,
+                /*jlong*/(int)total_live_bytes, ctime(&t));
     }
 }
 
 void
 io_heap_root_thread_object(ObjectIndex thread_obj_id,
-                SerialNumber thread_serial_num, SerialNumber trace_serial_num)
+                           SerialNumber thread_serial_num, SerialNumber trace_serial_num)
 {
     CHECK_THREAD_SERIAL_NO(thread_serial_num);
     CHECK_TRACE_SERIAL_NO(trace_serial_num);
     if (gdata->output_format == 'b') {
-         heap_tag(HPROF_GC_ROOT_THREAD_OBJ);
-         heap_id(thread_obj_id);
-         heap_u4(thread_serial_num);
-         heap_u4(trace_serial_num);
+        heap_tag(HPROF_GC_ROOT_THREAD_OBJ);
+        heap_id(thread_obj_id);
+        heap_u4(thread_serial_num);
+        heap_u4(trace_serial_num);
     } else {
         heap_printf("ROOT %x (kind=<thread>, id=%u, trace=%u)\n",
-                     thread_obj_id, thread_serial_num, trace_serial_num);
+                    thread_obj_id, thread_serial_num, trace_serial_num);
     }
 }
 
@@ -1380,7 +1380,7 @@ io_heap_root_unknown(ObjectIndex obj_id)
 
 void
 io_heap_root_jni_global(ObjectIndex obj_id, SerialNumber gref_serial_num,
-                         SerialNumber trace_serial_num)
+                        SerialNumber trace_serial_num)
 {
     CHECK_TRACE_SERIAL_NO(trace_serial_num);
     if (gdata->output_format == 'b') {
@@ -1389,14 +1389,14 @@ io_heap_root_jni_global(ObjectIndex obj_id, SerialNumber gref_serial_num,
         heap_id(gref_serial_num);
     } else {
         heap_printf("ROOT %x (kind=<JNI global ref>, "
-                     "id=%x, trace=%u)\n",
-                     obj_id, gref_serial_num, trace_serial_num);
+                    "id=%x, trace=%u)\n",
+                    obj_id, gref_serial_num, trace_serial_num);
     }
 }
 
 void
 io_heap_root_jni_local(ObjectIndex obj_id, SerialNumber thread_serial_num,
-        jint frame_depth)
+                       jint frame_depth)
 {
     CHECK_THREAD_SERIAL_NO(thread_serial_num);
     if (gdata->output_format == 'b') {
@@ -1406,8 +1406,8 @@ io_heap_root_jni_local(ObjectIndex obj_id, SerialNumber thread_serial_num,
         heap_u4(frame_depth);
     } else {
         heap_printf("ROOT %x (kind=<JNI local ref>, "
-                     "thread=%u, frame=%d)\n",
-                     obj_id, thread_serial_num, frame_depth);
+                    "thread=%u, frame=%d)\n",
+                    obj_id, thread_serial_num, frame_depth);
     }
 }
 
@@ -1422,7 +1422,7 @@ io_heap_root_system_class(ObjectIndex obj_id, char *sig, SerialNumber class_seri
 
         class_name = signature_to_name(sig);
         heap_printf("ROOT %x (kind=<system class>, name=%s)\n",
-                     obj_id, class_name);
+                    obj_id, class_name);
         HPROF_FREE(class_name);
     }
 }
@@ -1448,13 +1448,13 @@ io_heap_root_thread(ObjectIndex obj_id, SerialNumber thread_serial_num)
         heap_u4(thread_serial_num);
     } else {
         heap_printf("ROOT %x (kind=<thread block>, thread=%u)\n",
-                     obj_id, thread_serial_num);
+                    obj_id, thread_serial_num);
     }
 }
 
 void
 io_heap_root_java_frame(ObjectIndex obj_id, SerialNumber thread_serial_num,
-        jint frame_depth)
+                        jint frame_depth)
 {
     CHECK_THREAD_SERIAL_NO(thread_serial_num);
     if (gdata->output_format == 'b') {
@@ -1464,8 +1464,8 @@ io_heap_root_java_frame(ObjectIndex obj_id, SerialNumber thread_serial_num,
         heap_u4(frame_depth);
     } else {
         heap_printf("ROOT %x (kind=<Java stack>, "
-                     "thread=%u, frame=%d)\n",
-                     obj_id, thread_serial_num, frame_depth);
+                    "thread=%u, frame=%d)\n",
+                    obj_id, thread_serial_num, frame_depth);
     }
 }
 
@@ -1479,7 +1479,7 @@ io_heap_root_native_stack(ObjectIndex obj_id, SerialNumber thread_serial_num)
         heap_u4(thread_serial_num);
     } else {
         heap_printf("ROOT %x (kind=<native stack>, thread=%u)\n",
-                     obj_id, thread_serial_num);
+                    obj_id, thread_serial_num);
     }
 }
 
@@ -1503,13 +1503,13 @@ is_inst_field(jint modifiers)
 
 void
 io_heap_class_dump(ClassIndex cnum, char *sig, ObjectIndex class_id,
-                SerialNumber trace_serial_num,
-                ObjectIndex super_id, ObjectIndex loader_id,
-                ObjectIndex signers_id, ObjectIndex domain_id,
-                jint size,
-                jint n_cpool, ConstantPoolValue *cpool,
-                jint n_fields, FieldInfo *fields, jvalue *fvalues,
-                int thread_index, int node_number)
+                   SerialNumber trace_serial_num,
+                   ObjectIndex super_id, ObjectIndex loader_id,
+                   ObjectIndex signers_id, ObjectIndex domain_id,
+                   jint size,
+                   jint n_cpool, ConstantPoolValue *cpool,
+                   jint n_fields, FieldInfo *fields, jvalue *fvalues,
+                   int thread_index, int node_number)
 {
     CHECK_TRACE_SERIAL_NO(trace_serial_num);
     if (gdata->output_format == 'b') {
@@ -1575,7 +1575,7 @@ io_heap_class_dump(ClassIndex cnum, char *sig, ObjectIndex class_id,
             jint size;
 
             type_from_signature(string_get(cpool[i].sig_index),
-                            &kind, &size);
+                                &kind, &size);
             heap_u2((unsigned short)(cpool[i].constant_pool_index));
             heap_u1(kind);
             HPROF_ASSERT(!HPROF_TYPE_IS_PRIMITIVE(kind));
@@ -1591,7 +1591,7 @@ io_heap_class_dump(ClassIndex cnum, char *sig, ObjectIndex class_id,
                 jint size;
 
                 type_from_signature(string_get(fields[i].sig_index),
-                                &kind, &size);
+                                    &kind, &size);
                 field_name = string_get(fields[i].name_index);
                 heap_name(field_name);
                 heap_u1(kind);
@@ -1609,7 +1609,7 @@ io_heap_class_dump(ClassIndex cnum, char *sig, ObjectIndex class_id,
 
                 field_name = string_get(fields[i].name_index);
                 type_from_signature(string_get(fields[i].sig_index),
-                            &kind, &size);
+                                    &kind, &size);
                 heap_name(field_name);
                 heap_u1(kind);
             }
@@ -1619,8 +1619,8 @@ io_heap_class_dump(ClassIndex cnum, char *sig, ObjectIndex class_id,
         int i;
 
         class_name = signature_to_name(sig);
-        heap_printf("CLS %x (name=%s, thread=%d, node=%d)\n",
-                     class_id, class_name, thread_index, node_number);
+        heap_printf("CLS %x (name=%s, trace=%u, thread=%d, node=%d)\n",
+                    class_id, class_name, trace_serial_num, thread_index, node_number);
         HPROF_FREE(class_name);
         if (super_id) {
             heap_printf("\tsuper\t\t%x\n", super_id);
@@ -1641,14 +1641,14 @@ io_heap_class_dump(ClassIndex cnum, char *sig, ObjectIndex class_id,
                 jint size;
 
                 type_from_signature(string_get(fields[i].sig_index),
-                                &kind, &size);
+                                    &kind, &size);
                 if ( !HPROF_TYPE_IS_PRIMITIVE(kind) ) {
                     if (fvalues[i].i != 0 ) {
                         char *field_name;
 
                         field_name = string_get(fields[i].name_index);
                         heap_printf("\tstatic %s\t%x\n", field_name,
-                            fvalues[i].i);
+                                    fvalues[i].i);
                     }
                 }
             }
@@ -1661,7 +1661,7 @@ io_heap_class_dump(ClassIndex cnum, char *sig, ObjectIndex class_id,
             if ( !HPROF_TYPE_IS_PRIMITIVE(kind) ) {
                 if (cpool[i].value.i != 0 ) {
                     heap_printf("\tconstant pool entry %d\t%x\n",
-                            cpool[i].constant_pool_index, cpool[i].value.i);
+                                cpool[i].constant_pool_index, cpool[i].value.i);
                 }
             }
         }
@@ -1687,7 +1687,7 @@ dump_instance_fields(ClassIndex cnum,
             int size;
 
             type_from_signature(string_get(fields[i].sig_index),
-                            &kind, &size);
+                                &kind, &size);
             heap_element(kind, size, fvalues[i]);
             nbytes += size;
         }
@@ -1702,9 +1702,9 @@ dump_instance_fields(ClassIndex cnum,
 
 void
 io_heap_instance_dump(ClassIndex cnum, ObjectIndex obj_id,
-                SerialNumber trace_serial_num,
-                ObjectIndex class_id, jint size, char *sig,
-                FieldInfo *fields, jvalue *fvalues, jint n_fields)
+                      SerialNumber trace_serial_num,
+                      ObjectIndex class_id, jint size, char *sig,
+                      FieldInfo *fields, jvalue *fvalues, jint n_fields)
 {
     CHECK_TRACE_SERIAL_NO(trace_serial_num);
     if (gdata->output_format == 'b') {
@@ -1746,7 +1746,7 @@ io_heap_instance_dump(ClassIndex cnum, ObjectIndex obj_id,
 
         class_name = signature_to_name(sig);
         heap_printf("OBJ %x (sz=%u, trace=%u, class=%s@%x)\n",
-                     obj_id, size, trace_serial_num, class_name, class_id);
+                    obj_id, size, trace_serial_num, class_name, class_id);
         HPROF_FREE(class_name);
 
         for (i = 0; i < n_fields; i++) {
@@ -1755,7 +1755,7 @@ io_heap_instance_dump(ClassIndex cnum, ObjectIndex obj_id,
                 int size;
 
                 type_from_signature(string_get(fields[i].sig_index),
-                            &kind, &size);
+                                    &kind, &size);
                 if ( !HPROF_TYPE_IS_PRIMITIVE(kind) ) {
                     if (fvalues[i].i != 0 ) {
                         char *sep;
@@ -1775,8 +1775,8 @@ io_heap_instance_dump(ClassIndex cnum, ObjectIndex obj_id,
 
 void
 io_heap_object_array(ObjectIndex obj_id, SerialNumber trace_serial_num,
-                jint size, jint num_elements, char *sig, ObjectIndex *values,
-                ObjectIndex class_id)
+                     jint size, jint num_elements, char *sig, ObjectIndex *values,
+                     ObjectIndex class_id)
 {
     CHECK_TRACE_SERIAL_NO(trace_serial_num);
     if (gdata->output_format == 'b') {
@@ -1787,15 +1787,15 @@ io_heap_object_array(ObjectIndex obj_id, SerialNumber trace_serial_num,
         heap_u4(num_elements);
         heap_id(class_id);
         heap_elements(HPROF_NORMAL_OBJECT, num_elements,
-                (jint)sizeof(HprofId), (void*)values);
+                      (jint)sizeof(HprofId), (void*)values);
     } else {
         char *name;
         int i;
 
         name = signature_to_name(sig);
         heap_printf("ARR %x (sz=%u, trace=%u, nelems=%u, elem type=%s@%x)\n",
-                     obj_id, size, trace_serial_num, num_elements,
-                     name, class_id);
+                    obj_id, size, trace_serial_num, num_elements,
+                    name, class_id);
         for (i = 0; i < num_elements; i++) {
             ObjectIndex id;
 
@@ -1810,7 +1810,7 @@ io_heap_object_array(ObjectIndex obj_id, SerialNumber trace_serial_num,
 
 void
 io_heap_prim_array(ObjectIndex obj_id, SerialNumber trace_serial_num,
-              jint size, jint num_elements, char *sig, void *elements)
+                   jint size, jint num_elements, char *sig, void *elements)
 {
     CHECK_TRACE_SERIAL_NO(trace_serial_num);
     if (gdata->output_format == 'b') {
@@ -1830,7 +1830,7 @@ io_heap_prim_array(ObjectIndex obj_id, SerialNumber trace_serial_num,
 
         name = signature_to_name(sig);
         heap_printf("ARR %x (sz=%u, trace=%u, nelems=%u, elem type=%s)\n",
-                     obj_id, size, trace_serial_num, num_elements, name);
+                    obj_id, size, trace_serial_num, num_elements, name);
         HPROF_FREE(name);
     }
 }
@@ -1967,8 +1967,8 @@ void print_tree_node(char * string) {
 
 void
 io_heap_instance_dump_node(ClassIndex cnum, ObjectIndex obj_id,
-                      ObjectIndex class_id, jint size, char *sig,
-                      FieldInfo *fields, jvalue *fvalues, jint n_fields, int node_number, int thread_index)
+                           ObjectIndex class_id, jint size, char *sig,
+                           FieldInfo *fields, jvalue *fvalues, jint n_fields, int node_number, int thread_index, SerialNumber trace_serial_num)
 {
     if (gdata->output_format == 'b') {
         jint inst_size;
@@ -2007,8 +2007,8 @@ io_heap_instance_dump_node(ClassIndex cnum, ObjectIndex obj_id,
         int i;
 
         class_name = signature_to_name(sig);
-        heap_printf("OBJ %x (sz=%u, thread=%d, node=%d ,class=%s@%x)\n",
-                    obj_id, size, thread_index, node_number, class_name, class_id);
+        heap_printf("OBJ %x (sz=%u, trace=%u, thread=%d, node=%d, class=%s@%x)\n",
+                    obj_id, size, trace_serial_num, thread_index, node_number, class_name, class_id);
         HPROF_FREE(class_name);
 
         for (i = 0; i < n_fields; i++) {
@@ -2037,7 +2037,7 @@ io_heap_instance_dump_node(ClassIndex cnum, ObjectIndex obj_id,
 
 void
 io_heap_prim_array_node(ObjectIndex obj_id, SerialNumber trace_serial_num,
-                   jint size, jint num_elements, char *sig, void *elements, int thread_index, int node_number)
+                        jint size, jint num_elements, char *sig, void *elements, int thread_index, int node_number)
 {
     CHECK_TRACE_SERIAL_NO(trace_serial_num);
     if (gdata->output_format == 'b') {
@@ -2056,16 +2056,16 @@ io_heap_prim_array_node(ObjectIndex obj_id, SerialNumber trace_serial_num,
         char *name;
 
         name = signature_to_name(sig);
-        heap_printf("ARR %x (sz=%u, thread=%d, node=%d, nelems=%u, elem type=%s)\n",
-                    obj_id, size, thread_index, node_number, num_elements, name);
+        heap_printf("ARR %x (sz=%u, trace=%u, thread=%d, node=%d, nelems=%u, elem type=%s)\n",
+                    obj_id, size, trace_serial_num, thread_index, node_number, num_elements, name);
         HPROF_FREE(name);
     }
 }
 
 void
 io_heap_object_array_node(ObjectIndex obj_id, SerialNumber trace_serial_num,
-                     jint size, jint num_elements, char *sig, ObjectIndex *values,
-                     ObjectIndex class_id, int thread_index, int node_number)
+                          jint size, jint num_elements, char *sig, ObjectIndex *values,
+                          ObjectIndex class_id, int thread_index, int node_number)
 {
     CHECK_TRACE_SERIAL_NO(trace_serial_num);
     if (gdata->output_format == 'b') {
@@ -2082,8 +2082,8 @@ io_heap_object_array_node(ObjectIndex obj_id, SerialNumber trace_serial_num,
         int i;
 
         name = signature_to_name(sig);
-        heap_printf("ARR %x (sz=%u, thread=%d, node=%d, nelems=%u, elem type=%s@%x)\n",
-                    obj_id, size, thread_index, node_number , num_elements,
+        heap_printf("ARR %x (sz=%u, trace=%u, thread=%d, node=%d, nelems=%u, elem type=%s@%x)\n",
+                    obj_id, size, trace_serial_num, thread_index, node_number , num_elements,
                     name, class_id);
         for (i = 0; i < num_elements; i++) {
             ObjectIndex id;

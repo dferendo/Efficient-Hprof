@@ -180,19 +180,19 @@ static void
 dump_ref_info(RefInfo *info)
 {
     debug_message("[%d]: flavor=%d"
-                          ", refKind=%d"
-                          ", primType=%d"
-                          ", object_index=0x%x"
-                          ", length=%d"
-                          ", next=0x%x"
-                          "\n",
-            info->index,
-            info->flavor,
-            info->refKind,
-            info->primType,
-            info->object_index,
-            info->length,
-            info->next);
+                  ", refKind=%d"
+                  ", primType=%d"
+                  ", object_index=0x%x"
+                  ", length=%d"
+                  ", next=0x%x"
+                  "\n",
+                  info->index,
+                  info->flavor,
+                  info->refKind,
+                  info->primType,
+                  info->object_index,
+                  info->length,
+                  info->next);
 }
 
 /* Dump a RefIndex list */
@@ -214,7 +214,7 @@ dump_ref_list(RefIndex list)
 /* Dump information about a field and what ref data we had on it */
 static void
 dump_field(FieldInfo *fields, jvalue *fvalues, int n_fields,
-                jint index, jvalue value, jvmtiPrimitiveType primType)
+           jint index, jvalue value, jvmtiPrimitiveType primType)
 {
     ClassIndex  cnum;
     StringIndex name;
@@ -224,18 +224,18 @@ dump_field(FieldInfo *fields, jvalue *fvalues, int n_fields,
     name = fields[index].name_index;
     sig  = fields[index].sig_index;
     debug_message("[%d] %s \"%s\" \"%s\"",
-          index,
-          cnum!=0?string_get(class_get_signature(cnum)):"?",
-          name!=0?string_get(name):"?",
-          sig!=0?string_get(sig):"?");
+                  index,
+                  cnum!=0?string_get(class_get_signature(cnum)):"?",
+                  name!=0?string_get(name):"?",
+                  sig!=0?string_get(sig):"?");
     if ( fields[index].primType!=0 || fields[index].primType!=primType ) {
         debug_message(" (primType=%d(%c)",
-          fields[index].primType,
-          primTypeToSigChar(fields[index].primType));
+                      fields[index].primType,
+                      primTypeToSigChar(fields[index].primType));
         if ( primType != fields[index].primType ) {
             debug_message(", got %d(%c)",
-              primType,
-              primTypeToSigChar(primType));
+                          primType,
+                          primTypeToSigChar(primType));
         }
         debug_message(")");
     } else {
@@ -243,8 +243,8 @@ dump_field(FieldInfo *fields, jvalue *fvalues, int n_fields,
     }
     if ( value.j != (jlong)0 || fvalues[index].j != (jlong)0 ) {
         debug_message(" val=[0x%08x,0x%08x] or [0x%08x,0x%08x]",
-            jlong_high(value.j), jlong_low(value.j),
-            jlong_high(fvalues[index].j), jlong_low(fvalues[index].j));
+                      jlong_high(value.j), jlong_low(value.j),
+                      jlong_high(fvalues[index].j), jlong_low(fvalues[index].j));
     }
     debug_message("\n");
 }
@@ -267,7 +267,7 @@ dump_fields(RefIndex list, FieldInfo *fields, jvalue *fvalues, int n_fields)
 /* Verify field data */
 static void
 verify_field(RefIndex list, FieldInfo *fields, jvalue *fvalues, int n_fields,
-                jint index, jvalue value, jvmtiPrimitiveType primType)
+             jint index, jvalue value, jvmtiPrimitiveType primType)
 {
     HPROF_ASSERT(fvalues != NULL);
     HPROF_ASSERT(n_fields > 0);
@@ -354,7 +354,7 @@ dump_class_and_supers(JNIEnv *env, ObjectIndex object_index, RefIndex list)
         super_index  = class_get_object_index(super_cnum);
         if ( super_index != 0 ) {
             dump_class_and_supers(env, super_index,
-                        object_get_references(super_index));
+                                  object_get_references(super_index));
         }
     }
 
@@ -383,7 +383,7 @@ dump_class_and_supers(JNIEnv *env, ObjectIndex object_index, RefIndex list)
             if ( gdata->debugflags & DEBUGFLAG_UNPREPARED_CLASSES ) {
                 dump_ref_list(list);
                 debug_message("Unprepared class with references: %s\n",
-                               sig);
+                              sig);
             }
             HPROF_ERROR(JNI_FALSE, "Trouble with unprepared classes");
         }
@@ -422,7 +422,7 @@ dump_class_and_supers(JNIEnv *env, ObjectIndex object_index, RefIndex list)
                         ovalue   = empty_value;
                         ovalue.i = info->object_index;
                         fill_in_field_value(list, fields, fvalues, n_fields,
-                                        info->index, ovalue, 0);
+                                            info->index, ovalue, 0);
                         n_fields_set++;
                         HPROF_ASSERT(n_fields_set <= n_fields);
                         break;
@@ -443,7 +443,7 @@ dump_class_and_supers(JNIEnv *env, ObjectIndex object_index, RefIndex list)
                         stack_push(cpool_values, (void*)&cpv);
                         cpool_count++;
                         break;
-                        }
+                    }
                     case JVMTI_HEAP_REFERENCE_SIGNERS:
                         signers_index = info->object_index;
                         break;
@@ -492,11 +492,11 @@ dump_class_and_supers(JNIEnv *env, ObjectIndex object_index, RefIndex list)
     thread_index = object_get_thread_index(object_index);
 
     io_heap_class_dump(cnum, sig, object_index, trace_serial_num,
-            super_index,
-            loader_object_index(env, loader_index),
-            signers_index, domain_index,
-            (jint)size, cpool_count, cpool, n_fields, fields, fvalues,
-            thread_index, node->node_number);
+                       super_index,
+                       loader_object_index(env, loader_index),
+                       signers_index, domain_index,
+                       (jint)size, cpool_count, cpool, n_fields, fields, fvalues,
+                       thread_index, node->node_number);
 
     stack_term(cpool_values);
     if ( fvalues != NULL ) {
@@ -573,10 +573,10 @@ dump_instance(JNIEnv *env, ObjectIndex object_index, RefIndex list)
                 if ( list != 0 ) {
                     dump_ref_list(list);
                     debug_message("Instance of unprepared class with refs: %s\n",
-                                   sig);
+                                  sig);
                 } else {
                     debug_message("Instance of unprepared class without refs: %s\n",
-                                   sig);
+                                  sig);
                 }
                 HPROF_ERROR(JNI_FALSE, "Big Trouble with unprepared class instances");
             }
@@ -620,7 +620,7 @@ dump_instance(JNIEnv *env, ObjectIndex object_index, RefIndex list)
                         ovalue   = empty_value;
                         ovalue.i = info->object_index;
                         fill_in_field_value(list, fields, fvalues, n_fields,
-                                        info->index, ovalue, 0);
+                                            info->index, ovalue, 0);
                         n_fields_set++;
                         HPROF_ASSERT(n_fields_set <= n_fields);
                         break;
@@ -647,7 +647,7 @@ dump_instance(JNIEnv *env, ObjectIndex object_index, RefIndex list)
                                 new_values = (void*)HPROF_MALLOC(nbytes);
                                 (void)memcpy(new_values, values, obytes);
                                 (void)memset(((char*)new_values)+obytes, 0,
-                                                        nbytes-obytes);
+                                             nbytes-obytes);
                                 HPROF_FREE(values);
                                 num_elements = new_size;
                                 values =  new_values;
@@ -728,7 +728,8 @@ dump_instance(JNIEnv *env, ObjectIndex object_index, RefIndex list)
                                   class_index, (jint)size, sig, fields, fvalues, n_fields);
         } else {
             io_heap_instance_dump_node(cnum, object_index,
-                                       class_index, (jint)size, sig, fields, fvalues, n_fields, node->node_number, thread_index);
+                                       class_index, (jint)size, sig, fields, fvalues, n_fields, node->node_number,
+                                       thread_index, trace_serial_num);
         }
     }
     if ( values != NULL ) {
@@ -749,7 +750,7 @@ reference_init(void)
 {
     HPROF_ASSERT(gdata->reference_table==NULL);
     gdata->reference_table = table_initialize("Ref", 2048, 4096, 0,
-                            (int)sizeof(RefInfo));
+                                              (int)sizeof(RefInfo));
 }
 
 /* Save away a reference to an object */
@@ -775,7 +776,7 @@ reference_obj(RefIndex next, jvmtiHeapReferenceKind refKind,
 /* Save away some primitive field data */
 RefIndex
 reference_prim_field(RefIndex next, jvmtiHeapReferenceKind refKind,
-              jvmtiPrimitiveType primType, jvalue field_value, jint field_index)
+                     jvmtiPrimitiveType primType, jvalue field_value, jint field_index)
 {
     static RefInfo  empty_info;
     RefIndex        entry;
@@ -791,14 +792,14 @@ reference_prim_field(RefIndex next, jvmtiHeapReferenceKind refKind,
     info.length         = -1;
     info.next           = next;
     entry = table_create_entry(gdata->reference_table,
-                (void*)&field_value, (int)sizeof(jvalue), (void*)&info);
+                               (void*)&field_value, (int)sizeof(jvalue), (void*)&info);
     return entry;
 }
 
 /* Save away some primitive array data */
 RefIndex
 reference_prim_array(RefIndex next, jvmtiPrimitiveType primType,
-              const void *elements, jint elementCount)
+                     const void *elements, jint elementCount)
 {
     static RefInfo  empty_info;
     RefIndex        entry;
@@ -816,7 +817,7 @@ reference_prim_array(RefIndex next, jvmtiPrimitiveType primType,
     info.length         = elementCount;
     info.next           = next;
     entry = table_create_entry(gdata->reference_table, (void*)elements,
-                         elementCount * get_prim_size(primType), (void*)&info);
+                               elementCount * get_prim_size(primType), (void*)&info);
     return entry;
 }
 
