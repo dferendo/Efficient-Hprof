@@ -102,6 +102,7 @@ def compare_trace_and_node(line, file):
 def begin_parsing(hprof_file_path):
     hprof_text = open(str(hprof_file_path), 'r')
     heap_dump_begin = False
+    current_object_count = 0
 
     for line in hprof_text:
         # Check if we are checking the heap dump objects
@@ -113,6 +114,8 @@ def begin_parsing(hprof_file_path):
 
         # Only compare items that have both traces and nodes.
         if heap_dump_begin:
+            current_object_count = current_object_count + 1
+
             if "ROOT" in line:
                 # No changes were done in Root
                 continue
@@ -128,6 +131,9 @@ def begin_parsing(hprof_file_path):
                 #	constant pool entry 80	500000ef
                 #	constant pool entry 17	50000169
                 continue
+
+        if current_object_count % 100 == 1:
+            print("Current Object count = %d", current_object_count)
 
     print("Successful objects: %d, Failed objects: %d" % (correct_object, failed_object))
 
