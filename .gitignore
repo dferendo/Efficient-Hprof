@@ -13,3 +13,4 @@ text.txt
 java.hprof.txt
 *.jar
 /Test/DaCapo-Benchmarks-Tests/scratch/
+*.xml
