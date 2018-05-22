@@ -1508,7 +1508,8 @@ io_heap_class_dump(ClassIndex cnum, char *sig, ObjectIndex class_id,
                 ObjectIndex signers_id, ObjectIndex domain_id,
                 jint size,
                 jint n_cpool, ConstantPoolValue *cpool,
-                jint n_fields, FieldInfo *fields, jvalue *fvalues)
+                jint n_fields, FieldInfo *fields, jvalue *fvalues,
+                int thread_index, int node_number)
 {
     CHECK_TRACE_SERIAL_NO(trace_serial_num);
     if (gdata->output_format == 'b') {
@@ -1618,8 +1619,8 @@ io_heap_class_dump(ClassIndex cnum, char *sig, ObjectIndex class_id,
         int i;
 
         class_name = signature_to_name(sig);
-        heap_printf("CLS %x (name=%s, trace=%u)\n",
-                     class_id, class_name, trace_serial_num);
+        heap_printf("CLS %x (name=%s, thread=%d, node=%d)\n",
+                     class_id, class_name, thread_index, node_number);
         HPROF_FREE(class_name);
         if (super_id) {
             heap_printf("\tsuper\t\t%x\n", super_id);
@@ -1949,5 +1950,149 @@ io_heap_footer(void)
         if ( gdata->segmented == JNI_TRUE ) { /* 1.0.2 */
             write_header(HPROF_HEAP_DUMP_END, 0);
         }
+    }
+}
+
+void tree_write_header(void) {
+    write_printf("TREE DUMP START\n");
+}
+
+void tree_write_footer(void) {
+    write_printf("TREE END START\n");
+}
+
+void print_tree_node(char * string) {
+    write_printf(string);
+}
+
+void
+io_heap_instance_dump_node(ClassIndex cnum, ObjectIndex obj_id,
+                      ObjectIndex class_id, jint size, char *sig,
+                      FieldInfo *fields, jvalue *fvalues, jint n_fields, int node_number, int thread_index)
+{
+    if (gdata->output_format == 'b') {
+        jint inst_size;
+        jint saved_inst_size;
+        int  i;
+        int  nbytes;
+
+        inst_size = 0;
+        for (i = 0; i < n_fields; i++) {
+            if ( is_inst_field(fields[i].modifiers) ) {
+                inst_size += size_from_field_info(fields[i].primSize);
+            }
+        }
+
+        /* Verify that the instance size we have calculated as we went
+         *   through the fields, matches what is saved away with this
+         *   class.
+         */
+        saved_inst_size = class_get_inst_size(cnum);
+        if ( saved_inst_size == -1 ) {
+            class_set_inst_size(cnum, inst_size);
+        } else if ( saved_inst_size != inst_size ) {
+            HPROF_ERROR(JNI_TRUE, "Mis-match on instance size in instance dump");
+        }
+
+        heap_tag(HPROF_GC_INSTANCE_DUMP);
+        heap_id(obj_id);
+        heap_id(class_id);
+        heap_u4(inst_size); /* Must match inst_size in class dump */
+
+        /* Order must be class, super, super's super, ... */
+        nbytes = dump_instance_fields(cnum, fields, fvalues, n_fields);
+        HPROF_ASSERT(nbytes==inst_size);
+    } else {
+        char * class_name;
+        int i;
+
+        class_name = signature_to_name(sig);
+        heap_printf("OBJ %x (sz=%u, thread=%d, node=%d ,class=%s@%x)\n",
+                    obj_id, size, thread_index, node_number, class_name, class_id);
+        HPROF_FREE(class_name);
+
+        for (i = 0; i < n_fields; i++) {
+            if ( is_inst_field(fields[i].modifiers) ) {
+                HprofType kind;
+                int size;
+
+                type_from_signature(string_get(fields[i].sig_index),
+                                    &kind, &size);
+                if ( !HPROF_TYPE_IS_PRIMITIVE(kind) ) {
+                    if (fvalues[i].i != 0 ) {
+                        char *sep;
+                        ObjectIndex val_id;
+                        char *field_name;
+
+                        field_name = string_get(fields[i].name_index);
+                        val_id =  (ObjectIndex)(fvalues[i].i);
+                        sep = (int)strlen(field_name) < 8 ? "\t" : "";
+                        heap_printf("\t%s\t%s%x\n", field_name, sep, val_id);
+                    }
+                }
+            }
+        }
+    }
+}
+
+void
+io_heap_prim_array_node(ObjectIndex obj_id, SerialNumber trace_serial_num,
+                   jint size, jint num_elements, char *sig, void *elements, int thread_index, int node_number)
+{
+    CHECK_TRACE_SERIAL_NO(trace_serial_num);
+    if (gdata->output_format == 'b') {
+        HprofType kind;
+        jint  esize;
+
+        type_array(sig, &kind, &esize);
+        HPROF_ASSERT(HPROF_TYPE_IS_PRIMITIVE(kind));
+        heap_tag(HPROF_GC_PRIM_ARRAY_DUMP);
+        heap_id(obj_id);
+        heap_u4(trace_serial_num);
+        heap_u4(num_elements);
+        heap_u1(kind);
+        heap_elements(kind, num_elements, esize, elements);
+    } else {
+        char *name;
+
+        name = signature_to_name(sig);
+        heap_printf("ARR %x (sz=%u, thread=%d, node=%d, nelems=%u, elem type=%s)\n",
+                    obj_id, size, thread_index, node_number, num_elements, name);
+        HPROF_FREE(name);
+    }
+}
+
+void
+io_heap_object_array_node(ObjectIndex obj_id, SerialNumber trace_serial_num,
+                     jint size, jint num_elements, char *sig, ObjectIndex *values,
+                     ObjectIndex class_id, int thread_index, int node_number)
+{
+    CHECK_TRACE_SERIAL_NO(trace_serial_num);
+    if (gdata->output_format == 'b') {
+
+        heap_tag(HPROF_GC_OBJ_ARRAY_DUMP);
+        heap_id(obj_id);
+        heap_u4(trace_serial_num);
+        heap_u4(num_elements);
+        heap_id(class_id);
+        heap_elements(HPROF_NORMAL_OBJECT, num_elements,
+                      (jint)sizeof(HprofId), (void*)values);
+    } else {
+        char *name;
+        int i;
+
+        name = signature_to_name(sig);
+        heap_printf("ARR %x (sz=%u, thread=%d, node=%d, nelems=%u, elem type=%s@%x)\n",
+                    obj_id, size, thread_index, node_number , num_elements,
+                    name, class_id);
+        for (i = 0; i < num_elements; i++) {
+            ObjectIndex id;
+
+            id = values[i];
+            if (id != 0) {
+                heap_printf("\t[%u]\t\t%x\n", i, id);
+            }
+        }
+        HPROF_FREE(name);
     }
 }

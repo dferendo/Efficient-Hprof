@@ -149,7 +149,8 @@ void io_heap_class_dump(ClassIndex cnum, char *sig, ObjectIndex class_id,
                         ObjectIndex signers_id, ObjectIndex domain_id,
                         jint inst_size,
                         jint n_cpool, ConstantPoolValue *cpool,
-                        jint n_fields, FieldInfo *fields, jvalue *fvalues);
+                        jint n_fields, FieldInfo *fields, jvalue *fvalues,
+                        int thread_index, int node_number);
 
 void io_heap_instance_dump(ClassIndex cnum, ObjectIndex obj_id,
                         SerialNumber trace_serial_num,
@@ -165,5 +166,23 @@ void io_heap_prim_array(ObjectIndex obj_id, SerialNumber trace_serial_num,
                         void *elements);
 
 void io_heap_footer(void);
+
+void tree_write_header(void);
+void tree_write_footer(void);
+void print_tree_node(char * string);
+
+void
+io_heap_instance_dump_node(ClassIndex cnum, ObjectIndex obj_id,
+                           ObjectIndex class_id, jint size, char *sig,
+                           FieldInfo *fields, jvalue *fvalues, jint n_fields, int node_number, int thread_index);
+
+void
+io_heap_prim_array_node(ObjectIndex obj_id, SerialNumber trace_serial_num,
+                        jint size, jint num_elements, char *sig, void *elements, int thread_index, int node_number);
+
+void
+io_heap_object_array_node(ObjectIndex obj_id, SerialNumber trace_serial_num,
+                          jint size, jint num_elements, char *sig, ObjectIndex *values,
+                          ObjectIndex class_id, int thread_index, int node_number);
 
 #endif

@@ -4,3 +4,13 @@ text.txt
 /benchmarks/scratch/
 /benchmarks/dacapo-9.12-bach.jar
 /benchmarks/java.hprof.txt
+*.TMP
+*.class
+/benchmarks/Class Tests/.idea/
+*.iml
+/benchmarks/CorrectImplementationTest/.idea/
+/benchmarks/CorrectImplementationTest/venv/
+java.hprof.txt
+*.jar
+/Test/DaCapo-Benchmarks-Tests/scratch/
+*.xml
