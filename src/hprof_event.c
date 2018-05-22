@@ -273,7 +273,7 @@ event_return(JNIEnv *env, jthread thread, ClassIndex cnum, MethodIndex mnum)
     /* Be very careful what is called here, watch out for recursion. */
     ThreadTraceData * data;
     int index;
-    Node * child_node;
+    Node * parent_node;
 
     HPROF_ASSERT(env!=NULL);
     HPROF_ASSERT(thread!=NULL);
@@ -289,10 +289,10 @@ event_return(JNIEnv *env, jthread thread, ClassIndex cnum, MethodIndex mnum)
     data = &gdata->trace_tables[index];
 
     // Add Node
-    child_node = moveToParent(data->currentNode);
+    parent_node = moveToParent(data->currentNode);
 
     // Update Node
-    data->currentNode = child_node;
+    data->currentNode = parent_node;
 }
 
 /* Handle a class prepare (should have been already loaded) */
