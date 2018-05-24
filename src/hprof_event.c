@@ -44,7 +44,7 @@
  */
 
 #include "hprof.h"
-#include "hprof_tree.h"
+#include "hprof_trie.h"
 
 /* Private internal functions. */
 
@@ -207,7 +207,7 @@ event_call(JNIEnv *env, jthread thread, ClassIndex cnum, MethodIndex mnum)
     data = &gdata->trace_tables[index];
 
     // Add Node
-    child_node = findOrCreateTreeChild(data->currentNode, cnum, mnum, ++data->current_node_number);
+    child_node = find_or_create_node_child(data->currentNode, cnum, mnum, ++data->current_node_number);
 
     // Update Node
     data->currentNode = child_node;
@@ -256,7 +256,7 @@ event_exception_catch(JNIEnv *env, jthread thread, jmethodID method,
     loader_index = loader_find_or_create(env, loader);
     cnum = class_find_or_create(pcsig, loader_index);
 
-    new_node = moveToPreviousNode(env, data->currentNode, mname, cnum);
+    new_node = move_to_ancestor_node(env, data->currentNode, mname, cnum);
 
     if (new_node != NULL) {
         data->currentNode = new_node;
@@ -289,7 +289,7 @@ event_return(JNIEnv *env, jthread thread, ClassIndex cnum, MethodIndex mnum)
     data = &gdata->trace_tables[index];
 
     // Add Node
-    parent_node = moveToParent(data->currentNode);
+    parent_node = move_to_parent(data->currentNode);
 
     // Update Node
     data->currentNode = parent_node;

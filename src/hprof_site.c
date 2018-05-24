@@ -58,7 +58,7 @@
  */
 
 #include "hprof.h"
-#include "hprof_tree.h"
+#include "hprof_trie.h"
 
 typedef struct SiteKey {
     ClassIndex cnum;         /* Unique class number */

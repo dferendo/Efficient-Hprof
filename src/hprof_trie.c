@@ -2,13 +2,13 @@
 // Created by dylan on 24/02/2018.
 //
 
-#include "hprof_tree.h"
+#include "hprof_trie.h"
 #include <memory.h>
 #include <stdlib.h>
 #include <stdio.h>
 
 
-Node * initTree() {
+Node * init_trie() {
     Node * newTree = (Node *) malloc(sizeof(Node));
 
     if (newTree == NULL) {
@@ -24,7 +24,7 @@ Node * initTree() {
     return newTree;
 }
 
-Node * findOrCreateTreeChild(Node * currentNode, ClassIndex cnum, MethodIndex mnum, int node_number) {
+Node * find_or_create_node_child(Node *currentNode, ClassIndex cnum, MethodIndex mnum, int node_number) {
     Node * newNode;
     NodeData * data;
 
@@ -76,7 +76,7 @@ Node * findOrCreateTreeChild(Node * currentNode, ClassIndex cnum, MethodIndex mn
     return newNode;
 }
 
-Node * moveToParent(Node * currentNode) {
+Node * move_to_parent(Node *currentNode) {
     if (currentNode->parent == NULL) {
         return currentNode;
     }
@@ -84,7 +84,7 @@ Node * moveToParent(Node * currentNode) {
     return currentNode->parent;
 }
 
-Node * moveToPreviousNode(JNIEnv *env, Node * currentNode, char * method_name, ClassIndex cnum) {
+Node * move_to_ancestor_node(JNIEnv *env, Node *currentNode, char *method_name, ClassIndex cnum) {
     Node * parent;
 
     if (currentNode->data == NULL) {
@@ -101,7 +101,7 @@ Node * moveToPreviousNode(JNIEnv *env, Node * currentNode, char * method_name, C
         if (parent == NULL) {
             return NULL;
         } else {
-            return moveToPreviousNode(env, currentNode->parent, method_name, cnum);
+            return move_to_ancestor_node(env, currentNode->parent, method_name, cnum);
         }
     }
 }

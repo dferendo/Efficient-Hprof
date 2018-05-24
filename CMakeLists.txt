@@ -73,8 +73,8 @@ set(SOURCE_FILES
         src/hprof_util.h
         src/hprof_prelude.h
         src/hprof_prelude.c
-        src/hprof_tree.c
-        src/hprof_tree.h
+        src/hprof_trie.c
+        src/hprof_trie.h
         ${JAVA_HOME}/classfile_constants.h
         ${JAVA_HOME}/jni.h
         ${JAVA_HOME}/jvmti.h

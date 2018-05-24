@@ -39,7 +39,7 @@
 
 
 #include "hprof.h"
-#include "hprof_tree.h"
+#include "hprof_trie.h"
 
 /* Thread Local Storage Table and method entry/exit handling. */
 
@@ -1233,7 +1233,7 @@ trace_array_find_or_create(JNIEnv *env, jthread thread)
     // Check if thread index was created, if not create it
     if (storage->thread_index == -1) {
         // If thread is not found, create an entry in the array
-        root_node = initTree();
+        root_node = init_trie();
 
         info.rootNode = root_node;
         info.currentNode = root_node;
