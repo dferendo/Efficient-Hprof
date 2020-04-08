@@ -1,4 +1,4 @@
-# HProf Modification
+# Efficient HProf
 
 This project is done to check if some improvements can be made to hprof. All dependencies were added to the repository and Java version 8 is used. This version only compiles on linux, solaris and bsd, for other versions modify the lib folder to your system required files (These can be found when downloading jdk8 source code). 
 
